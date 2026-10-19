@@ -47,7 +47,7 @@ flattening.
 ## Platforms and performance
 
 - Tested on macOS (Apple Silicon, Metal) and Windows (NVIDIA, Vulkan). Linux is untested and has no prebuilt FBX
-  library yet. There are no standalone installers: install from source with `pip`.
+  library yet. There are no standalone installers yet: `install.sh` / `install.bat` install from a clone of the repository.
 - A few generators give visibly different results on different GPUs (about 25 node outputs between Apple and
   NVIDIA); being investigated.
 - Some nodes are slower than they should be on large graphs (Edge Detect, Distance, Slope Blur, Normal to Height HQ,
