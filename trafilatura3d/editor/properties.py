@@ -207,6 +207,15 @@ class PropertiesPanel(QScrollArea):
 
     # --- editing ------------------------------------------------------------------------------
 
+    def _preview_edit(self, graph_id: str, pid: str, value) -> None:
+        """A Preview value: the views recook, the panel stays (a dragged slider is not rebuilt under the mouse)."""
+        self._editing = True
+        try:
+            self.doc.set_preview(self.package, graph_id,
+                                 {**self.doc.preview.get((id(self.package), graph_id), {}), pid: value})
+        finally:
+            self._editing = False
+
     def _edit(self, label: str, fn, final: bool, key: str):
         """Apply an edit; a slider drag (final False) is one undo step closed by its final value."""
         self._editing = True
@@ -889,7 +898,8 @@ class PropertiesPanel(QScrollArea):
         more = tool_button("properties", "Edit exposed graph input")
         more.setCheckable(True)
         more.setChecked(expanded)
-        more.toggled.connect(lambda on: (self._expanded.add(pid) if on else self._expanded.discard(pid), self.rebuild()))
+        more.toggled.connect(lambda on: (self._expanded.add(pid) if on else self._expanded.discard(pid),
+                                         QTimer.singleShot(0, self.rebuild)))  # not inside the button's own signal
         tools.append(more)
         copy = tool_button("copy", "Copy this input")
         copy.clicked.connect(lambda: self._copy_inputs(g, [pid]))
@@ -898,8 +908,7 @@ class PropertiesPanel(QScrollArea):
         rm.clicked.connect(lambda: self._edit("Remove input", lambda: g.unexpose(pid), True, "unexpose"))
         tools.append(rm)
         if preview is not None:
-            editor = make_editor(p, values[pid], lambda v, final: self.doc.set_preview(
-                self.package, g.id, {**self.doc.preview.get((id(self.package), g.id), {}), pid: v}))
+            editor = make_editor(p, values[pid], lambda v, final: self._preview_edit(g.id, pid, v))
         else:
             editor = make_editor(p, p.default, lambda v, final: self._edit(
                 "Edit default", lambda: g.expose(pid, dataclasses.replace(p, default=v)), final, f"exposed.{pid}"))
