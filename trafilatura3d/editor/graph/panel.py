@@ -86,8 +86,9 @@ class GraphPanel(QWidget):
         self.warnings_label.setStyleSheet("color: #e8a33a; background: rgba(20,20,20,200); padding: 4px 6px;"
                                           "border-radius: 3px;")
         self.warnings_label.setTextFormat(Qt.RichText)
-        self.warnings_label.linkActivated.connect(self._focus_node)  # a node's warning frames that node
+        self.warnings_label.linkActivated.connect(self._warning_link)  # a node's warning frames that node
         self.warnings_label.hide()
+        self.dismissed_warnings = {}  # (package id, graph id) -> warnings closed with the ✕, hidden while the same
         self.view.resized = self._place_warnings
 
         lay = QVBoxLayout(self)
@@ -420,12 +421,26 @@ class GraphPanel(QWidget):
                      for w in found[:8]]
             if len(found) > 8:
                 lines.append(f"… {len(found) - 8} more")
+            shown = frozenset((w.message, w.node) for w in found)
+            if self.dismissed_warnings.get((id(self.package), g.id)) == shown:
+                self.warnings_label.hide()
+                return
+            self._shown_warnings = shown
+            lines[0] = '<a href="#dismiss" style="color:#f0c070; text-decoration:none">✕</a>&nbsp;&nbsp;' + lines[0]
             self.warnings_label.setText("<br>".join(lines))
             self.warnings_label.adjustSize()
             self.warnings_label.show()
             self._place_warnings()
         else:
             self.warnings_label.hide()
+
+    def _warning_link(self, target: str) -> None:
+        """The warnings' links: ✕ closes them for this graph (they come back when they change), a node frames it."""
+        if target == "#dismiss":
+            self.dismissed_warnings[(id(self.package), self.graph_id)] = self._shown_warnings
+            self.warnings_label.hide()
+        else:
+            self._focus_node(target)
 
     def _focus_node(self, node_id: str) -> None:
         item = self.scene.nodes.get(node_id)

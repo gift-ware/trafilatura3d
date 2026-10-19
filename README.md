@@ -1,5 +1,7 @@
 # Trafilatura 3D
 
+![Trafilatura 3D](trafilatura3d/editor/splash.png)
+
 An editor and engine for node-based procedural textures and for painting textures on 3D meshes, cooked on the
 GPU through [wgpu](https://github.com/pygfx/wgpu-py) (Metal, Vulkan, D3D12). It reads `.sbs` files and `.spp`
 projects (one way: they are imported into its own format) and follows the workflow familiar to users of node-based
@@ -11,6 +13,10 @@ Two workspaces share one engine:
   path tracer, bakers from high poly meshes.
 - **Paint**: projects (`.trafilatura3dpaint`) hold Texture Sets with layer stacks (paint, fill, folders, masks,
   effects, the library's filters and generators), brush, path and projection tools, baking and export.
+
+![The Graph workspace: a forest ground material on a displaced plane, its graph and exposed parameters](docs/images/graph.png)
+
+![The Paint workspace: a shader ball with a stack of fill layers and masks on three UV tiles](docs/images/paint.png)
 
 The core is pure Python with no Qt and no project knowledge; the editor (PySide6) is an optional extra and only a
 client of the core.

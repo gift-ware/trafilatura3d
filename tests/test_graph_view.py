@@ -155,6 +155,46 @@ class BaseModeTest(unittest.TestCase):
 
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
+class WarningsTest(unittest.TestCase):
+    def test_warnings_close_until_they_change(self):
+        """The ✕ closes a graph's warnings; the same ones stay closed, others show again."""
+        from unittest import mock
+        from PySide6.QtCore import QCoreApplication, QEvent
+        from PySide6.QtWidgets import QApplication
+        import rendercanvas.qt as rq
+        from trafilatura3d.diagnostics import GraphWarning
+        QCoreApplication.setOrganizationName("Trafilatura3DTest")
+        QCoreApplication.setApplicationName("Trafilatura3DTest")
+        QApplication.instance() or QApplication([])
+        init = rq.QRenderWidget.__init__
+        rq.QRenderWidget.__init__ = lambda self, *a, **k: init(self, *a, **{**k, "present_method": "bitmap"})
+        self.addCleanup(setattr, rq.QRenderWidget, "__init__", init)
+        from trafilatura3d.editor.mainwindow import MainWindow
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        w = MainWindow([str(material_package(Path(tmp.name) / "scene.trafilatura3d"))])
+
+        def close():
+            w.doc.undo.indexChanged.disconnect()
+            w.graph.scene.selectionChanged.disconnect()
+            w.deleteLater()
+            QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+        self.addCleanup(close)
+        panel = w.graph
+        one, two = [GraphWarning("first", None, "")], [GraphWarning("first", None, ""), GraphWarning("second", None, "")]
+        with mock.patch("trafilatura3d.diagnostics.graph_warnings", return_value=one):
+            panel._show_warnings(panel.graph)
+            self.assertFalse(panel.warnings_label.isHidden())
+            panel._warning_link("#dismiss")
+            self.assertTrue(panel.warnings_label.isHidden())
+            panel._show_warnings(panel.graph)  # the same warnings: still closed
+            self.assertTrue(panel.warnings_label.isHidden())
+        with mock.patch("trafilatura3d.diagnostics.graph_warnings", return_value=two):
+            panel._show_warnings(panel.graph)  # a new one: shown again
+            self.assertFalse(panel.warnings_label.isHidden())
+
+
+@unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
 class DropTest(unittest.TestCase):
     def test_dropped_files_open(self):
         """A package dropped on the window opens as File > Open does; other files are left to the panels (the 3D
