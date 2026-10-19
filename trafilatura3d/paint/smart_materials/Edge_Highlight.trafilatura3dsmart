@@ -1,0 +1,77 @@
+{
+ "version": 1,
+ "name": "Edge Highlight",
+ "layer": {
+  "uid": "28c4e87717f6",
+  "kind": "folder",
+  "name": "Edge Highlight",
+  "visible": true,
+  "blend": {},
+  "children": [
+   {
+    "uid": "16ea4830ce88",
+    "kind": "fill",
+    "name": "Edges",
+    "visible": true,
+    "blend": {},
+    "mask": {
+     "background": 0.0,
+     "enabled": true,
+     "effects": [
+      {
+       "uid": "1355198ad0ff",
+       "kind": "generator",
+       "name": "Edge Wear",
+       "visible": true,
+       "blend": {},
+       "procedural": "node:edge_wear",
+       "values": {}
+      }
+     ]
+    },
+    "projection": {
+     "filtering": "Bilinear | HQ",
+     "wrap": "Repeat",
+     "tiling": 1.0,
+     "rotation": 0.0,
+     "offset": [
+      0.0,
+      0.0
+     ]
+    },
+    "material": {
+     "basecolor": {
+      "color": [
+       0.9,
+       0.9,
+       0.88
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "roughness": {
+      "color": [
+       0.4,
+       0.4,
+       0.4
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "metallic": {
+      "color": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     }
+    }
+   }
+  ]
+ }
+}

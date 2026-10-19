@@ -1,0 +1,7683 @@
+{
+ "nodes": [
+  {
+   "id": "bitmap_to_material_light",
+   "name": "Bitmap to Material Light",
+   "category": "Material filters/1-Click",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/1-click/bitmap-to-material-light",
+   "parameters": [
+    {
+     "name": "Depth Balance",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Global"
+    },
+    {
+     "name": "Sharpen",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Hue",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Saturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Brightness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Output Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Relief"
+    },
+    {
+     "name": "Invert Generated Relief",
+     "type": "bool",
+     "group": "Relief"
+    },
+    {
+     "name": "Normal Strength",
+     "type": "float",
+     "min": 0.0,
+     "max": 20.0,
+     "group": "Relief"
+    },
+    {
+     "name": "Relief Equalizer",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Relief"
+    },
+    {
+     "name": "Pinch Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Relief"
+    },
+    {
+     "name": "Normal Sharpen",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Relief"
+    },
+    {
+     "name": "Normal Soften",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Relief"
+    },
+    {
+     "name": "Specular Diffuse Influence",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Specular Saturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Specular Sharpen",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Specular Levels In",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Specular Levels Out",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Metallic Specular Influence",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Glossiness Levels In",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Glossiness"
+    },
+    {
+     "name": "Glossiness Levels Out",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Glossiness"
+    },
+    {
+     "name": "Metallic Glossiness Influence",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Glossiness"
+    },
+    {
+     "name": "Roughness Levels In",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Roughness Levels Out",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Metallic Roughness Influence",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Ambient Occlusion In Diffuse",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Ambient Occlusion Spread",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Ambient Occlusion Light Distance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Ambient Occlusion Light Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Ambient Occlusion Levels",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    }
+   ]
+  },
+  {
+   "id": "height_blend",
+   "name": "Height Blend",
+   "category": "Material filters/Effects (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/effects-material/height-blend",
+   "inputs": [
+    {
+     "name": "Height Top",
+     "type": "grayscale"
+    },
+    {
+     "name": "Height Bottom",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    },
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Height Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Balanced height",
+      "Bottom height priority"
+     ]
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "material_height_blend",
+   "name": "Material Height Blend",
+   "category": "Material filters/Effects (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/effects-material/material-height-blend",
+   "parameters": [
+    {
+     "name": "Height Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Balanced height",
+      "Bottom height priority"
+     ],
+     "group": "Channels"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Albedo Matching",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    }
+   ]
+  },
+  {
+   "id": "season_filter",
+   "name": "Season Filter",
+   "category": "Material filters/Effects (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/effects-material/season-filter",
+   "inputs": [
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Light Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Advanced"
+    },
+    {
+     "name": "Light Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Advanced"
+    },
+    {
+     "name": "Effect From Height or Normal",
+     "type": "enum",
+     "choices": [
+      "Height",
+      "Normal"
+     ],
+     "group": "Effect"
+    },
+    {
+     "name": "Water Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Water Details",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Refraction",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Reflection",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Reflection Distance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Reflection Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Flow Direction",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Ice",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Ice Details",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Snow",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Moss",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Moss Scale",
+     "type": "int",
+     "min": 1,
+     "max": 4,
+     "group": "Effect"
+    },
+    {
+     "name": "Moss Color",
+     "type": "color",
+     "group": "Effect"
+    },
+    {
+     "name": "Water Color",
+     "type": "color",
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "snow_cover",
+   "name": "Snow Cover",
+   "category": "Material filters/Effects (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/effects-material/snow-cover",
+   "inputs": [
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Fresh Snow",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Melted Snow",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Buildup",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Flakes Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    }
+   ]
+  },
+  {
+   "id": "water_level",
+   "name": "Water Level",
+   "category": "Material filters/Effects (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/effects-material/water-level",
+   "inputs": [
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Water Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Water Darkness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Edges Wetness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Edges Wetness Distance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Depth Blur Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Depth Blur Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Sludge Color",
+     "type": "color",
+     "group": "Channels"
+    },
+    {
+     "name": "Sludge Depth",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Sludge Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Frost",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Frost Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Frost Cracks",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    },
+    {
+     "name": "Frost Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Channels"
+    }
+   ]
+  },
+  {
+   "id": "material_transform",
+   "name": "Material Transform",
+   "category": "Material filters/Transforms (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/transforms-material/material-transform",
+   "parameters": [
+    {
+     "name": "Transformation",
+     "type": "other"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5
+    },
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "material_adjustment_blend",
+   "name": "Material Adjustment Blend",
+   "category": "Material filters/Blending (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/blending-material/material-adjustment-blend",
+   "inputs": [
+    {
+     "name": "Color ID Mask",
+     "type": "color"
+    },
+    {
+     "name": "Greyscale Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Color ID Mask",
+     "type": "bool",
+     "group": "Opacity"
+    },
+    {
+     "name": "Fuzziness",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0,
+     "group": "Opacity"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Opacity"
+    },
+    {
+     "name": "Padding",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Opacity"
+    }
+   ]
+  },
+  {
+   "id": "material_blend",
+   "name": "Material Blend",
+   "category": "Material filters/Blending (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/blending-material/material-blend",
+   "inputs": [
+    {
+     "name": "ColorID",
+     "type": "color"
+    },
+    {
+     "name": "Greyscale Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Diffuse"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Base Color"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Base Color"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Specular"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Emissive"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Emissive"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Glossiness"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Glossiness"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Roughness"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Metallic"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Metallic"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Specular Level"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Specular Level"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Height"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Opacity"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Opacity"
+    },
+    {
+     "name": "Color ID Mask",
+     "type": "bool",
+     "group": "Opacity"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Opacity"
+    },
+    {
+     "name": "Fuzziness",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0,
+     "group": "Opacity"
+    },
+    {
+     "name": "Padding",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Opacity"
+    }
+   ]
+  },
+  {
+   "id": "material_color_blend",
+   "name": "Material Color Blend",
+   "category": "Material filters/Blending (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/blending-material/material-color-blend",
+   "inputs": [
+    {
+     "name": "ColorID",
+     "type": "color"
+    },
+    {
+     "name": "Greyscale Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Diffuse"
+    },
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Diffuse"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add/Sub",
+      "Max",
+      "Min",
+      "Switch"
+     ],
+     "group": "Diffuse"
+    },
+    {
+     "name": "Source",
+     "type": "enum",
+     "choices": [
+      "Height",
+      "Mask"
+     ],
+     "group": "Normal"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Combine",
+      "Blend"
+     ],
+     "group": "Normal"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Height Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Normal"
+    },
+    {
+     "name": "Color ID Mask",
+     "type": "bool",
+     "group": "Opacity"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Opacity"
+    },
+    {
+     "name": "Fuzziness",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0,
+     "group": "Opacity"
+    },
+    {
+     "name": "Padding",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Opacity"
+    }
+   ]
+  },
+  {
+   "id": "material_switch",
+   "name": "Material Switch",
+   "category": "Material filters/Blending (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/blending-material/material-switch",
+   "parameters": [
+    {
+     "name": "Switch",
+     "type": "bool",
+     "group": "Channels"
+    }
+   ]
+  },
+  {
+   "id": "multi_material_blend",
+   "name": "Multi-Material Blend",
+   "category": "Material filters/Blending (Material)",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/blending-material/multi-material-blend",
+   "inputs": [
+    {
+     "name": "1-16 Full material slots"
+    },
+    {
+     "name": "Color ID",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Materials",
+     "type": "enum",
+     "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16"
+     ]
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Material 2-16"
+    },
+    {
+     "name": "Fuzziness",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0,
+     "group": "Material 2-16"
+    },
+    {
+     "name": "Padding",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Material 2-16"
+    }
+   ]
+  },
+  {
+   "id": "base_material",
+   "name": "Base Material",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/base-material",
+   "parameters": [
+    {
+     "name": "PBR Workflow",
+     "type": "enum",
+     "choices": [
+      "Metal - Roughness",
+      "Specular - Glossiness"
+     ]
+    },
+    {
+     "name": "Material Preset",
+     "type": "enum",
+     "choices": [
+      "Custom",
+      "Dielectric",
+      "Gold",
+      "Silver",
+      "Aluminium",
+      "Iron",
+      "Copper",
+      "Titanium",
+      "Nickel",
+      "Cobalt",
+      "Platinum"
+     ]
+    },
+    {
+     "name": "Base Color",
+     "type": "color"
+    },
+    {
+     "name": "Metallic",
+     "type": "float"
+    },
+    {
+     "name": "Diffuse Color",
+     "type": "color"
+    },
+    {
+     "name": "Specular",
+     "type": "color"
+    },
+    {
+     "name": "Specular Presets",
+     "type": "enum",
+     "choices": [
+      "Plastic",
+      "Wood",
+      "Stone",
+      "Brick",
+      "Sand",
+      "Concrete",
+      "Fabric",
+      "Rusted Metal",
+      "Water",
+      "Ice",
+      "Glass"
+     ]
+    },
+    {
+     "name": "Specular Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Roughness Value",
+     "type": "float",
+     "group": "Roughness - Glossiness"
+    },
+    {
+     "name": "Glossiness Value",
+     "type": "float",
+     "group": "Roughness - Glossiness"
+    },
+    {
+     "name": "Grunge Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness - Glossiness"
+    },
+    {
+     "name": "Grunge Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16,
+     "group": "Roughness - Glossiness"
+    },
+    {
+     "name": "Custom Grunge Input",
+     "type": "bool",
+     "group": "Roughness - Glossiness"
+    },
+    {
+     "name": "Normal from Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Height Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    }
+   ]
+  },
+  {
+   "id": "basecolor_metallic_roughness_converter",
+   "name": "BaseColor / Metallic / Roughness converter",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/basecolor-metallic-roughness-converter",
+   "parameters": [
+    {
+     "name": "Use SpecularLevel input",
+     "type": "bool"
+    },
+    {
+     "name": "Target",
+     "type": "enum",
+     "choices": [
+      "PBR Diffuse/Specular/Gloss",
+      "Vray (GGX)",
+      "Corona",
+      "Corona 1.6+",
+      "Redshift 1.x",
+      "Arnold 4 (AiStandard)",
+      "Arnold 4 (AlSurface)",
+      "RenderMan (PxrSurface)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pbr_albedo_safe_color",
+   "name": "PBR Albedo Safe Color",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-albedo-safe-color",
+   "parameters": [
+    {
+     "name": "PBR Workflow",
+     "type": "enum",
+     "choices": [
+      "Base Color - Metallic",
+      "Diffuse - Specular"
+     ]
+    },
+    {
+     "name": "Tolerance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "pbr_basecolor_metallic_validate",
+   "name": "PBR BaseColor / Metallic Validate",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-basecolor-metallic-validate",
+   "parameters": [
+    {
+     "name": "Validation Mode",
+     "type": "enum",
+     "choices": [
+      "Albedo",
+      "Metal",
+      "Combined"
+     ]
+    },
+    {
+     "name": "Albedo Dark Range Threshold",
+     "type": "enum",
+     "choices": [
+      "50 sRGB",
+      "30 sRGB"
+     ]
+    },
+    {
+     "name": "Metal Reflectance Range",
+     "type": "enum",
+     "choices": [
+      "70-100% Reflective",
+      "60-100% Reflective"
+     ]
+    },
+    {
+     "name": "Overlay Map",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "pbr_dielectric_f0",
+   "name": "PBR Dielectric F0",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-dielectric-f0",
+   "parameters": [
+    {
+     "name": "Specular F0",
+     "type": "enum",
+     "choices": [
+      "Plastic",
+      "Wood",
+      "Stone",
+      "Brick",
+      "Sand",
+      "Concrete",
+      "Fabric",
+      "Rusted Metal",
+      "Water",
+      "Ice",
+      "Glass",
+      "Custom IOR"
+     ]
+    },
+    {
+     "name": "Specular Range",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0
+    },
+    {
+     "name": "IOR",
+     "type": "float",
+     "min": 1.0,
+     "max": 5.0
+    }
+   ]
+  },
+  {
+   "id": "pbr_metal_reflectance",
+   "name": "PBR Metal Reflectance",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-metal-reflectance",
+   "parameters": [
+    {
+     "name": "Metal Color",
+     "type": "enum",
+     "choices": [
+      "Gold",
+      "Silver",
+      "Aluminium",
+      "Iron",
+      "Copper",
+      "Titanium",
+      "Nickel",
+      "Cobalt",
+      "Platinum"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pbr_render",
+   "name": "PBR Render",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-render",
+   "inputs": [
+    {
+     "name": "Base Color"
+    },
+    {
+     "name": "Normal"
+    },
+    {
+     "name": "Emissive"
+    },
+    {
+     "name": "Roughness"
+    },
+    {
+     "name": "Metallic"
+    },
+    {
+     "name": "Specular Level"
+    },
+    {
+     "name": "Height"
+    },
+    {
+     "name": "Ambient Occlusion"
+    },
+    {
+     "name": "Opacity Mask"
+    },
+    {
+     "name": "Anisotropy Level"
+    },
+    {
+     "name": "Anisotropy Angle"
+    },
+    {
+     "name": "Translucency"
+    },
+    {
+     "name": "Scattering Distance Scale"
+    },
+    {
+     "name": "Lens Dirt Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Lens Aperture Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Background input",
+     "type": "color"
+    },
+    {
+     "name": "Environment Map",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Beauty",
+     "type": "color"
+    },
+    {
+     "name": "Raw Irradiance",
+     "type": "color"
+    },
+    {
+     "name": "Raw Specular",
+     "type": "color"
+    },
+    {
+     "name": "Normal World Space",
+     "type": "color"
+    },
+    {
+     "name": "Normal Tangent Space",
+     "type": "color"
+    },
+    {
+     "name": "UVs",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Sphere",
+      "Plane",
+      "Cylinder"
+     ]
+    },
+    {
+     "name": "Displacement Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.5
+    },
+    {
+     "name": "Environment Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Background Mode",
+     "type": "enum",
+     "choices": [
+      "Color",
+      "Environment",
+      "Ambient",
+      "Background Input"
+     ]
+    },
+    {
+     "name": "Background Color",
+     "type": "color"
+    },
+    {
+     "name": "Environment Background Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Plane Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Cylinder Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Cylinder Length",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation Direction",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation Around Direction",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Shape Position",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "UV Tiling",
+     "type": "float",
+     "min": 1.0,
+     "max": 6.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Sphere UV Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 4.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Plane UV Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 4.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Cylinder UV Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 6.0,
+     "group": "Shape"
+    },
+    {
+     "name": "UV Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Tilt UVs",
+     "type": "bool",
+     "group": "Shape"
+    },
+    {
+     "name": "Exposure",
+     "type": "float",
+     "min": -4.0,
+     "max": 4.0,
+     "group": "Camera"
+    },
+    {
+     "name": "Tone Mapper",
+     "type": "enum",
+     "choices": [
+      "Linear",
+      "ACES",
+      "Filmic Hejl"
+     ],
+     "group": "Camera"
+    },
+    {
+     "name": "Camera Mode",
+     "type": "enum",
+     "choices": [
+      "Perspective",
+      "Orthographic"
+     ],
+     "group": "Camera"
+    },
+    {
+     "name": "Field of View",
+     "type": "float",
+     "min": 0.01,
+     "max": 100.0,
+     "group": "Camera"
+    },
+    {
+     "name": "Distance",
+     "type": "float",
+     "min": 0.0,
+     "max": 4.0,
+     "group": "Camera"
+    },
+    {
+     "name": "Vignette Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Camera"
+    },
+    {
+     "name": "Vignette Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Camera"
+    },
+    {
+     "name": "Screen Position",
+     "type": "float2",
+     "group": "Camera"
+    },
+    {
+     "name": "Aperture Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.1,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Aperture Blades",
+     "type": "int",
+     "min": 3,
+     "max": 9,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Aperture Ring",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Aperture Difraction",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Swirly Bokeh",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Focus Mode",
+     "type": "enum",
+     "choices": [
+      "Auto",
+      "Point"
+     ],
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Focus Point",
+     "type": "float2",
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Focus Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Use Custom Aperture Map",
+     "type": "bool",
+     "group": "Depth of Field"
+    },
+    {
+     "name": "Enable Post Effects",
+     "type": "bool",
+     "group": "Post Effects"
+    },
+    {
+     "name": "Bloom Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Bloom Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Bloom Chroma Shift",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Lens Halo Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Lens Flares Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Lens Dirt Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Post Effects"
+    },
+    {
+     "name": "Diffuse Quality",
+     "type": "enum",
+     "choices": [
+      "16 Samples",
+      "32 Samples",
+      "64 Samples",
+      "128 Samples"
+     ],
+     "group": "Render Settings"
+    },
+    {
+     "name": "Diffuse Emissive Mulitplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Render Settings"
+    },
+    {
+     "name": "Diffuse Shadow Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Render Settings"
+    },
+    {
+     "name": "Specular Dithering",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Render Settings"
+    },
+    {
+     "name": "Specular Shadow Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Render Settings"
+    },
+    {
+     "name": "Opacity Mode",
+     "type": "enum",
+     "choices": [
+      "Dithered Alpha test",
+      "Simple Alpha Blend"
+     ],
+     "group": "Render Settings"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Render Settings"
+    },
+    {
+     "name": "Recompute Normals",
+     "type": "bool",
+     "group": "Material Adjustements"
+    },
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Material Adjustements"
+    },
+    {
+     "name": "Dielectric F0 Input",
+     "type": "enum",
+     "choices": [
+      "Constant Value",
+      "Specular Level input"
+     ],
+     "group": "Material Adjustements"
+    },
+    {
+     "name": "Dielectric F0",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.08,
+     "group": "Material Adjustements"
+    },
+    {
+     "name": "Enable Clear Coat",
+     "type": "bool",
+     "group": "Clear Coat"
+    },
+    {
+     "name": "Clear Coat Weight",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Clear Coat"
+    },
+    {
+     "name": "Clear Coat Specular Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Clear Coat"
+    },
+    {
+     "name": "Inherit Normal from Base Layer",
+     "type": "bool",
+     "group": "Clear Coat"
+    },
+    {
+     "name": "Enable Emissive Lighting",
+     "type": "bool",
+     "group": "Emissive"
+    },
+    {
+     "name": "Emissive Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Emissive"
+    },
+    {
+     "name": "Enable Subsurface Scattering",
+     "type": "bool",
+     "group": "Subsurface Scattering"
+    },
+    {
+     "name": "Scattering Distance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Subsurface Scattering"
+    },
+    {
+     "name": "Red Shift",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Subsurface Scattering"
+    },
+    {
+     "name": "Rayleigh",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Subsurface Scattering"
+    }
+   ]
+  },
+  {
+   "id": "pbr_render_mapping",
+   "name": "PBR Render Mapping",
+   "category": "Material filters/PBR Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/pbr-utilities/pbr-render-mapping",
+   "inputs": [
+    {
+     "name": "Texture",
+     "type": "any"
+    },
+    {
+     "name": "UVs",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Background Color",
+     "type": "color"
+    }
+   ]
+  },
+  {
+   "id": "ao_cancellation",
+   "name": "AO Cancellation",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/ao-cancellation",
+   "parameters": [
+    {
+     "name": "AO Cancellation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "AO Saturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "atlas_scatter",
+   "name": "Atlas Scatter",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/atlas-scatter",
+   "parameters": [
+    {
+     "name": "Atlas Input Resolution",
+     "type": "other",
+     "min": 1,
+     "max": 12
+    },
+    {
+     "name": "X Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Y Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Pattern Range",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Distribution Mode",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "Pattern Index",
+      "Line Index",
+      "Column Index"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Distribution Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90",
+      "180",
+      "270"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Atlas Shape Detection Precision",
+     "type": "enum",
+     "choices": [
+      "Simple or small shapes",
+      "Complex or big shapes",
+      "No failure mode"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Downscale Atlas Opacity (faster detection)",
+     "type": "int",
+     "min": -4,
+     "max": 0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Ignore Shape Smaller Than",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 5.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale No Overlap",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size Ratio from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Preserve Aspect Ratio",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Position Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Random Distribution",
+     "type": "enum",
+     "choices": [
+      "Gaussian",
+      "Uniform"
+     ],
+     "group": "Position"
+    },
+    {
+     "name": "Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Horizontal",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Vertical",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Out of Bounds Option",
+     "type": "enum",
+     "choices": [
+      "Scale Shape",
+      "Constrain Position"
+     ],
+     "group": "Position"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Height Scale Auto Adjust",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Blend Mode",
+     "type": "enum",
+     "choices": [
+      "Height Blend",
+      "Alpha Test"
+     ],
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset Map Mulitplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Conform to Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Smooth Conformed Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Height"
+    },
+    {
+     "name": "Skew from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Background Slope Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Height"
+    },
+    {
+     "name": "Cutout Black Pixels",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Flatten Pattern Base",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Mask Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Mask Random Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Mask from Bg Slope",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Color Adjustment",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color from Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Skew from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Normal Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Normal"
+    },
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Normal"
+    },
+    {
+     "name": "Roughness Adjustment",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Roughness from Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    },
+    {
+     "name": "Roughness Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Roughness"
+    }
+   ]
+  },
+  {
+   "id": "atlas_splitter",
+   "name": "Atlas Splitter",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/atlas-splitter",
+   "parameters": [
+    {
+     "name": "Grid View",
+     "type": "bool"
+    },
+    {
+     "name": "Grid Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Grid Selection Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Auto Scale",
+     "type": "bool"
+    },
+    {
+     "name": "Auto Crop",
+     "type": "bool"
+    },
+    {
+     "name": "Shape Selection",
+     "type": "int"
+    },
+    {
+     "name": "Ignore Shape Smaller Than",
+     "type": "float"
+    },
+    {
+     "name": "Auto Rotation",
+     "type": "bool"
+    },
+    {
+     "name": "Rotation",
+     "type": "float"
+    },
+    {
+     "name": "Input Normal Format",
+     "type": "int"
+    },
+    {
+     "name": "Downscale Opacity Mask",
+     "type": "int"
+    },
+    {
+     "name": "Dilation Width",
+     "type": "float"
+    },
+    {
+     "name": "Enable Additional Inputs",
+     "type": "bool"
+    },
+    {
+     "name": "Custom Background Color",
+     "type": "bool"
+    },
+    {
+     "name": "Base Color Bg Color",
+     "type": "float3"
+    },
+    {
+     "name": "Normal Bg Color",
+     "type": "float3"
+    },
+    {
+     "name": "Metallic Bg Color",
+     "type": "float"
+    },
+    {
+     "name": "Roughness Bg Color",
+     "type": "float"
+    },
+    {
+     "name": "Height Bg Color",
+     "type": "float"
+    },
+    {
+     "name": "User 1 Bg Color",
+     "type": "float"
+    },
+    {
+     "name": "User 2 Bg Color",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "clone_patch",
+   "name": "Clone Patch",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/clone-patch",
+   "parameters": [
+    {
+     "name": "Is Normal (only for Color)",
+     "type": "bool"
+    },
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Square",
+      "Disc"
+     ]
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Grid Resolution",
+     "type": "int",
+     "min": 1,
+     "max": 11,
+     "group": "Edge"
+    },
+    {
+     "name": "Source Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Source Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    }
+   ]
+  },
+  {
+   "id": "color_equalizer",
+   "name": "Color Equalizer",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/color-equalizer",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    },
+    {
+     "name": "Mask Input",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Tiled",
+     "type": "bool"
+    },
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 50.0
+    },
+    {
+     "name": "Bright/Dark Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Custom Color Variation",
+     "type": "bool"
+    },
+    {
+     "name": "Hue",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Chroma",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Luma",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Mask Source",
+     "type": "enum",
+     "choices": [
+      "None",
+      "Image Average",
+      "Color Parameter",
+      "Input"
+     ],
+     "group": "Color Variation"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Mask"
+    },
+    {
+     "name": "Hue Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Chroma Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Luma Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Mask"
+    }
+   ]
+  },
+  {
+   "id": "crop",
+   "name": "Crop",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/crop",
+   "parameters": [
+    {
+     "name": "Input Size",
+     "type": "int",
+     "min": 0,
+     "max": 8192
+    },
+    {
+     "name": "Background",
+     "type": "other"
+    },
+    {
+     "name": "Transform",
+     "type": "other"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Is Normal (only for Color version)",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "material_clone_patch",
+   "name": "Material Clone Patch",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/material-clone-patch",
+   "inputs": [
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Square",
+      "Disc"
+     ],
+     "group": "Channels"
+    },
+    {
+     "name": "Threshold (for multiple channels)",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Grid Resolution",
+     "type": "int",
+     "min": 1,
+     "max": 11,
+     "group": "Edge"
+    },
+    {
+     "name": "Source Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Source Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    }
+   ]
+  },
+  {
+   "id": "material_crop",
+   "name": "Material Crop",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/material-crop",
+   "parameters": [
+    {
+     "name": "Input Size",
+     "type": "int",
+     "min": 0,
+     "max": 8192,
+     "group": "Channels"
+    },
+    {
+     "name": "Background",
+     "type": "other",
+     "group": "Channels"
+    },
+    {
+     "name": "Transform",
+     "type": "other",
+     "group": "Channels"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Channels"
+    }
+   ]
+  },
+  {
+   "id": "multi_angle_to_albedo",
+   "name": "Multi-Angle to Albedo",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/multi-angle-to-albedo",
+   "inputs": [
+    {
+     "name": "Input 1-8",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Samples Amount",
+     "type": "int",
+     "min": 2,
+     "max": 8
+    }
+   ]
+  },
+  {
+   "id": "multi_angle_to_normal",
+   "name": "Multi-Angle to Normal",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/multi-angle-to-normal",
+   "inputs": [
+    {
+     "name": "Input 1-8",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ]
+    },
+    {
+     "name": "Samples Amount",
+     "type": "int",
+     "min": 2,
+     "max": 8
+    },
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "First Sample Light Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0
+    },
+    {
+     "name": "Next Sample Light Angle",
+     "type": "enum",
+     "choices": [
+      "Counterclockwise",
+      "Clockwise"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "multi_clone_patch",
+   "name": "Multi Clone Patch",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/multi-clone-patch",
+   "parameters": [
+    {
+     "name": "Input Count",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Is Normal (only for Color)",
+     "type": "bool"
+    },
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Square",
+      "Disc"
+     ]
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Grid Resolution",
+     "type": "int",
+     "min": 1,
+     "max": 11,
+     "group": "Edge"
+    },
+    {
+     "name": "Source Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Source Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Matrix",
+     "type": "other",
+     "group": "Transformations"
+    },
+    {
+     "name": "Target Offset",
+     "type": "float",
+     "min": -0.5,
+     "max": 0.5,
+     "group": "Transformations"
+    }
+   ]
+  },
+  {
+   "id": "multi_color_equalizer",
+   "name": "Multi Color Equalizer",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/multi-color-equalizer",
+   "inputs": [
+    {
+     "name": "Input 1-8",
+     "type": "color"
+    },
+    {
+     "name": "Mask Input",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Count",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Input Tiled",
+     "type": "bool"
+    },
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 50.0
+    },
+    {
+     "name": "Bright/Dark Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Custom Color Variation",
+     "type": "bool"
+    },
+    {
+     "name": "Hue",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Chroma",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Luma",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color Variation"
+    },
+    {
+     "name": "Mask Source",
+     "type": "enum",
+     "choices": [
+      "None",
+      "Image Average",
+      "Color Parameter",
+      "Input"
+     ],
+     "group": "Color Variation"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Mask"
+    },
+    {
+     "name": "Hue Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Chroma Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Luma Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Mask"
+    }
+   ]
+  },
+  {
+   "id": "multi_crop",
+   "name": "Multi Crop",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/multi-crop",
+   "parameters": [
+    {
+     "name": "Input Count",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Input Size",
+     "type": "int",
+     "min": 0,
+     "max": 8192
+    },
+    {
+     "name": "Background",
+     "type": "other"
+    },
+    {
+     "name": "Transform",
+     "type": "other"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Is Normal (only for Color version)",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "smart_auto_tile",
+   "name": "Smart Auto Tile",
+   "category": "Material filters/Scan Processing",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/material-filters/scan-processing/smart-auto-tile",
+   "inputs": [
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Size",
+     "type": "int",
+     "min": 0,
+     "max": 8192,
+     "group": "Crop"
+    },
+    {
+     "name": "Transform",
+     "type": "other",
+     "group": "Crop"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Crop"
+    },
+    {
+     "name": "Detect Edges",
+     "type": "bool",
+     "group": "Edge"
+    },
+    {
+     "name": "Use Threshold Per Channel",
+     "type": "bool",
+     "group": "Edge"
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Threshold Base Color",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Threshold Normal",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Threshold Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Cut Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.5,
+     "group": "Edge"
+    },
+    {
+     "name": "Blur",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Edge"
+    },
+    {
+     "name": "Grid Resolution",
+     "type": "int",
+     "min": 1,
+     "max": 11,
+     "group": "Edge"
+    },
+    {
+     "name": "Use Base Color",
+     "type": "bool",
+     "group": "Edge"
+    },
+    {
+     "name": "Use Normal",
+     "type": "bool",
+     "group": "Edge"
+    },
+    {
+     "name": "Use Height",
+     "type": "bool",
+     "group": "Edge"
+    },
+    {
+     "name": "Use Mask",
+     "type": "bool",
+     "group": "Edge"
+    }
+   ]
+  },
+  {
+   "id": "bottom_to_top",
+   "name": "Bottom To Top",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/bottom-to-top",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "color"
+    },
+    {
+     "name": "Roughness",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Roughness_Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "cloth_wear",
+   "name": "Cloth Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/cloth-wear",
+   "inputs": [
+    {
+     "name": "Cloth Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Hard Edges Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Wear Softness",
+     "type": "float",
+     "min": 0.0,
+     "max": 5.0
+    }
+   ]
+  },
+  {
+   "id": "dirt",
+   "name": "Dirt",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/dirt",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Grunge input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Position",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Dirt Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Dirt Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Grunge Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Edges Masking",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "bool"
+    },
+    {
+     "name": "Grunge Scale",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "bool"
+    },
+    {
+     "name": "Triplanar Blending Contrast",
+     "type": "float",
+     "min": 0.001,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "dripping_rust",
+   "name": "Dripping Rust",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/dripping-rust",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Position",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Rust Spreading",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rust Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spreading Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Drips Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Drips Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Drips Samples Amount",
+     "type": "int",
+     "min": 0,
+     "max": 32
+    }
+   ]
+  },
+  {
+   "id": "dust",
+   "name": "Dust",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/dust",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Noise",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Occlusion Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Noise Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override Noise",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "edge_blur",
+   "name": "Edge Blur",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-blur",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Blur Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 8.0
+    }
+   ]
+  },
+  {
+   "id": "edge_damages",
+   "name": "Edge Damages",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-damages",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Damages Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "edge_dirt",
+   "name": "Edge Dirt",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-dirt",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Variation Mask",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override variation mask",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "edge_notch",
+   "name": "Edge Notch",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-notch",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "edge_select",
+   "name": "Edge Select",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-select",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Convex Edges Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Convex"
+    },
+    {
+     "name": "Convex Softness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Convex"
+    },
+    {
+     "name": "Convex Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Convex"
+    },
+    {
+     "name": "Concave Edges Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Concave"
+    },
+    {
+     "name": "Concave Softness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Concave"
+    },
+    {
+     "name": "Concave Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Concave"
+    }
+   ]
+  },
+  {
+   "id": "edge_speckle",
+   "name": "Edge Speckle",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-speckle",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Variation Mask",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Edge selection",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override variation mask",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "edge_wear",
+   "name": "Edge Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/edge-wear",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Edges Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "fiber_glass_edge_wear",
+   "name": "Fiber Glass Edge Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/fiber-glass-edge-wear",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Grunge Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Position",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Wear Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Wear Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Edges Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0
+    },
+    {
+     "name": "Grunge Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Ambient Occlusion Masking",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Curvature Weight",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "bool"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "bool"
+    },
+    {
+     "name": "Triplanar Blending Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "grease",
+   "name": "Grease",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/grease",
+   "inputs": [
+    {
+     "name": "Thickness",
+     "type": "grayscale"
+    },
+    {
+     "name": "Noise",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Thickness Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override Noise",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "ground_dirt",
+   "name": "Ground Dirt",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/ground-dirt",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Dirt Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "leaks",
+   "name": "Leaks",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/leaks",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Normal World Space",
+     "type": "color"
+    },
+    {
+     "name": "Variation Mask",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Lenght",
+     "type": "float",
+     "min": 0.0,
+     "max": 8.0
+    },
+    {
+     "name": "Occlude",
+     "type": "enum",
+     "choices": [
+      "X",
+      "Y",
+      "Z",
+      "None"
+     ]
+    },
+    {
+     "name": "Override variation mask",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "leather_wear",
+   "name": "Leather Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/leather-wear",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Grunge Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Wear Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Wear Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Grunge Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Ambient Occlusion Masking",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Curvature Weight",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "light",
+   "name": "Light",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/light",
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Horizontal Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Vertical Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Highlight Glossiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.999
+    },
+    {
+     "name": "Highlight Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "mask_builder",
+   "name": "Mask Builder",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/mask-builder",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Grunge Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Grunge Input 2",
+     "type": "grayscale"
+    },
+    {
+     "name": "Scatter Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    },
+    {
+     "name": "Position",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "bool"
+    },
+    {
+     "name": "Triplanar Blending Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Grunge",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "Grunge"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "bool",
+     "group": "Grunge"
+    },
+    {
+     "name": "Secondary Custom Grunge",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Grunge"
+    },
+    {
+     "name": "Invert",
+     "type": "bool",
+     "group": "Grunge"
+    },
+    {
+     "name": "AO",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "AO"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "AO"
+    },
+    {
+     "name": "Noisiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "AO"
+    },
+    {
+     "name": "Noise Scale",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "AO"
+    },
+    {
+     "name": "Noise Type",
+     "type": "enum",
+     "choices": [
+      "Spots",
+      "Cloud",
+      "Moisture",
+      "White Noise"
+     ],
+     "group": "AO"
+    },
+    {
+     "name": "Invert",
+     "type": "bool",
+     "group": "AO"
+    },
+    {
+     "name": "Curvature",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Convex Range",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Convex Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Convex Invert",
+     "type": "bool",
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Range",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Invert",
+     "type": "bool",
+     "group": "Curvature"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Level Boost",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Noisiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Curvature"
+    },
+    {
+     "name": "Noise Scale",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "Curvature"
+    },
+    {
+     "name": "Noise Type",
+     "type": "enum",
+     "choices": [
+      "Spots",
+      "Cloud",
+      "Moisture",
+      "White Noise"
+     ],
+     "group": "Curvature"
+    },
+    {
+     "name": "Top/Down Gradient",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Gradient"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Gradient"
+    },
+    {
+     "name": "Invert",
+     "type": "bool",
+     "group": "Gradient"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Top Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Bottom Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Front Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Back Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Right Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Left Intensity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Scratches",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Amount",
+     "type": "int",
+     "min": 0,
+     "max": 4096,
+     "group": "Scratches"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Scratches"
+    },
+    {
+     "name": "Scatter",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 0,
+     "max": 50,
+     "group": "Scatter"
+    },
+    {
+     "name": "Density",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Scatter"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 4.0,
+     "group": "Scatter"
+    },
+    {
+     "name": "Size Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Scatter"
+    },
+    {
+     "name": "Opacity Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Scatter"
+    }
+   ]
+  },
+  {
+   "id": "metal_edge_wear",
+   "name": "Metal Edge Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/metal-edge-wear",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Grunge Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Position",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Wear Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Wear Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Edges Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0
+    },
+    {
+     "name": "Grunge Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Grunge Scale",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Ambient Occlusion Masking",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Curvature Weight",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "bool"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "bool"
+    },
+    {
+     "name": "Triplanar Blending Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "paint_wear",
+   "name": "Paint Wear",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/paint-wear",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Variation Mask",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Occlusion",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0
+    },
+    {
+     "name": "Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override variation mask",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "selective_dirt",
+   "name": "Selective Dirt",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/selective-dirt",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Variation Mask",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Override variation mask",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "sun_bleach",
+   "name": "Sun Bleach",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/sun-bleach",
+   "inputs": [
+    {
+     "name": "Normal World Space",
+     "type": "color"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Occlusion",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "surface_brush",
+   "name": "Surface Brush",
+   "category": "Mesh based generators/Mask Generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/mask-generators/surface-brush",
+   "inputs": [
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Position",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask (optional)",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scratches Lenght",
+     "type": "float",
+     "min": 0.0,
+     "max": 8.0
+    },
+    {
+     "name": "Occlude Axis",
+     "type": "enum",
+     "choices": [
+      "X",
+      "Y",
+      "Z",
+      "none"
+     ]
+    },
+    {
+     "name": "Occlude Axis Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Occlusion",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "cracks_weathering",
+   "name": "Cracks Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/cracks-weathering",
+   "inputs": [
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Cracks Propagation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Cracks Depth",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    }
+   ]
+  },
+  {
+   "id": "fabric_weathering",
+   "name": "Fabric Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/fabric-weathering",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Normal Wold Space",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Dirtiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Edges Wearing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age Threshlod",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age Creases",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 32.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Old Fabric Desaturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Old Fabric Brightness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "leather_weathering",
+   "name": "Leather Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/leather-weathering",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Normal Wold Space",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Dirtiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Edges Wearing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age Threshlod",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Cracks Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 16.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Cracks Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 32.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used Leather Desaturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used Leather Brightness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "metal_weathering",
+   "name": "Metal Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/metal-weathering",
+   "inputs": [
+    {
+     "name": "Normal WS",
+     "type": "color"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "Direct X",
+      "Open GL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Dirtiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Edges Wearing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Paint Peeling",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Rust",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Rust Peeling",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Rust Verdigris",
+     "type": "enum",
+     "choices": [
+      "Rust",
+      "Verdigris"
+     ],
+     "group": "Effect"
+    },
+    {
+     "name": "Paint Cracks Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 16.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Paint Cracks Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 32.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Raw Metal Color",
+     "type": "color",
+     "group": "Effect"
+    },
+    {
+     "name": "Raw Metal Specular Color",
+     "type": "color",
+     "group": "Effect"
+    },
+    {
+     "name": "Raw Metal Glossiness Value",
+     "type": "float",
+     "group": "Effect"
+    },
+    {
+     "name": "Raw Metal Roughness Value",
+     "type": "float",
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Metallic Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "moss_weathering",
+   "name": "Moss Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/moss-weathering",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "color"
+    },
+    {
+     "name": "Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Moss Propagation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "rock_weathering",
+   "name": "Rock Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/rock-weathering",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Normal WS",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Dirtiness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Edges Wearing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used Rock",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Cracks Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 60.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Cracks Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Age Threshlod",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Scale",
+     "type": "float",
+     "min": 1.0,
+     "max": 32.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Sharp Edges Scratches Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used Rock Desaturation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Used Rock Brightness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "rust_weathering",
+   "name": "Rust Weathering",
+   "category": "Mesh based generators/Weathering",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/weathering/rust-weathering",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Position",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ],
+     "group": "Advanced"
+    },
+    {
+     "name": "Mask",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Rust Spreading",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Spreading Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Vernish Damage Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Drips Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Drips Samples Amount",
+     "type": "int",
+     "min": 0,
+     "max": 32,
+     "group": "Effect"
+    },
+    {
+     "name": "Drips Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Effect"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 32.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Specular Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Glossiness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Roughness Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Metallic Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Blending"
+    }
+   ]
+  },
+  {
+   "id": "3d_planar_projection",
+   "name": "3D Planar Projection",
+   "category": "Mesh based generators/Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/utilities-mesh-based-generators/3d-planar-projection",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Projected Texture",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Project Input",
+     "type": "enum",
+     "choices": [
+      "UV Position",
+      "World Space Position"
+     ],
+     "group": "Positioning"
+    },
+    {
+     "name": "Target UV Position",
+     "type": "float2",
+     "group": "Positioning"
+    },
+    {
+     "name": "Target Position",
+     "type": "color",
+     "group": "Positioning"
+    },
+    {
+     "name": "Target Normal",
+     "type": "color",
+     "group": "Positioning"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Positioning"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Positioning"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Positioning"
+    },
+    {
+     "name": "Maximum Depth",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Depth Fade",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Normal Threshold",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Normal Fade",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    }
+   ]
+  },
+  {
+   "id": "material_mesh_data_blender",
+   "name": "Material Mesh Data Blender",
+   "category": "Mesh based generators/Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/utilities-mesh-based-generators/material-mesh-data-blender",
+   "inputs": [
+    {
+     "name": "Full Material Input (Group “Material”)"
+    },
+    {
+     "name": "Ambient Occlusion",
+     "type": "grayscale"
+    },
+    {
+     "name": "Curvature",
+     "type": "grayscale"
+    },
+    {
+     "name": "Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Normal",
+     "type": "color"
+    },
+    {
+     "name": "Vertex Color",
+     "type": "color"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {}
+   ],
+   "parameters": [
+    {
+     "name": "Diffuse AO",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Sharp Edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Color From Vertex Color",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Pre Lighting",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Cartoon Lighting Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Cartoon Pre Lighting Layers",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Diffuse Cartoon Outlines",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Base Color AO",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Base Color Sharp edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Base Color From Vertex Color",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Normal Material Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "SpecularAO",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Specular Bright Sharp Edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Specular Cartoon Outlines",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Glossiness Dark Sharp Edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Roughness Bright Sharp Edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Roughness Cartoon Outlines",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Metallic Bright Sharp Edges",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Metallic Cartoon Outlines",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "AO Materiel Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Height Material Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Baked Maps"
+    },
+    {
+     "name": "Height Material Blending Type",
+     "type": "enum",
+     "choices": [
+      "Reinforce",
+      "Interpolation"
+     ],
+     "group": "Baked Maps"
+    }
+   ]
+  },
+  {
+   "id": "material_selector",
+   "name": "Material Selector",
+   "category": "Mesh based generators/Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/utilities-mesh-based-generators/material-selector",
+   "outputs": [
+    {
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Materials",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Enable Material #1-16",
+     "type": "bool"
+    },
+    {
+     "name": "Material #1-16",
+     "type": "color"
+    },
+    {
+     "name": "Fuzziness",
+     "type": "float",
+     "min": 0.01,
+     "max": 1.0,
+     "group": "Color Picker Parameters"
+    },
+    {
+     "name": "Padding",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color Picker Parameters"
+    }
+   ]
+  },
+  {
+   "id": "mesh_data_combiner",
+   "name": "Mesh Data Combiner",
+   "category": "Mesh based generators/Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/utilities-mesh-based-generators/mesh-data-combiner",
+   "parameters": [
+    {
+     "name": "Ambient Occlusion",
+     "type": "bool"
+    },
+    {
+     "name": "UV Masks",
+     "type": "bool"
+    },
+    {
+     "name": "Curvature",
+     "type": "bool"
+    },
+    {
+     "name": "Height",
+     "type": "bool"
+    },
+    {
+     "name": "Position (Grayscale)",
+     "type": "bool"
+    },
+    {
+     "name": "Thickness",
+     "type": "bool"
+    },
+    {
+     "name": "Normal",
+     "type": "bool"
+    },
+    {
+     "name": "Position (RGB)",
+     "type": "bool"
+    },
+    {
+     "name": "Color ID",
+     "type": "bool"
+    },
+    {
+     "name": "World Space Direction",
+     "type": "bool"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "tri_planar",
+   "name": "Tri Planar",
+   "category": "Mesh based generators/Utilities",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/mesh-based-generators/utilities-mesh-based-generators/tri-planar",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "color"
+    },
+    {
+     "name": "World Space Normal",
+     "type": "color"
+    },
+    {
+     "name": "Input X",
+     "type": "any"
+    },
+    {
+     "name": "Input Y",
+     "type": "any"
+    },
+    {
+     "name": "Input Z",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Projection",
+     "type": "enum",
+     "choices": [
+      "All axis",
+      "X only",
+      "Y only",
+      "Z only"
+     ]
+    },
+    {
+     "name": "Image Inputs",
+     "type": "enum",
+     "choices": [
+      "1 input",
+      "3 inputs"
+     ]
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "linear",
+      "advanced"
+     ]
+    },
+    {
+     "name": "Blending Contrast",
+     "type": "float",
+     "min": 0.001,
+     "max": 1.0
+    },
+    {
+     "name": "Normalization Factor",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Texture Tiling",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0
+    },
+    {
+     "name": "Global Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Fix Mirrored Projection",
+     "type": "bool"
+    },
+    {
+     "name": "Rotation X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rotation Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rotation Z",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Offset X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Random Offset X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Offset Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Random Offset Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Offset Z",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Random Offset Z",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "blackbody",
+   "name": "Blackbody",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/blackbody",
+   "outputs": [
+    {
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Temperature",
+     "type": "float",
+     "min": 1000.0,
+     "max": 27000.0
+    }
+   ]
+  },
+  {
+   "id": "color_temperature_adjustment",
+   "name": "Color Temperature Adjustment",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/color-temperature-adjustment",
+   "parameters": [
+    {
+     "name": "Temperature",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Magenta-Green",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Color Space",
+     "type": "enum",
+     "choices": [
+      "HDR (linear)",
+      "LDR (sRGB)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "exposure",
+   "name": "Exposure",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/exposure",
+   "parameters": [
+    {
+     "name": "Exposure (EV)",
+     "type": "float",
+     "min": -8.0,
+     "max": 8.0
+    }
+   ]
+  },
+  {
+   "id": "exposure_preview",
+   "name": "Exposure Preview",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/exposure-preview",
+   "parameters": [
+    {
+     "name": "Max Exposure (EV)",
+     "type": "float",
+     "min": -8.0,
+     "max": 8.0
+    },
+    {
+     "name": "Min Exposure (EV)",
+     "type": "float",
+     "min": -8.0,
+     "max": 8.0
+    }
+   ]
+  },
+  {
+   "id": "gradient_2_points",
+   "name": "Gradient 2 Points",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/gradient-2-points",
+   "parameters": [
+    {
+     "name": "Point 1 Position",
+     "type": "float2"
+    },
+    {
+     "name": "Point 1 Color",
+     "type": "color"
+    },
+    {
+     "name": "Point 1 Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Point 2 Position",
+     "type": "float2"
+    },
+    {
+     "name": "Point 2 Color",
+     "type": "color"
+    },
+    {
+     "name": "Point 2 Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "gradient_linear_hdri",
+   "name": "Gradient Linear (HDRI)",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/gradient-linear-hdri",
+   "parameters": [
+    {
+     "name": "Point Position",
+     "type": "float2"
+    },
+    {
+     "name": "Top Color",
+     "type": "color"
+    },
+    {
+     "name": "Bottom Color",
+     "type": "color"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "hdr_merge",
+   "name": "HDR Merge",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/hdr-merge",
+   "inputs": [
+    {
+     "name": "Input 1-16",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Inputs",
+     "type": "int",
+     "min": 2,
+     "max": 16
+    },
+    {
+     "name": "Exposure Delta (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 4.0
+    },
+    {
+     "name": "White Point",
+     "type": "float",
+     "min": 0.0,
+     "max": 13.0
+    }
+   ]
+  },
+  {
+   "id": "line_light",
+   "name": "Line Light",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/line-light",
+   "inputs": [
+    {
+     "name": "Background Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Shape Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Pattern Image Input",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Position Mode",
+     "type": "enum",
+     "choices": [
+      "Ground / Ceiling",
+      "Distance from Origin",
+      "World Positions"
+     ]
+    },
+    {
+     "name": "Show Ground Grid",
+     "type": "bool"
+    },
+    {
+     "name": "Up Vector",
+     "type": "enum",
+     "choices": [
+      "Z Up",
+      "Y Up"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Point 1 UV Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Point 2 UV Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Point 1 World Position",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Point 2 World Position",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Line Absolute Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Distance from Origin",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Color Mode",
+     "type": "enum",
+     "choices": [
+      "RGB",
+      "Temperature (Kelvin)",
+      "Image Input"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Temperature",
+     "type": "float",
+     "min": 800.0,
+     "max": 20000.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image UV Mode",
+     "type": "enum",
+     "choices": [
+      "Stretch",
+      "Stretch Middle only",
+      "Repeat + Spacing"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image Repeat Spacing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Exposure (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Line Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Line Thickness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Smooth Square",
+      "Sharp Square",
+      "Cone",
+      "Hemisphere",
+      "Image Input"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern Hardness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern UV Mode",
+     "type": "enum",
+     "choices": [
+      "Stretch",
+      "Stretch Middle only",
+      "Repeat + Spacing"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern Repeat Spacing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Enable Ground Clipping",
+     "type": "bool",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Ground Height",
+     "type": "float",
+     "min": -2.0,
+     "max": 0.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Enable Backgound Input",
+     "type": "bool",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    }
+   ]
+  },
+  {
+   "id": "nadir_extract",
+   "name": "Nadir Extract",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/nadir-extract",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Output Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nadir_patch",
+   "name": "Nadir Patch",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/nadir-patch",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    },
+    {
+     "name": "Mask Input",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Enable",
+     "type": "bool"
+    },
+    {
+     "name": "Show Frames Helper",
+     "type": "bool"
+    },
+    {
+     "name": "Frame Thickness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Patch Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Patch Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Patch Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Patch Alpha",
+     "type": "enum",
+     "choices": [
+      "Smooth Square",
+      "Gaussian",
+      "Mask Input"
+     ]
+    },
+    {
+     "name": "Patch Hardness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Source Rotation Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Source Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Patch Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    }
+   ]
+  },
+  {
+   "id": "panorama_3d_position",
+   "name": "Panorama 3D Position",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/panorama-3d-position",
+   "parameters": [
+    {
+     "name": "Up Vector",
+     "type": "enum",
+     "choices": [
+      "Z Up",
+      "Y Up"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "panorama_rotation",
+   "name": "Panorama Rotation",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/panorama-rotation",
+   "parameters": [
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Direction Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pre Rotation Around Pole",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Post Rotation Around Pole",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "physical_sun_sky",
+   "name": "Physical Sun/Sky",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/physical-sun-sky",
+   "parameters": [
+    {
+     "name": "Sun Position",
+     "type": "float2",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Turbidity",
+     "type": "float",
+     "min": 1.0,
+     "max": 10.0
+    },
+    {
+     "name": "Albedo",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Ground Color",
+     "type": "color"
+    },
+    {
+     "name": "Exposure (EV)",
+     "type": "float",
+     "min": -1.0,
+     "max": 4.0
+    },
+    {
+     "name": "Sun Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 4.0
+    },
+    {
+     "name": "Sun Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Sky Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "plane_light",
+   "name": "Plane Light",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/plane-light",
+   "inputs": [
+    {
+     "name": "Background Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Shape Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Pattern Image Input",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Position Mode",
+     "type": "enum",
+     "choices": [
+      "Ground / Ceiling",
+      "Distance from Origin",
+      "World Positions"
+     ]
+    },
+    {
+     "name": "Show Ground Grid",
+     "type": "bool"
+    },
+    {
+     "name": "Up Vector",
+     "type": "enum",
+     "choices": [
+      "Z Up",
+      "Y Up"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane UV Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane World Position",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane Absolute Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Distance from Origin",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Color Mode",
+     "type": "enum",
+     "choices": [
+      "RGB",
+      "Temperature (Kelvin)",
+      "Image Input"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Temperature",
+     "type": "float",
+     "min": 800.0,
+     "max": 20000.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image UV Mode",
+     "type": "enum",
+     "choices": [
+      "Stretch",
+      "Stretch Middle only",
+      "Repeat + Spacing"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image Repeat Spacing",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Image Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Exposure (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Plane Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Smooth Square",
+      "Sharp Square",
+      "Cone",
+      "Hemisphere",
+      "Image Input"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern Hardness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Pattern UV Mode",
+     "type": "enum",
+     "choices": [
+      "Stretch",
+      "Stretch Middle only"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Enable Ground Clipping",
+     "type": "bool",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Ground Height",
+     "type": "float",
+     "min": -2.0,
+     "max": 0.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Enable Backgound Input",
+     "type": "bool",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    }
+   ]
+  },
+  {
+   "id": "shape_light",
+   "name": "Shape Light",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/shape-light",
+   "inputs": [
+    {
+     "name": "Background Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Shape Image Input",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Matrix",
+     "type": "other",
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Rectangle",
+      "Disc"
+     ],
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape Color Mode",
+     "type": "enum",
+     "choices": [
+      "RGB",
+      "Temperature (Kelvin)",
+      "Image Input"
+     ],
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape Temperature",
+     "type": "float",
+     "min": 800.0,
+     "max": 20000.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape Image Input Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape Exposure (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Shape Hardness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Hotspot Exposure (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Hotspot Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Hotspot Falloff",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Hotspot Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Enable Backgound Input",
+     "type": "bool",
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Shape Matrix"
+    },
+    {
+     "name": "Background Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Shape Matrix"
+    }
+   ]
+  },
+  {
+   "id": "sphere_light",
+   "name": "Sphere Light",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/sphere-light",
+   "inputs": [
+    {
+     "name": "Background Image Input",
+     "type": "color"
+    },
+    {
+     "name": "Shape Image Input",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Position Mode",
+     "type": "enum",
+     "choices": [
+      "Distance from Origin",
+      "World Position"
+     ]
+    },
+    {
+     "name": "Up Vector",
+     "type": "enum",
+     "choices": [
+      "Z Up",
+      "Y Up"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Sphere World Position",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Position",
+     "type": "float2",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Distance from Origin",
+     "type": "float",
+     "min": 0.0,
+     "max": 20.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Color Mode",
+     "type": "enum",
+     "choices": [
+      "RGB",
+      "Temperature (Kelvin)",
+      "Image Input"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shape Temperature",
+     "type": "float",
+     "min": 800.0,
+     "max": 20000.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Sphere Image Input Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Sphere Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Exposure (EV)",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Sphere Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Sphere Hardness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shading",
+     "type": "enum",
+     "choices": [
+      "None",
+      "Limb Darkening",
+      "Shading Light"
+     ],
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Shading Light World Position",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Penombra Transparency",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Enable Backgound Input",
+     "type": "bool",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Position Coordinates"
+    },
+    {
+     "name": "Background Gamma",
+     "type": "enum",
+     "choices": [
+      "sRGB",
+      "Linear"
+     ],
+     "group": "Position Coordinates"
+    }
+   ]
+  },
+  {
+   "id": "straighten_horizon",
+   "name": "Straighten Horizon",
+   "category": "3D View (Library)/HDRI Tools",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/3d-view-library/hdri-tools/straighten-horizon",
+   "parameters": [
+    {
+     "name": "Enable Horizon Correction",
+     "type": "bool"
+    },
+    {
+     "name": "Horizon Point #1 Position",
+     "type": "float2"
+    },
+    {
+     "name": "Horizon Point #2 Position",
+     "type": "float2"
+    },
+    {
+     "name": "Horizontal Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  }
+ ]
+}

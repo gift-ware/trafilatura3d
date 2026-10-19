@@ -1,0 +1,2 @@
+"""Legacy library generators ("... (Legacy)"): the generators that older .sbs files still
+use, each with its own parameters (the documentation does not list them); our methods, fitted on their outputs."""

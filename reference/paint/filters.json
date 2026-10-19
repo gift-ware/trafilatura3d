@@ -1,0 +1,2826 @@
+{
+ "items": [
+  {
+   "id": "painter.filters.overview",
+   "name": "Filters (overview)",
+   "category": "filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/filter"
+  },
+  {
+   "id": "painter.filter.anisotropic_kuwahara",
+   "name": "Anisotropic Kuwahara",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/anisotropic-kuwahara",
+   "inputs": [
+    {
+     "name": "Radius Map: Grayscale"
+    },
+    {
+     "name": "Custom Input: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Extract Direction",
+     "type": "enum"
+    },
+    {
+     "name": "Radius"
+    },
+    {
+     "name": "Smoothness"
+    },
+    {
+     "name": "Sharpness"
+    },
+    {
+     "name": "Tensor Smoothness"
+    },
+    {
+     "name": "Anisotropy"
+    },
+    {
+     "name": "Anisotropy Angle"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.bevel_smooth",
+   "name": "Bevel Smooth",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/bevel-smooth",
+   "inputs": [
+    {
+     "name": "Distance Map: Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Direction",
+     "type": "enum"
+    },
+    {
+     "name": "Distance"
+    },
+    {
+     "name": "Smoothing"
+    },
+    {
+     "name": "Curve Offset"
+    },
+    {
+     "name": "Curve Shape",
+     "type": "enum"
+    },
+    {
+     "name": "Mask Threshold"
+    },
+    {
+     "name": "Distance Map Multiplier"
+    },
+    {
+     "name": "Bevel Wrap",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.bevel",
+   "name": "Bevel",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/bevel",
+   "parameters": [
+    {
+     "name": "Bevel Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Distance"
+    },
+    {
+     "name": "Corner Type",
+     "type": "enum"
+    },
+    {
+     "name": "Smoothing"
+    },
+    {
+     "name": "Blur Mode",
+     "type": "enum"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.color_match",
+   "name": "Color Match",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/color-match",
+   "inputs": [
+    {
+     "name": "Source Color:"
+    },
+    {
+     "name": "Target Color:"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Source Color Mode",
+     "type": "enum",
+     "values": [
+      "Average",
+      "Parameter",
+      "Input"
+     ]
+    },
+    {
+     "name": "Source Color"
+    },
+    {
+     "name": "Target Color Mode",
+     "type": "enum",
+     "values": [
+      "Parameter",
+      "Input"
+     ]
+    },
+    {
+     "name": "Target Color"
+    },
+    {
+     "name": "Custom Color Variation",
+     "type": "boolean"
+    },
+    {
+     "name": "Hue"
+    },
+    {
+     "name": "Chroma"
+    },
+    {
+     "name": "Luma"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.directional_distance",
+   "name": "Directional Distance",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/directional-distance",
+   "inputs": [
+    {
+     "name": "Distance Map: Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Distance"
+    },
+    {
+     "name": "Angle"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Distance Map Multiplier"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.gradient_curve",
+   "name": "Gradient Curve",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/gradient-curve",
+   "parameters": [
+    {
+     "name": "Preset",
+     "type": "enum"
+    },
+    {
+     "name": "Invert",
+     "type": "boolean"
+    },
+    {
+     "name": "Balance"
+    },
+    {
+     "name": "Contrast"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.height_adjustments",
+   "name": "Height Adjust",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/height-adjustments",
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "boolean"
+    },
+    {
+     "name": "Offset"
+    },
+    {
+     "name": "Multiply"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.height_to_normal",
+   "name": "Height To Normal",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/height-to-normal",
+   "parameters": [
+    {
+     "name": "Overwrite Existing Normal",
+     "type": "boolean"
+    },
+    {
+     "name": "Use World Units",
+     "type": "boolean"
+    },
+    {
+     "name": "Normal Intensity"
+    },
+    {
+     "name": "Surface Size (cm)"
+    },
+    {
+     "name": "Height Depth (cm)"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.mask_outline",
+   "name": "Mask Outline",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/mask-outline",
+   "parameters": [
+    {
+     "name": "Mask Position",
+     "type": "enum"
+    },
+    {
+     "name": "Start From Black",
+     "type": "boolean"
+    },
+    {
+     "name": "Threshold"
+    },
+    {
+     "name": "Width"
+    },
+    {
+     "name": "Blur"
+    },
+    {
+     "name": "Curve Shape"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.pbr_validate",
+   "name": "PBR Validate",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/pbr-validate",
+   "parameters": [
+    {
+     "name": "Validation Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Albedo Dark Range Threshold",
+     "type": "enum"
+    },
+    {
+     "name": "Metal Reflectance Range",
+     "type": "enum"
+    },
+    {
+     "name": "Overlay Map",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.quantize",
+   "name": "Quantize",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/quantize",
+   "parameters": [
+    {
+     "name": "Color Amount"
+    },
+    {
+     "name": "Contour Smoothing"
+    },
+    {
+     "name": "Dithering"
+    },
+    {
+     "name": "Dithering Pattern",
+     "type": "enum"
+    },
+    {
+     "name": "Distance Color Space",
+     "type": "color"
+    },
+    {
+     "name": "Apply To Alpha",
+     "type": "boolean"
+    },
+    {
+     "name": "Alpha Threshold"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.stylization",
+   "name": "Stylization",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/stylization",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion Base: Color"
+    },
+    {
+     "name": "Curvature: Color"
+    },
+    {
+     "name": "Normal Base: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Stylization"
+    },
+    {
+     "name": "Brush Strokes"
+    },
+    {
+     "name": "Smoothness"
+    },
+    {
+     "name": "Colorize"
+    },
+    {
+     "name": "Gradient"
+    },
+    {
+     "name": "Baked Lighthing"
+    },
+    {
+     "name": "Edges and Cavities"
+    },
+    {
+     "name": "Strokes Amount",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Mode",
+     "type": "enum",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Select",
+     "type": "enum",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Select",
+     "type": "enum",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Scale",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Non-Uniform Size",
+     "type": "boolean",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Size",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Scale Random",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Follow Surface",
+     "type": "boolean",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Rotation",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Strokes Rotation Random",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Projection Hardness",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Normal Threshold",
+     "group": "Brush Strokes"
+    },
+    {
+     "name": "Color Custom",
+     "type": "boolean",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Color Variation",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Color Opacity",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Color",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Color Random",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Roughness Custom",
+     "type": "boolean",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Roughness Variation",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Roughness",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Metallic Custom",
+     "type": "boolean",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Metallic Variation",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Metallic",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Normal Custom",
+     "type": "boolean",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Normal Variation",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Normal Random",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Blending Mode (Normal)",
+     "type": "enum",
+     "group": "Brush Strokes Effects"
+    },
+    {
+     "name": "Color Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Roughness Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Metallic Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Height Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Normal Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Ambient Occlusion Smoothness",
+     "group": "Smoothness"
+    },
+    {
+     "name": "Color Opacity",
+     "group": "Colorize"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Colorize"
+    },
+    {
+     "name": "Grunge Variation",
+     "type": "enum",
+     "group": "Colorize"
+    },
+    {
+     "name": "Grunge Opacity",
+     "group": "Colorize"
+    },
+    {
+     "name": "Grunge Color",
+     "group": "Colorize"
+    },
+    {
+     "name": "Tilling Amount",
+     "group": "Colorize"
+    },
+    {
+     "name": "Pattern Scale",
+     "group": "Colorize"
+    },
+    {
+     "name": "Gradient Mode",
+     "type": "enum",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color Opacity",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color Blending Mode",
+     "type": "enum",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color 2",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color 2 Opacity",
+     "group": "Gradient"
+    },
+    {
+     "name": "Color 2 Blending Mode",
+     "type": "enum",
+     "group": "Gradient"
+    },
+    {
+     "name": "Horizontal Rotation",
+     "group": "Gradient"
+    },
+    {
+     "name": "Vertical Rotation",
+     "group": "Gradient"
+    },
+    {
+     "name": "Gradient Invert",
+     "type": "boolean",
+     "group": "Gradient"
+    },
+    {
+     "name": "Gradient Offset",
+     "group": "Gradient"
+    },
+    {
+     "name": "Gradient Contrast",
+     "group": "Gradient"
+    },
+    {
+     "name": "Brush Strokes In Lighting",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Diffuse Intensity",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Diffuse Color",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Diffuse Radius",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Diffuse Contrast",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Specular Intensity",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Specular Color",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Specular Radius",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Specular Contrast",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Horizontal Rotation",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Vertical Rotation",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Color Sharpen",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Surface Sharpen",
+     "group": "Baked Lighting"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Edges and Cavities Contrast",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Cavities Opacity",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Cavities Spread",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Brush Strokes In Cavities",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Custom Cavities Color",
+     "type": "boolean",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Cavities Color",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Edges Opacity",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Edges Spread",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Brush Strokes In Edges",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Custom Edges Color",
+     "type": "boolean",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Edges Color",
+     "group": "Edges And Cavities"
+    },
+    {
+     "name": "Display Helpers",
+     "type": "enum",
+     "group": "Helpers"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.tri_planar_advanced_filter",
+   "name": "Tri-Planar Advanced",
+   "category": "advanced-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/advanced-filters/tri-planar-advanced-filter",
+   "inputs": [
+    {
+     "name": "World Space Normal:"
+    },
+    {
+     "name": "Position:"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Projection",
+     "type": "enum"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Blending Contrast"
+    },
+    {
+     "name": "Texture Tiling"
+    },
+    {
+     "name": "Rotation X"
+    },
+    {
+     "name": "Offset X"
+    },
+    {
+     "name": "Rotation Y"
+    },
+    {
+     "name": "Offset Y"
+    },
+    {
+     "name": "Rotation Z"
+    },
+    {
+     "name": "Offset Z"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis X"
+    },
+    {
+     "name": "Offset X X",
+     "group": "Axis X"
+    },
+    {
+     "name": "Offset X Y",
+     "group": "Axis X"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Offset Y X",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Offset Y Y",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis Z"
+    },
+    {
+     "name": "Offset Z X",
+     "group": "Axis Z"
+    },
+    {
+     "name": "Offset Z Y",
+     "group": "Axis Z"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_brushed_linear",
+   "name": "MatFinish Brushed Linear",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-brushed-linear",
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Brushing Intensity"
+    },
+    {
+     "name": "Length"
+    },
+    {
+     "name": "Rotation"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_galvanized",
+   "name": "MatFinish Galvanized",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-galvanized",
+   "inputs": [
+    {
+     "name": "Custom Flake: Grayscale"
+    },
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Flakes Intensity"
+    },
+    {
+     "name": "Use Custom Flake",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_grainy",
+   "name": "MatFinish Grainy",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-grainy",
+   "inputs": [
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Grain Intensity"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_grinded",
+   "name": "MatFinish Grinded",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-grinded",
+   "inputs": [
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Grinding Intensity"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_hammered",
+   "name": "MatFinish Hammered",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-hammered",
+   "inputs": [
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Details Intensity"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    },
+    {
+     "name": "Rotation"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_perforated_circles",
+   "name": "MatFinish Perforated Circles",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-perforated-circles",
+   "parameters": [
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Holes Size"
+    },
+    {
+     "name": "Details Intensity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_powder_coated",
+   "name": "MatFinish Powder Coated",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-powder-coated",
+   "inputs": [
+    {
+     "name": "Custom Flake: Grayscale"
+    },
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Flakes Intensity"
+    },
+    {
+     "name": "Use Custom Flake",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_raw",
+   "name": "MatFinish Raw",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-raw",
+   "inputs": [
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Details Intensity"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfinish_rough",
+   "name": "MatFinish Rough",
+   "category": "finish-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/finish-filters/matfinish-rough",
+   "inputs": [
+    {
+     "name": "Custom Grunge: Grayscale"
+    },
+    {
+     "name": "Position: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Scale"
+    },
+    {
+     "name": "Scale Grunge"
+    },
+    {
+     "name": "Brushing Intensity"
+    },
+    {
+     "name": "Brushing Warp"
+    },
+    {
+     "name": "Use Custom Flake",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Mapping",
+     "type": "boolean"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.baked_lighting_environment",
+   "name": "Baked Lighting Environment",
+   "category": "lighting-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/lighting-filters/baked-lighting-environment",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion: Grayscale"
+    },
+    {
+     "name": "Environment Map: Grayscale"
+    },
+    {
+     "name": "Normal: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Horizontal Rotation"
+    },
+    {
+     "name": "Vertical Rotation"
+    },
+    {
+     "name": "Exposure"
+    },
+    {
+     "name": "Height Intensity"
+    },
+    {
+     "name": "Ambient Occlusion Intensity"
+    },
+    {
+     "name": "Specular Occlusion Intensity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.baked_lighting_stylized",
+   "name": "Baked Lighting Stylized",
+   "category": "lighting-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/lighting-filters/baked-lighting-stylized",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion: Grayscale"
+    },
+    {
+     "name": "Curvature: Grayscale"
+    },
+    {
+     "name": "Normal: Color"
+    },
+    {
+     "name": "World Space Normals: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input",
+     "type": "enum"
+    },
+    {
+     "name": "Output",
+     "type": "enum"
+    },
+    {
+     "name": "Dielectric Reflectance"
+    },
+    {
+     "name": "Diffuse AO"
+    },
+    {
+     "name": "Diffuse Cavity"
+    },
+    {
+     "name": "Specular AO"
+    },
+    {
+     "name": "Specular Cavity"
+    },
+    {
+     "name": "Cavity Smoothness"
+    },
+    {
+     "name": "Edges Intensity"
+    },
+    {
+     "name": "Edges Smoothness"
+    },
+    {
+     "name": "Normal Details Type",
+     "type": "enum"
+    },
+    {
+     "name": "Height to Normal Intensity"
+    },
+    {
+     "name": "Sun Intensity"
+    },
+    {
+     "name": "Sun Horizontal Angle"
+    },
+    {
+     "name": "Sun Vertical Angle"
+    },
+    {
+     "name": "Sun Color"
+    },
+    {
+     "name": "Sky Intensity"
+    },
+    {
+     "name": "Sky Color"
+    },
+    {
+     "name": "Horizon Color"
+    },
+    {
+     "name": "Ground Color"
+    },
+    {
+     "name": "Horizontal Angle"
+    },
+    {
+     "name": "Vertical Angle"
+    },
+    {
+     "name": "Intensity"
+    },
+    {
+     "name": "Color"
+    },
+    {
+     "name": "Horizontal Angle"
+    },
+    {
+     "name": "Vertical Angle"
+    },
+    {
+     "name": "Intensity"
+    },
+    {
+     "name": "Color"
+    },
+    {
+     "name": "Dielectric Reflectance",
+     "group": "Material"
+    },
+    {
+     "name": "Diffuse AO",
+     "group": "Material"
+    },
+    {
+     "name": "Diffuse Cavity",
+     "group": "Material"
+    },
+    {
+     "name": "Specular AO",
+     "group": "Material"
+    },
+    {
+     "name": "Specular Cavity",
+     "group": "Material"
+    },
+    {
+     "name": "Cavity Smoothness",
+     "group": "Material"
+    },
+    {
+     "name": "Edges Intensity",
+     "group": "Material"
+    },
+    {
+     "name": "Edges Smoothness",
+     "group": "Material"
+    },
+    {
+     "name": "Normal Details Type",
+     "type": "enum",
+     "group": "Material"
+    },
+    {
+     "name": "Height to Normal Intensity",
+     "group": "Material"
+    },
+    {
+     "name": "Sun Intensity",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Sun Horizontal Angle",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Sun Vertical Angle",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Sun Color",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Sky Intensity",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Sky Color",
+     "type": "color",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Horizon Color",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Ground Color",
+     "type": "color",
+     "group": "Sun & Sky"
+    },
+    {
+     "name": "Horizontal Angle",
+     "group": "Light 1"
+    },
+    {
+     "name": "Vertical Angle",
+     "group": "Light 1"
+    },
+    {
+     "name": "Intensity",
+     "group": "Light 1"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Light 1"
+    },
+    {
+     "name": "Horizontal Angle",
+     "group": "Light 2"
+    },
+    {
+     "name": "Vertical Angle",
+     "group": "Light 2"
+    },
+    {
+     "name": "Intensity",
+     "group": "Light 2"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Light 2"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_comic_book",
+   "name": "MatFX Comic Book",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-comic-book",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion: Grayscale"
+    },
+    {
+     "name": "Curvature: Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Type",
+     "type": "enum"
+    },
+    {
+     "name": "Input Contrast"
+    },
+    {
+     "name": "Input Luminosity"
+    },
+    {
+     "name": "Color Intensity"
+    },
+    {
+     "name": "Border Opacity"
+    },
+    {
+     "name": "Border Tolerance"
+    },
+    {
+     "name": "Border Smoothness"
+    },
+    {
+     "name": "Paint Intensity"
+    },
+    {
+     "name": "Warp"
+    },
+    {
+     "name": "Sharpness"
+    },
+    {
+     "name": "Output Contrast"
+    },
+    {
+     "name": "Output Luminosity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_detail_edge_wear",
+   "name": "MatFX Detail Edge Wear",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-detail-edge-wear",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Input Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Wear Level"
+    },
+    {
+     "name": "Wear Contrast"
+    },
+    {
+     "name": "Edges Smoothness"
+    },
+    {
+     "name": "Grunge Amount"
+    },
+    {
+     "name": "Grunge Scale"
+    },
+    {
+     "name": "Base Color",
+     "group": "Material / PBR Metallic Roughness"
+    },
+    {
+     "name": "Metallic",
+     "group": "Material / PBR Metallic Roughness"
+    },
+    {
+     "name": "Roughness",
+     "group": "Material / PBR Metallic Roughness"
+    },
+    {
+     "name": "Diffuse",
+     "group": "Material / PBR Specular Glossiness"
+    },
+    {
+     "name": "Specular Color",
+     "group": "Material / PBR Specular Glossiness"
+    },
+    {
+     "name": "Glossiness",
+     "group": "Material / PBR Specular Glossiness"
+    },
+    {
+     "name": "Generator Mask Control",
+     "group": "Settings"
+    },
+    {
+     "name": "Generator Mask Contrast",
+     "group": "Settings"
+    },
+    {
+     "name": "Generator Mask Blur",
+     "group": "Settings"
+    },
+    {
+     "name": "Alpha Background Value",
+     "group": "Settings"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Settings"
+    },
+    {
+     "name": "Invert Curvature",
+     "type": "boolean",
+     "group": "Settings"
+    },
+    {
+     "name": "Combine Curvature",
+     "type": "boolean",
+     "group": "Settings"
+    },
+    {
+     "name": "Normal Intensity",
+     "group": "Settings"
+    },
+    {
+     "name": "AO Spreading",
+     "group": "Settings"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_edge_damages",
+   "name": "MatFX Edge Damages",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-edge-damages",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Level"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Scratches Intensity"
+    },
+    {
+     "name": "Damages Roughness"
+    },
+    {
+     "name": "Damages Depth"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_hbao",
+   "name": "MatFX HBAO",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-hbao",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Channel Source",
+     "type": "enum"
+    },
+    {
+     "name": "Use World Units",
+     "type": "boolean"
+    },
+    {
+     "name": "Height Depth"
+    },
+    {
+     "name": "Radius"
+    },
+    {
+     "name": "Intensity"
+    },
+    {
+     "name": "Relief Balance"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_oil_paint",
+   "name": "MatFX Oil Paint",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-oil-paint",
+   "inputs": [
+    {
+     "name": "Image Input: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Type",
+     "type": "enum"
+    },
+    {
+     "name": "Effect Intensity"
+    },
+    {
+     "name": "Fine Details"
+    },
+    {
+     "name": "Sharpness"
+    },
+    {
+     "name": "Roughness"
+    },
+    {
+     "name": "Roughness Variation"
+    },
+    {
+     "name": "Roughness Details"
+    },
+    {
+     "name": "Normal Intensity"
+    },
+    {
+     "name": "Normal Strokes Direction Influence"
+    },
+    {
+     "name": "Input Image Contrast",
+     "group": "Input Color Correction"
+    },
+    {
+     "name": "Input Image Hue",
+     "group": "Input Color Correction"
+    },
+    {
+     "name": "Input Image Saturation",
+     "group": "Input Color Correction"
+    },
+    {
+     "name": "Input Image Luminosity",
+     "group": "Input Color Correction"
+    },
+    {
+     "name": "Global Scale Multiplier",
+     "group": "Strokes"
+    },
+    {
+     "name": "Scale Random",
+     "group": "Strokes"
+    },
+    {
+     "name": "Size",
+     "group": "Strokes"
+    },
+    {
+     "name": "Size Random",
+     "group": "Strokes"
+    },
+    {
+     "name": "Random Color",
+     "group": "Strokes"
+    },
+    {
+     "name": "Strokes Hardness",
+     "group": "Strokes"
+    },
+    {
+     "name": "Automatic Orientation Multiplier",
+     "group": "Strokes"
+    },
+    {
+     "name": "Orientation Smoothness",
+     "group": "Strokes"
+    },
+    {
+     "name": "Enabled",
+     "type": "boolean",
+     "group": "Highlights"
+    },
+    {
+     "name": "Grid Subdivision",
+     "group": "Highlights"
+    },
+    {
+     "name": "Strokes Size",
+     "group": "Highlights"
+    },
+    {
+     "name": "Strokes Size From Details",
+     "group": "Highlights"
+    },
+    {
+     "name": "Warp Intensity",
+     "group": "Highlights"
+    },
+    {
+     "name": "Enabled",
+     "type": "boolean",
+     "group": "Midtones"
+    },
+    {
+     "name": "Grid Subdivision",
+     "group": "Midtones"
+    },
+    {
+     "name": "Strokes Size",
+     "group": "Midtones"
+    },
+    {
+     "name": "Strokes Size From Details",
+     "group": "Midtones"
+    },
+    {
+     "name": "Warp Intensity",
+     "group": "Midtones"
+    },
+    {
+     "name": "Enabled",
+     "type": "boolean",
+     "group": "Shadows"
+    },
+    {
+     "name": "Grid Subdivision",
+     "group": "Shadows"
+    },
+    {
+     "name": "Strokes Size",
+     "group": "Shadows"
+    },
+    {
+     "name": "Strokes Size From Details",
+     "group": "Shadows"
+    },
+    {
+     "name": "Warp Intensity",
+     "group": "Shadows"
+    },
+    {
+     "name": "Enabled",
+     "type": "boolean",
+     "group": "Background"
+    },
+    {
+     "name": "Grid Subdivision",
+     "group": "Background"
+    },
+    {
+     "name": "Strokes Size",
+     "group": "Background"
+    },
+    {
+     "name": "Warp Intensity",
+     "group": "Background"
+    },
+    {
+     "name": "Amount",
+     "group": "Contour"
+    },
+    {
+     "name": "Thickness",
+     "group": "Contour"
+    },
+    {
+     "name": "Texture Intensity",
+     "group": "Canvas"
+    },
+    {
+     "name": "Fibers Count",
+     "group": "Canvas"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_peeling_paint",
+   "name": "MatFX Peeling Paint",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-peeling-paint",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Peeling Level"
+    },
+    {
+     "name": "Peeling Distance"
+    },
+    {
+     "name": "Flake Level"
+    },
+    {
+     "name": "Air Bubble Density"
+    },
+    {
+     "name": "Flaking Density"
+    },
+    {
+     "name": "Flaking X Amount"
+    },
+    {
+     "name": "Flaking Y Amount"
+    },
+    {
+     "name": "Use Curvature",
+     "type": "boolean"
+    },
+    {
+     "name": "Curvature Distance"
+    },
+    {
+     "name": "Curvature Contrast"
+    },
+    {
+     "name": "Luminosity",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Contrast",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Hue Shift",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Saturation",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Normal Intensity",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Height Range",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Height Position",
+     "group": "Technical parameters"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "group": "Technical parameters"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_rust_weathering",
+   "name": "MatFX Rust Weathering",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-rust-weathering",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    },
+    {
+     "name": "Rust Spreading"
+    },
+    {
+     "name": "Spreading Smoothness"
+    },
+    {
+     "name": "Varnish Damage Scale"
+    },
+    {
+     "name": "Drips Intensity"
+    },
+    {
+     "name": "Drips Samples Amount"
+    },
+    {
+     "name": "Drips Smoothness"
+    },
+    {
+     "name": "Normal Intensity",
+     "group": "Blending"
+    },
+    {
+     "name": "Ambient Occlusion Intensity",
+     "group": "Blending"
+    },
+    {
+     "name": "Height Intensity",
+     "group": "Blending"
+    },
+    {
+     "name": "Base Color Intensity",
+     "group": "Blending / Metallic Roughness"
+    },
+    {
+     "name": "Roughness Intensity",
+     "group": "Blending / Metallic Roughness"
+    },
+    {
+     "name": "Metallic Intensity",
+     "group": "Blending / Metallic Roughness"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_shut_line",
+   "name": "MatFX Shut Line",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-shut-line",
+   "parameters": [
+    {
+     "name": "Cavity Width"
+    },
+    {
+     "name": "Slope Intensity"
+    },
+    {
+     "name": "Emboss Strength"
+    },
+    {
+     "name": "Height Intensity"
+    },
+    {
+     "name": "Line Color",
+     "group": "Material"
+    },
+    {
+     "name": "Source Material Opacity",
+     "group": "Material"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_water_drops",
+   "name": "MatFX Water Drops",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-water-drops",
+   "inputs": [
+    {
+     "name": "Ambient Occlusion: Grayscale"
+    },
+    {
+     "name": "World Space Normals: Color"
+    },
+    {
+     "name": "Position: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Drops Amount"
+    },
+    {
+     "name": "Drops Scale X"
+    },
+    {
+     "name": "Drops Scale Y"
+    },
+    {
+     "name": "Drops Scale Random"
+    },
+    {
+     "name": "Drops Direction Intensity"
+    },
+    {
+     "name": "Influence X",
+     "group": "Position"
+    },
+    {
+     "name": "Influence Y",
+     "group": "Position"
+    },
+    {
+     "name": "Influence Z",
+     "group": "Position"
+    },
+    {
+     "name": "Intensity",
+     "group": "Water Accumulation"
+    },
+    {
+     "name": "Spread",
+     "group": "Water Accumulation"
+    },
+    {
+     "name": "AO Based Intensity",
+     "group": "Water Accumulation"
+    },
+    {
+     "name": "Masking Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Top Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Bottom Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Front Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Back Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Right Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Left Intensity",
+     "group": "World Space"
+    },
+    {
+     "name": "Drops Base Color Warp Intensity",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Rotation Vector Map Multiplier",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Height Intensity",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Roughness",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Roughness Blending",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Metallic",
+     "group": "Material"
+    },
+    {
+     "name": "Drops Metallic Blending",
+     "group": "Material"
+    },
+    {
+     "name": "Normal Intensity",
+     "group": "Material"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.matfx_watercolor",
+   "name": "MatFX Watercolor",
+   "category": "matfx-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/matfx-filters/matfx-watercolor",
+   "parameters": [
+    {
+     "name": "Paint Opacity"
+    },
+    {
+     "name": "Paper Absorption"
+    },
+    {
+     "name": "Accumulation Type",
+     "type": "enum"
+    },
+    {
+     "name": "Borders Spread"
+    },
+    {
+     "name": "Borders Density"
+    },
+    {
+     "name": "Show cross paint edges",
+     "type": "boolean"
+    },
+    {
+     "name": "Hide Paper",
+     "type": "boolean"
+    },
+    {
+     "name": "Custom Paper",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.blur_directional",
+   "name": "Blur Directional",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/blur-directional",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Angle"
+    },
+    {
+     "name": "Intensity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.blur_slope",
+   "name": "Blur Slope",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/blur-slope",
+   "inputs": [
+    {
+     "name": "Custom Noise: Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Intensity"
+    },
+    {
+     "name": "Intensity Divider",
+     "type": "enum"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Quality"
+    },
+    {
+     "name": "Source Type",
+     "type": "enum",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Blur",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Position",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Contrast",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Source Tilling",
+     "group": "Source Parameters"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.blur",
+   "name": "Blur",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/blur",
+   "parameters": [
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Wrap",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.clamp",
+   "name": "Clamp",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/clamp",
+   "parameters": [
+    {
+     "name": "Min"
+    },
+    {
+     "name": "Max"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.color_balance",
+   "name": "Color Balance",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/color-balance",
+   "parameters": [
+    {
+     "name": "Cyan <-> Red",
+     "group": "Highlights"
+    },
+    {
+     "name": "Magenta <-> Green",
+     "group": "Highlights"
+    },
+    {
+     "name": "Yellow <-> Blue",
+     "group": "Highlights"
+    },
+    {
+     "name": "Cyan <-> Red",
+     "group": "Midtones"
+    },
+    {
+     "name": "Magenta <-> Green",
+     "group": "Midtones"
+    },
+    {
+     "name": "Yellow <-> Blue",
+     "group": "Midtones"
+    },
+    {
+     "name": "Cyan <-> Red",
+     "group": "Shadows"
+    },
+    {
+     "name": "Magenta <-> Green",
+     "group": "Shadows"
+    },
+    {
+     "name": "Yellow <-> Blue",
+     "group": "Shadows"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.color_correct",
+   "name": "Color Correct",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/color-correct",
+   "parameters": [
+    {
+     "name": "Contrast",
+     "group": "Shadows"
+    },
+    {
+     "name": "Luminosity",
+     "group": "Shadows"
+    },
+    {
+     "name": "Saturation",
+     "group": "Shadows"
+    },
+    {
+     "name": "Contrast",
+     "group": "Midtones"
+    },
+    {
+     "name": "Luminosity",
+     "group": "Midtones"
+    },
+    {
+     "name": "Saturation",
+     "group": "Midtones"
+    },
+    {
+     "name": "Contrast",
+     "group": "Highlights"
+    },
+    {
+     "name": "Luminosity",
+     "group": "Highlights"
+    },
+    {
+     "name": "Saturation",
+     "group": "Highlights"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.contrast_luminosity",
+   "name": "Contrast Luminosity",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/contrast-luminosity",
+   "parameters": [
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Luminosity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.drop_shadow",
+   "name": "Drop Shadow",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/drop-shadow",
+   "parameters": [
+    {
+     "name": "Angle"
+    },
+    {
+     "name": "Distance"
+    },
+    {
+     "name": "Size"
+    },
+    {
+     "name": "Spread"
+    },
+    {
+     "name": "Opacity"
+    },
+    {
+     "name": "Color"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.fill_area_color",
+   "name": "Fill Area Color",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/fill-area-color",
+   "parameters": [
+    {
+     "name": "Area Detection",
+     "type": "enum"
+    },
+    {
+     "name": "Area Detection Threshold"
+    },
+    {
+     "name": "Debug Area Detection",
+     "type": "boolean"
+    },
+    {
+     "name": "UV Border Behavior",
+     "type": "enum"
+    },
+    {
+     "name": "UV Border Threshold"
+    },
+    {
+     "name": "Color Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Fill Color"
+    },
+    {
+     "name": "Blur Intensity"
+    },
+    {
+     "name": "Blur Samples"
+    },
+    {
+     "name": "Diffusion Iterations"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.fill_area_mask",
+   "name": "Fill Area Mask",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/fill-area-mask",
+   "parameters": [
+    {
+     "name": "Area Detection",
+     "type": "enum"
+    },
+    {
+     "name": "Area Detection Threshold"
+    },
+    {
+     "name": "Debug Area Detection",
+     "type": "boolean"
+    },
+    {
+     "name": "UV Border Behavior",
+     "type": "enum"
+    },
+    {
+     "name": "UV Border Detection Threshold"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.fxaa_anti_aliasing",
+   "name": "FXAA (Anti-Aliasing)",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/fxaa-anti-aliasing",
+   "parameters": [
+    {
+     "name": "Affect Alpha Channel",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.glow",
+   "name": "Glow",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/glow",
+   "parameters": [
+    {
+     "name": "Used on a Mask",
+     "type": "boolean"
+    },
+    {
+     "name": "Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Width"
+    },
+    {
+     "name": "Spread"
+    },
+    {
+     "name": "Opacity"
+    },
+    {
+     "name": "Color"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.gradient_dynamic",
+   "name": "Gradient Dynamic",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/gradient-dynamic",
+   "inputs": [
+    {
+     "name": "Gradient Source: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Gradient Orientation",
+     "type": "enum"
+    },
+    {
+     "name": "Gradient Input Position"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.gradient",
+   "name": "Gradient",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/gradient",
+   "parameters": [
+    {
+     "name": "Display Gradient (Debug)",
+     "type": "boolean"
+    },
+    {
+     "name": "Color Quantity"
+    },
+    {
+     "name": "Blend Color in Linear",
+     "type": "boolean"
+    },
+    {
+     "name": "Color 1",
+     "type": "color"
+    },
+    {
+     "name": "Color 1 Position"
+    },
+    {
+     "name": "Color 2",
+     "type": "color"
+    },
+    {
+     "name": "Color 2 Position"
+    },
+    {
+     "name": "Color N",
+     "type": "color"
+    },
+    {
+     "name": "Color N Position"
+    },
+    {
+     "name": "Grayscale Mode",
+     "type": "enum",
+     "values": [
+      "Desaturation",
+      "Luma",
+      "Average",
+      "Max",
+      "Min"
+     ],
+     "group": "Input Transformation"
+    },
+    {
+     "name": "Blur Intensity",
+     "group": "Input Transformation"
+    },
+    {
+     "name": "Balance",
+     "group": "Input Transformation"
+    },
+    {
+     "name": "Contrast",
+     "group": "Input Transformation"
+    },
+    {
+     "name": "Invert",
+     "type": "boolean",
+     "group": "Input Transformation"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.grayscale_conversion",
+   "name": "Grayscale Conversion",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/grayscale-conversion",
+   "inputs": [
+    {
+     "name": "Custom Input: Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Channel Input",
+     "type": "enum"
+    },
+    {
+     "name": "Invert",
+     "type": "boolean"
+    },
+    {
+     "name": "Balance"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Red"
+    },
+    {
+     "name": "Green"
+    },
+    {
+     "name": "Blue"
+    },
+    {
+     "name": "Alpha"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.highpass",
+   "name": "Highpass",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/highpass",
+   "parameters": [
+    {
+     "name": "Color Space",
+     "type": "color"
+    },
+    {
+     "name": "Radius"
+    },
+    {
+     "name": "Apply To Alpha",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.histogram_scan",
+   "name": "Histogram Scan",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/histogram-scan",
+   "parameters": [
+    {
+     "name": "Position"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Invert Position",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.histogram_shift",
+   "name": "Histogram Shift",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/histogram-shift",
+   "parameters": [
+    {
+     "name": "Position"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.hsl_perceptive",
+   "name": "HSL Perceptive",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/hsl-perceptive",
+   "parameters": [
+    {
+     "name": "Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Hue"
+    },
+    {
+     "name": "Saturation"
+    },
+    {
+     "name": "Lightness"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.invert",
+   "name": "Invert",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/invert",
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.mirror",
+   "name": "Mirror",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/mirror",
+   "parameters": [
+    {
+     "name": "Display Debug",
+     "type": "boolean"
+    },
+    {
+     "name": "Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Axis X Offset"
+    },
+    {
+     "name": "Axis Y Offset"
+    },
+    {
+     "name": "Invert Axis X",
+     "type": "boolean"
+    },
+    {
+     "name": "Invert Axis Y",
+     "type": "boolean"
+    },
+    {
+     "name": "Corner Type",
+     "type": "enum"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.pixelate",
+   "name": "Pixelate",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/pixelate",
+   "parameters": [
+    {
+     "name": "Pixels Amount"
+    },
+    {
+     "name": "Apply To Alpha",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.posterize",
+   "name": "Posterize",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/posterize",
+   "parameters": [
+    {
+     "name": "Colors Amount"
+    },
+    {
+     "name": "Apply to Alpha",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.sharpen",
+   "name": "Sharpen",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/sharpen",
+   "parameters": [
+    {
+     "name": "Sharpen Intensity"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.smoothstep",
+   "name": "Smoothstep",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/smoothstep",
+   "parameters": [
+    {
+     "name": "Minimum"
+    },
+    {
+     "name": "Maximum"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.threshold",
+   "name": "Threshold",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/threshold",
+   "parameters": [
+    {
+     "name": "Threshold"
+    },
+    {
+     "name": "Mode",
+     "type": "enum"
+    },
+    {
+     "name": "_mode",
+     "type": "enum"
+    },
+    {
+     "name": "_threshold"
+    },
+    {
+     "name": "_threshold_min"
+    },
+    {
+     "name": "_threshold_max"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.transform",
+   "name": "Transform",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/transform",
+   "parameters": [
+    {
+     "name": "Repeat mode",
+     "type": "enum"
+    },
+    {
+     "name": "Flip mode",
+     "type": "enum"
+    },
+    {
+     "name": "Scaling X"
+    },
+    {
+     "name": "Scaling Y"
+    },
+    {
+     "name": "Offset X"
+    },
+    {
+     "name": "Offset Y"
+    },
+    {
+     "name": "Tile Safe Rotation",
+     "type": "boolean"
+    },
+    {
+     "name": "Rotation"
+    },
+    {
+     "name": "Scaling"
+    },
+    {
+     "name": "Offset"
+    }
+   ]
+  },
+  {
+   "id": "painter.filter.warp",
+   "name": "Warp",
+   "category": "standard-filters",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/filters/standard-filters/warp",
+   "inputs": [
+    {
+     "name": "Custom Noise"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Warp Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Intensity"
+    },
+    {
+     "name": "Intensity Divider",
+     "type": "enum"
+    },
+    {
+     "name": "Angle"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Directions",
+     "type": "enum"
+    },
+    {
+     "name": "Source Mode",
+     "type": "enum",
+     "values": [
+      "Default Noise",
+      "Previous Input",
+      "Custom Noise"
+     ],
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Source Blur",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Source Balance",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Source Contrast",
+     "group": "Source Parameters"
+    },
+    {
+     "name": "Source Tilling",
+     "group": "Source Parameters"
+    }
+   ]
+  }
+ ]
+}

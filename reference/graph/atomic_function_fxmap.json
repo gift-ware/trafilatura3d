@@ -1,0 +1,3010 @@
+{
+ "nodes": [
+  {
+   "id": "bitmap",
+   "name": "Bitmap",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/bitmap",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "default": "Color",
+     "choices": [
+      "Color",
+      "Grayscale"
+     ]
+    },
+    {
+     "name": "PKG resource path",
+     "type": "string"
+    },
+    {
+     "name": "Resize method",
+     "type": "enum",
+     "choices": [
+      "Smooth stretch",
+      "Nearest stretch"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "blend",
+   "name": "Blend",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/blend/blend",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Background",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Opacity",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Blending mode",
+     "type": "enum",
+     "choices": [
+      "Copy",
+      "Add (Linear dodge)",
+      "Subtract",
+      "Multiply",
+      "Add sub",
+      "Max (Lighten)",
+      "Min (Darken)",
+      "Switch",
+      "Divide",
+      "Overlay",
+      "Screen",
+      "Soft light"
+     ]
+    },
+    {
+     "name": "Alpha blending",
+     "type": "enum",
+     "choices": [
+      "Use source alpha",
+      "Ignore alpha",
+      "Straight alpha blending",
+      "Premultiplied alpha blending"
+     ]
+    },
+    {
+     "name": "Cropping area",
+     "type": "float4"
+    }
+   ]
+  },
+  {
+   "id": "blur",
+   "name": "Blur",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/blur",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0
+    }
+   ]
+  },
+  {
+   "id": "channel_shuffle",
+   "name": "Channels shuffle",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/channel-shuffle",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Input 2",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Red channel",
+     "type": "enum"
+    },
+    {
+     "name": "Green channel",
+     "type": "enum"
+    },
+    {
+     "name": "Blue channel",
+     "type": "enum"
+    },
+    {
+     "name": "Alpha channel",
+     "type": "enum"
+    }
+   ]
+  },
+  {
+   "id": "curve",
+   "name": "Curve",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/curve",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Apply/Expose curve",
+     "type": "bool"
+    },
+    {
+     "name": "Curve addressing",
+     "type": "bool",
+     "choices": [
+      "Clamp",
+      "Fold/repeat"
+     ]
+    },
+    {
+     "name": "Curve",
+     "type": "curve"
+    }
+   ]
+  },
+  {
+   "id": "directional_blur",
+   "name": "Directional blur",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/directional-blur",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "directional_warp",
+   "name": "Directional warp",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/directional-warp",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Intensity input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Warp angle",
+     "type": "float"
+    },
+    {
+     "name": "Input filtering mode",
+     "type": "bool",
+     "choices": [
+      "Nearest",
+      "Bilinear"
+     ]
+    },
+    {
+     "name": "Intensity map offset",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "distance",
+   "name": "Distance",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/distance",
+   "inputs": [
+    {
+     "name": "Mask input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Source input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Grayscale",
+      "Color"
+     ]
+    },
+    {
+     "name": "Maximum distance",
+     "type": "float"
+    },
+    {
+     "name": "Combine source/distance",
+     "type": "bool",
+     "choices": [
+      "Combine",
+      "Only Source"
+     ]
+    },
+    {
+     "name": "Distance mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "emboss",
+   "name": "Emboss",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/emboss",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Intensity input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Light angle",
+     "type": "float"
+    },
+    {
+     "name": "Highlight color",
+     "type": "float|float4"
+    },
+    {
+     "name": "Shadow color",
+     "type": "float|float4"
+    }
+   ]
+  },
+  {
+   "id": "fx_map",
+   "name": "FX-Map",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/fx-map",
+   "inputs": [
+    {
+     "name": "Background",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Input image #",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Grayscale",
+      "Color"
+     ]
+    },
+    {
+     "name": "Background",
+     "type": "float|float4"
+    },
+    {
+     "name": "Render region",
+     "type": "float4"
+    },
+    {
+     "name": "Tiling region",
+     "type": "float4"
+    },
+    {
+     "name": "Cull outside",
+     "type": "bool"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Global opacity",
+     "type": "float"
+    },
+    {
+     "name": "Blending mode",
+     "type": "enum"
+    }
+   ]
+  },
+  {
+   "id": "gradient_dynamic",
+   "name": "Gradient (Dynamic)",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/gradient-dynamic",
+   "inputs": [
+    {
+     "name": "Grayscale input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Gradient input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Gradient addressing",
+     "type": "bool",
+     "choices": [
+      "Repeat",
+      "Clamp"
+     ]
+    },
+    {
+     "name": "Gradient orientation",
+     "type": "enum",
+     "choices": [
+      "Horizontal",
+      "Vertical"
+     ]
+    },
+    {
+     "name": "Gradient input position",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "gradient_map",
+   "name": "Gradient map",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/gradient-map",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Color",
+      "Grayscale"
+     ]
+    },
+    {
+     "name": "Gradient adressing",
+     "type": "bool",
+     "choices": [
+      "Repeat",
+      "Clamp"
+     ]
+    },
+    {
+     "name": "Gradient",
+     "type": "gradient"
+    }
+   ]
+  },
+  {
+   "id": "grayscale_conversion",
+   "name": "Grayscale conversion",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/grayscale-conversion",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Channel weights",
+     "type": "float4"
+    },
+    {
+     "name": "Flatten alpha",
+     "type": "bool"
+    },
+    {
+     "name": "Background value",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "hsl",
+   "name": "HSL",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/hsl",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Hue",
+     "type": "float"
+    },
+    {
+     "name": "Saturation",
+     "type": "float"
+    },
+    {
+     "name": "Lightness",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "input_color",
+   "name": "Input color",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/input-color",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "PKG resource path",
+     "type": "string"
+    },
+    {
+     "name": "Default value",
+     "type": "color"
+    },
+    {
+     "name": "Identifier",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Description",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Label",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "User data",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Group",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Component",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Usage",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Color space",
+     "type": "string",
+     "group": "Integration attributes"
+    }
+   ]
+  },
+  {
+   "id": "input_grayscale",
+   "name": "Input grayscale",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/input-grayscale",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "PKG resource path",
+     "type": "string"
+    },
+    {
+     "name": "Default value",
+     "type": "float"
+    },
+    {
+     "name": "Identifier",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Description",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Label",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "User data",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Group",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Component",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Usage",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Color space",
+     "type": "string",
+     "group": "Integration attributes"
+    }
+   ]
+  },
+  {
+   "id": "input_value",
+   "name": "Input value",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/input-value",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "value"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Default value",
+     "type": "other"
+    },
+    {
+     "name": "Identifier",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Description",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Label",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "User data",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Group",
+     "type": "string",
+     "group": "Attributes"
+    }
+   ]
+  },
+  {
+   "id": "levels",
+   "name": "Levels",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/levels",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Level in low",
+     "type": "float|float4"
+    },
+    {
+     "name": "Level in high",
+     "type": "float|float4"
+    },
+    {
+     "name": "Level in mid",
+     "type": "float|float4"
+    },
+    {
+     "name": "Level out low",
+     "type": "float|float4"
+    },
+    {
+     "name": "Level out high",
+     "type": "float|float4"
+    },
+    {
+     "name": "Intermediary clamp",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "normal",
+   "name": "Normal",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/normal",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Normal format",
+     "type": "bool",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ]
+    },
+    {
+     "name": "Alpha channel content",
+     "type": "bool",
+     "choices": [
+      "Fill Alpha With Input",
+      "Force Alpha To 1"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "output",
+   "name": "Output",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/output",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Identifier",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Description",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Label",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "User data",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Group",
+     "type": "string",
+     "group": "Attributes"
+    },
+    {
+     "name": "Component",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Usage",
+     "type": "string",
+     "group": "Integration attributes"
+    },
+    {
+     "name": "Color space",
+     "type": "string",
+     "group": "Integration attributes"
+    }
+   ]
+  },
+  {
+   "id": "pixel_processor",
+   "name": "Pixel processor",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/pixel-processor",
+   "inputs": [
+    {
+     "name": "Input image #",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Grayscale",
+      "Color"
+     ]
+    },
+    {
+     "name": "Per pixel function",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "sharpen",
+   "name": "Sharpen",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/sharpen",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Punchthrough Alpha",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "svg",
+   "name": "SVG",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/svg",
+   "inputs": [
+    {
+     "name": "Background",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "default": "Color",
+     "choices": [
+      "Color",
+      "Grayscale"
+     ]
+    },
+    {
+     "name": "Background color",
+     "type": "color"
+    },
+    {
+     "name": "PKG resource path",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "text",
+   "name": "Text",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/text",
+   "inputs": [
+    {
+     "name": "Background",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Grayscale",
+      "Color"
+     ]
+    },
+    {
+     "name": "Text",
+     "type": "string"
+    },
+    {
+     "name": "Font",
+     "type": "string"
+    },
+    {
+     "name": "Font size",
+     "type": "float"
+    },
+    {
+     "name": "Alignment",
+     "type": "enum",
+     "default": "Center",
+     "choices": [
+      "Left",
+      "Center",
+      "Right"
+     ]
+    },
+    {
+     "name": "Transformation",
+     "type": "float4"
+    },
+    {
+     "name": "Position",
+     "type": "float2"
+    },
+    {
+     "name": "Background",
+     "type": "float|float4"
+    },
+    {
+     "name": "Font color",
+     "type": "float|float4"
+    }
+   ]
+  },
+  {
+   "id": "transformation_2d",
+   "name": "Transformation 2D",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/transformation-2d",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Transformation matrix",
+     "type": "float4"
+    },
+    {
+     "name": "Offset",
+     "type": "float2"
+    },
+    {
+     "name": "Mipmap mode",
+     "type": "enum"
+    },
+    {
+     "name": "Mipmap level",
+     "type": "int"
+    },
+    {
+     "name": "Matte color",
+     "type": "float4"
+    },
+    {
+     "name": "Filtering",
+     "type": "enum"
+    }
+   ]
+  },
+  {
+   "id": "uniform_color",
+   "name": "Uniform color",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/uniform-color",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color mode",
+     "type": "bool",
+     "choices": [
+      "Grayscale",
+      "Color"
+     ]
+    },
+    {
+     "name": "Output color",
+     "type": "float|float4"
+    }
+   ]
+  },
+  {
+   "id": "value_processor",
+   "name": "Value processor",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/value-processor",
+   "inputs": [
+    {
+     "name": "Input image #",
+     "type": "grayscale|color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "value"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value processor function",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "warp",
+   "name": "Warp",
+   "category": "Atomic nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/atomic-nodes/warp",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale|color"
+    },
+    {
+     "name": "Gradient input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale|color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Input filtering mode",
+     "type": "bool",
+     "choices": [
+      "Nearest",
+      "Bilinear"
+     ]
+    }
+   ]
+  }
+ ],
+ "function_nodes": [
+  {
+   "id": "const_float",
+   "name": "Float",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "const_float2",
+   "name": "Float2",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "float2"
+    }
+   ]
+  },
+  {
+   "id": "const_float3",
+   "name": "Float3",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float3"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "float3"
+    }
+   ]
+  },
+  {
+   "id": "const_float4",
+   "name": "Float4",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "float4"
+    }
+   ]
+  },
+  {
+   "id": "const_integer",
+   "name": "Integer",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "int"
+    }
+   ]
+  },
+  {
+   "id": "const_integer2",
+   "name": "Integer2",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer2"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "int2"
+    }
+   ]
+  },
+  {
+   "id": "const_integer3",
+   "name": "Integer3",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer3"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "const_integer4",
+   "name": "Integer4",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer4"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "const_boolean",
+   "name": "Boolean",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "boolean"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "const_string",
+   "name": "String",
+   "category": "Function nodes / Constant",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/constant-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "string"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Value",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "vector_float2",
+   "name": "Vector Float2",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component float"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ]
+  },
+  {
+   "id": "vector_float3",
+   "name": "Vector Float3",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component float"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float3"
+    }
+   ]
+  },
+  {
+   "id": "vector_float4",
+   "name": "Vector Float4",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component float"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ]
+  },
+  {
+   "id": "vector_integer2",
+   "name": "Vector Integer2",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component integer"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer2"
+    }
+   ]
+  },
+  {
+   "id": "vector_integer3",
+   "name": "Vector Integer3",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component integer"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer3"
+    }
+   ]
+  },
+  {
+   "id": "vector_integer4",
+   "name": "Vector Integer4",
+   "category": "Function nodes / Vector",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "lower-component integer"
+    },
+    {
+     "name": "Input 2",
+     "type": "lower-component integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer4"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_float",
+   "name": "Swizzle Float",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "float vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_float2",
+   "name": "Swizzle Float2",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "float vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_float3",
+   "name": "Swizzle Float3",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "float vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float3"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_float4",
+   "name": "Swizzle Float4",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "float vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_integer",
+   "name": "Swizzle Integer",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "integer vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_integer2",
+   "name": "Swizzle Integer2",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "integer vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer2"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_integer3",
+   "name": "Swizzle Integer3",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "integer vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer3"
+    }
+   ]
+  },
+  {
+   "id": "swizzle_integer4",
+   "name": "Swizzle Integer4",
+   "category": "Function nodes / Swizzle",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/vector-and-swizzle-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "integer vector"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer4"
+    }
+   ]
+  },
+  {
+   "id": "get_float",
+   "name": "Get Float",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get float",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_float2",
+   "name": "Get Float2",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get float2",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_float3",
+   "name": "Get Float3",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float3"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get float3",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_float4",
+   "name": "Get Float4",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get float4",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_integer",
+   "name": "Get Integer",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get integer",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_integer2",
+   "name": "Get Integer2",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer2"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get integer2",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_integer3",
+   "name": "Get Integer3",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer3"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get integer3",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_integer4",
+   "name": "Get Integer4",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer4"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get integer4",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_boolean",
+   "name": "Get Boolean",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "boolean"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get boolean",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "get_string",
+   "name": "Get String",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "string"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Get string",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "set",
+   "name": "Set",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/fx-maps/using-substance-function-graphs-in-fx-maps/using-the-set-sequence-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "any"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of input"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Set",
+     "type": "string"
+    }
+   ]
+  },
+  {
+   "id": "is_defined",
+   "name": "Is defined",
+   "category": "Function nodes / Variables",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/get-nodes",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "sample_gray",
+   "name": "Sample Gray",
+   "category": "Function nodes / Samplers",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/sampler-nodes",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "float2"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input image",
+     "type": "enum"
+    },
+    {
+     "name": "Filtering mode",
+     "type": "enum",
+     "choices": [
+      "Nearest",
+      "Bilinear filtering"
+     ]
+    },
+    {
+     "name": "Addressing mode",
+     "type": "enum",
+     "choices": [
+      "Repeat",
+      "Clamp to Edge"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sample_color",
+   "name": "Sample Color",
+   "category": "Function nodes / Samplers",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/sampler-nodes",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "float2"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input image",
+     "type": "enum"
+    },
+    {
+     "name": "Filtering mode",
+     "type": "enum",
+     "choices": [
+      "Nearest",
+      "Bilinear filtering"
+     ]
+    },
+    {
+     "name": "Addressing mode",
+     "type": "enum",
+     "choices": [
+      "Repeat",
+      "Clamp to Edge"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "to_float",
+   "name": "To Float",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "to_float2",
+   "name": "To Float2",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "integer2"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ]
+  },
+  {
+   "id": "to_float3",
+   "name": "To Float3",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "integer3"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float3"
+    }
+   ]
+  },
+  {
+   "id": "to_float4",
+   "name": "To Float4",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "integer4"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float4"
+    }
+   ]
+  },
+  {
+   "id": "to_integer",
+   "name": "To Integer",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer"
+    }
+   ]
+  },
+  {
+   "id": "to_integer2",
+   "name": "To Integer2",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "float2"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer2"
+    }
+   ]
+  },
+  {
+   "id": "to_integer3",
+   "name": "To Integer3",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "float3"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer3"
+    }
+   ]
+  },
+  {
+   "id": "to_integer4",
+   "name": "To Integer4",
+   "category": "Function nodes / Cast",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/cast-nodes",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "float4"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "integer4"
+    }
+   ]
+  },
+  {
+   "id": "add",
+   "name": "Add",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Vector Float / Integer"
+    },
+    {
+     "name": "b",
+     "type": "Vector Float / Integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "subtraction",
+   "name": "Subtraction",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Vector Float / Integer"
+    },
+    {
+     "name": "b",
+     "type": "Vector Float / Integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "multiplication",
+   "name": "Multiplication",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Vector Float / Integer"
+    },
+    {
+     "name": "b",
+     "type": "Vector Float / Integer"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "scalar_multiplication",
+   "name": "Scalar Multiplication",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Vector Float"
+    },
+    {
+     "name": "scalar",
+     "type": "Vector Float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a"
+    }
+   ]
+  },
+  {
+   "id": "division",
+   "name": "Division",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "negation",
+   "name": "Negation",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a"
+    }
+   ]
+  },
+  {
+   "id": "modulo",
+   "name": "Modulo",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a"
+    }
+   ]
+  },
+  {
+   "id": "dot_product",
+   "name": "Dot Product",
+   "category": "Function nodes / Operator",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/operator-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Vector Float"
+    },
+    {
+     "name": "b",
+     "type": "Vector Float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output"
+    }
+   ]
+  },
+  {
+   "id": "and",
+   "name": "And",
+   "category": "Function nodes / Logical",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/logical-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "bool"
+    },
+    {
+     "name": "b",
+     "type": "bool"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "or",
+   "name": "Or",
+   "category": "Function nodes / Logical",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/logical-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "bool"
+    },
+    {
+     "name": "b",
+     "type": "bool"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "not",
+   "name": "Not",
+   "category": "Function nodes / Logical",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/logical-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "bool"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "equal",
+   "name": "Equal",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "not_equal",
+   "name": "Not Equal",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "greater",
+   "name": "Greater",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "greater_or_equal",
+   "name": "Greater or Equal",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "lower",
+   "name": "Lower",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "lower_or_equal",
+   "name": "Lower or Equal",
+   "category": "Function nodes / Comparison",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/comparison-nodes",
+   "inputs": [
+    {
+     "name": "a",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "b",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "pow",
+   "name": "Pow",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "float"
+    },
+    {
+     "name": "Y",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "pow2",
+   "name": "2Pow",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "sqrt",
+   "name": "Square root",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "exp",
+   "name": "Exponential",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "log",
+   "name": "Logarithm",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "log2",
+   "name": "Logarithm base 2",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "abs",
+   "name": "Absolute",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "ceil",
+   "name": "Ceil",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "floor",
+   "name": "Floor",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "lerp",
+   "name": "Linear interpolation",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "A",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "B",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "X",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "min",
+   "name": "Minimum",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "A",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "B",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "max",
+   "name": "Maximum",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "A",
+     "type": "Float1 / Integer1"
+    },
+    {
+     "name": "B",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of a & b"
+    }
+   ]
+  },
+  {
+   "id": "cos",
+   "name": "Cosine",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "sin",
+   "name": "Sine",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "tan",
+   "name": "Tangent",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "Float1 / Integer1"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float (index: Float1)"
+    }
+   ]
+  },
+  {
+   "id": "atan2",
+   "name": "Arc tangent 2",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "Vector",
+     "type": "float2"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "cartesian",
+   "name": "Cartesian",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "Length",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float2"
+    }
+   ]
+  },
+  {
+   "id": "random",
+   "name": "Random",
+   "category": "Function nodes / Function",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/function-nodes",
+   "inputs": [
+    {
+     "name": "X",
+     "type": "float"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "if_else",
+   "name": "If...Else",
+   "category": "Function nodes / Control",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/control-nodes",
+   "inputs": [
+    {
+     "name": "Condition",
+     "type": "bool"
+    },
+    {
+     "name": "If",
+     "type": "variable type"
+    },
+    {
+     "name": "Else",
+     "type": "variable type"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of If/Else"
+    }
+   ]
+  },
+  {
+   "id": "sequence",
+   "name": "Sequence",
+   "category": "Function nodes / Control",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/control-nodes",
+   "inputs": [
+    {
+     "name": "In",
+     "type": "variable type"
+    },
+    {
+     "name": "Last",
+     "type": "variable type"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of Last"
+    }
+   ]
+  },
+  {
+   "id": "while_loop",
+   "name": "While Loop",
+   "category": "Function nodes / Control",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/nodes-reference-for-substance-function-graphs/atomic-function-nodes/control-nodes",
+   "inputs": [
+    {
+     "name": "Init.",
+     "type": "variable type"
+    },
+    {
+     "name": "Exit Cond.",
+     "type": "bool"
+    },
+    {
+     "name": "Loop Body",
+     "type": "variable type"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "type of Loop Body"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Max. iterations",
+     "type": "int",
+     "min": -1
+    }
+   ]
+  }
+ ],
+ "fxmap_nodes": [
+  {
+   "id": "quadrant",
+   "name": "Quadrant",
+   "category": "FX-Map nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/fx-maps/the-quadrant-node",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "fx-map chain"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output 1..4",
+     "type": "fx-map chain"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color / Luminosity",
+     "type": "float|float4"
+    },
+    {
+     "name": "Branch Offset",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "default": "No Pattern",
+     "choices": [
+      "No Pattern",
+      "Input image",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule"
+     ]
+    },
+    {
+     "name": "Pattern Offset",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern Size",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern Rotation",
+     "type": "float"
+    },
+    {
+     "name": "Pattern Variation",
+     "type": "float"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Random Seed",
+     "type": "other"
+    },
+    {
+     "name": "Inherit Random",
+     "type": "bool"
+    },
+    {
+     "name": "Input image alpha",
+     "type": "other"
+    },
+    {
+     "name": "Input image filtering",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "iterate",
+   "name": "Iterate",
+   "category": "FX-Map nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/fx-maps/the-iterate-node",
+   "inputs": [
+    {
+     "name": "Pass-through (left)",
+     "type": "fx-map chain"
+    },
+    {
+     "name": "Repeated (right)",
+     "type": "fx-map chain"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "fx-map chain"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Iterations",
+     "type": "int"
+    },
+    {
+     "name": "Random Seed",
+     "type": "other"
+    }
+   ]
+  },
+  {
+   "id": "switch",
+   "name": "Switch",
+   "category": "FX-Map nodes",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-function-graphs/fx-maps/fxmaps",
+   "inputs": [
+    {
+     "name": "Input 1",
+     "type": "fx-map chain"
+    },
+    {
+     "name": "Input 2",
+     "type": "fx-map chain"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "fx-map chain"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Selector",
+     "type": "other"
+    }
+   ]
+  }
+ ]
+}

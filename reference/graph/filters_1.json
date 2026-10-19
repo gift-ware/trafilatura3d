@@ -1,0 +1,2052 @@
+{
+ "nodes": [
+  {
+   "id": "auto_levels",
+   "name": "Auto Levels",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/auto-levels"
+  },
+  {
+   "id": "channel_mixer",
+   "name": "Channel Mixer",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/channel-mixer",
+   "parameters": [
+    {
+     "name": "Red Channel",
+     "type": "float3",
+     "min": -200.0,
+     "max": 200.0,
+     "choices": []
+    },
+    {
+     "name": "Green Channel",
+     "type": "float3",
+     "min": -200.0,
+     "max": 200.0,
+     "choices": []
+    },
+    {
+     "name": "Blue Channel",
+     "type": "float3",
+     "min": -200.0,
+     "max": 200.0,
+     "choices": []
+    },
+    {
+     "name": "Monochrome",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "chrominance_extract",
+   "name": "Chrominance Extract",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/chrominance-extract"
+  },
+  {
+   "id": "clamp",
+   "name": "Clamp",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/clamp",
+   "parameters": [
+    {
+     "name": "Min",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Max",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Apply to Alpha",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "color_match",
+   "name": "Color Match",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/color-match",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    },
+    {
+     "name": "Source Color",
+     "type": "color"
+    },
+    {
+     "name": "Target Color",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Source Color Mode",
+     "type": "enum",
+     "choices": [
+      "Average",
+      "Parameter",
+      "Input"
+     ]
+    },
+    {
+     "name": "Source Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Target Color Mode",
+     "type": "enum",
+     "choices": [
+      "Parameter",
+      "Image Input"
+     ]
+    },
+    {
+     "name": "Target Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Custom Color Variation",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Color Variation",
+     "type": "other",
+     "choices": []
+    },
+    {
+     "name": "Use Mask",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Mask Mode",
+     "type": "enum",
+     "choices": [
+      "Parameter",
+      "Input"
+     ]
+    },
+    {
+     "name": "Mask",
+     "type": "other",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "color_to_mask",
+   "name": "Color to mask",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/color-to-mask",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    },
+    {
+     "name": "Color Input",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Use color input",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Color",
+     "type": "float3",
+     "choices": []
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Selection fade",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Distance color space",
+     "type": "enum",
+     "choices": [
+      "RGB (Data)",
+      "Linear sRGB (Color)",
+      "Luminance (Color)",
+      "Lab (Color)",
+      "Angle (Normal)"
+     ]
+    },
+    {
+     "name": "Distance weights",
+     "type": "float3",
+     "default": [
+      0.5,
+      1.0,
+      1.0
+     ],
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "contrast_luminosity",
+   "name": "ContrastLuminosity",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/contrast-luminosity",
+   "parameters": [
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Luminosity",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "convert_to_linear",
+   "name": "Convert To Linear",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/convert-to-linear"
+  },
+  {
+   "id": "convert_to_srgb",
+   "name": "Convert to sRGB",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/convert-to-srgb"
+  },
+  {
+   "id": "grayscale_conversion_advanced",
+   "name": "Grayscale Conversion Advanced",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/grayscale-conversion-advanced",
+   "parameters": [
+    {
+     "name": "Grayscale Type",
+     "type": "enum",
+     "choices": [
+      "Desaturation",
+      "Luma",
+      "Average",
+      "Max",
+      "Min"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hald_clut",
+   "name": "Hald CLUT",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/hald-clut",
+   "inputs": [
+    {
+     "name": "input",
+     "type": "color"
+    },
+    {
+     "name": "lut",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "LUT Intensity by Alpha",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "hdr_range_viewer",
+   "name": "HDR Range Viewer",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/hdr-range-viewer",
+   "parameters": [
+    {
+     "name": "Range Min",
+     "type": "float",
+     "min": -2.0,
+     "max": 0.0,
+     "choices": []
+    },
+    {
+     "name": "Range Max",
+     "type": "float",
+     "min": 1.0,
+     "max": 3.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "height_map_frequencies_mapper",
+   "name": "Height Map Frequencies Mapper",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/height-map-frequencies-mapper",
+   "parameters": [
+    {
+     "name": "Relief",
+     "type": "float",
+     "min": 0.0,
+     "max": 32.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "highpass",
+   "name": "Highpass",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/highpass",
+   "parameters": [
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "histogram_range",
+   "name": "Histogram Range",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/histogram-range",
+   "parameters": [
+    {
+     "name": "Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "histogram_scan",
+   "name": "Histogram Scan",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/histogram-scan",
+   "parameters": [
+    {
+     "name": "Position",
+     "type": "float",
+     "default": 0.0,
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Invert Position",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "histogram_scan_non_uniform",
+   "name": "Histogram Scan Non-Uniform",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/histogram-scan-non-uniform",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Position Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Contrast Map",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Use Position Input",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Use Contrast Input",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "histogram_select",
+   "name": "Histogram Select",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/histogram-select",
+   "parameters": [
+    {
+     "name": "Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "histogram_shift",
+   "name": "Histogram Shift",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/histogram-shift",
+   "parameters": [
+    {
+     "name": "Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "invert",
+   "name": "Invert",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/invert",
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "lighting_cancel_high_frequencies",
+   "name": "Lighting Cancel High Frequencies",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/lighting-cancel-high-frequencies",
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "lighting_cancel_low_frequencies",
+   "name": "Lighting Cancel Low Frequencies",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/lighting-cancel-low-frequencies",
+   "parameters": [
+    {
+     "name": "Cancellation Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "luminance_highpass",
+   "name": "Luminance Highpass",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/luminance-highpass",
+   "parameters": [
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "min_max",
+   "name": "Min Max",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/min-max"
+  },
+  {
+   "id": "pow",
+   "name": "Pow",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/pow",
+   "parameters": [
+    {
+     "name": "exponent",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "quantize_color_simple",
+   "name": "Quantize Color (Simple)",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/quantize",
+   "parameters": [
+    {
+     "name": "Quantize Red Channel",
+     "type": "int",
+     "choices": []
+    },
+    {
+     "name": "Quantize Green Channel",
+     "type": "int",
+     "choices": []
+    },
+    {
+     "name": "Quantize Blue Channel",
+     "type": "int",
+     "choices": []
+    },
+    {
+     "name": "Quantize Alpha Channel",
+     "type": "int",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "quantize_color",
+   "name": "Quantize Color",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/quantize-color",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    },
+    {
+     "name": "ID",
+     "type": "grayscale"
+    },
+    {
+     "name": "Palette",
+     "type": "color"
+    },
+    {
+     "name": "Palette color amount",
+     "type": "int (value output)"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Max. color amount",
+     "type": "int",
+     "choices": []
+    },
+    {
+     "name": "Contour smoothing",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Dithering",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Dithering pattern",
+     "type": "enum",
+     "choices": [
+      "Blue noise",
+      "Bayer"
+     ]
+    },
+    {
+     "name": "Ignore alpha",
+     "type": "bool",
+     "default": false,
+     "choices": []
+    },
+    {
+     "name": "Distance color space",
+     "type": "enum",
+     "choices": [
+      "Lab (Color)",
+      "RGB (Data)"
+     ]
+    },
+    {
+     "name": "ID sort mode",
+     "type": "enum",
+     "choices": [
+      "Z-curve",
+      "Hue",
+      "Representativity"
+     ]
+    },
+    {
+     "name": "Downscale filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear",
+      "Nearest"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "replace_color",
+   "name": "Replace Color",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/replace-color",
+   "parameters": [
+    {
+     "name": "Source Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Target Color",
+     "type": "color",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "replace_color_range",
+   "name": "Replace Color Range",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/replace-color-range",
+   "parameters": [
+    {
+     "name": "Source Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Target Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Source Range",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "threshold",
+   "name": "Threshold",
+   "category": "Filters/Adjustments",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/adjustments/threshold",
+   "parameters": [
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Greater",
+      "Greater or equal",
+      "Lower",
+      "Lower or equal"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "color_blend",
+   "name": "Color (Blend Node)",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/color-blend-node",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "color_burn",
+   "name": "Color Burn",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/color-burn",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "color_dodge",
+   "name": "Color Dodge",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/color-dodge",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "difference",
+   "name": "Difference",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/difference",
+   "inputs": [
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "dissolve",
+   "name": "Dissolve",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/dissolve",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "linear_burn",
+   "name": "Linear Burn",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/linear-burn",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "luminosity_blend",
+   "name": "Luminosity (Blend Node)",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/luminosity-blend-node",
+   "inputs": [
+    {
+     "name": "Foreground",
+     "type": "color"
+    },
+    {
+     "name": "Background",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Alpha Blending",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "multi_switch",
+   "name": "Multi Switch",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/multi-switch",
+   "inputs": [
+    {
+     "name": "Input 1-20",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Input Number",
+     "type": "int",
+     "min": 2,
+     "max": 20,
+     "choices": []
+    },
+    {
+     "name": "Input Selection",
+     "type": "int",
+     "min": 1,
+     "max": 20,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "switch",
+   "name": "Switch",
+   "category": "Filters/Blending",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blending/switch",
+   "inputs": [
+    {
+     "name": "Input 1 (True)",
+     "type": "any"
+    },
+    {
+     "name": "Input 2 (False)",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Switch",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "anisotropic_blur",
+   "name": "Anisotropic Blur",
+   "category": "Filters/Blurs",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blurs/anisotropic-blur",
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0,
+     "choices": []
+    },
+    {
+     "name": "Anisotropy",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Quality",
+     "type": "int",
+     "min": 0,
+     "max": 1,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "blur_hq",
+   "name": "Blur HQ",
+   "category": "Filters/Blurs",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blurs/blur-hq",
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0,
+     "choices": []
+    },
+    {
+     "name": "Quality",
+     "type": "int",
+     "min": 0,
+     "max": 1,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "non_uniform_blur",
+   "name": "Non Uniform Blur",
+   "category": "Filters/Blurs",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blurs/non-uniform-blur",
+   "inputs": [
+    {
+     "name": "Blur Map",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 50.0,
+     "choices": []
+    },
+    {
+     "name": "Anisotropy",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Asymmetry",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Samples",
+     "type": "int",
+     "min": 1,
+     "max": 16,
+     "choices": []
+    },
+    {
+     "name": "Blades",
+     "type": "int",
+     "min": 1,
+     "max": 9,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "radial_blur",
+   "name": "Radial Blur",
+   "category": "Filters/Blurs",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blurs/radial-blur",
+   "parameters": [
+    {
+     "name": "Samples",
+     "type": "int",
+     "min": 1,
+     "max": 128,
+     "choices": []
+    },
+    {
+     "name": "Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.5,
+     "choices": []
+    },
+    {
+     "name": "Center Position",
+     "type": "float2",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "slope_blur",
+   "name": "Slope Blur",
+   "category": "Filters/Blurs",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/blurs/slope-blur",
+   "inputs": [
+    {
+     "name": "Slope",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Samples",
+     "type": "int",
+     "min": 0,
+     "max": 32,
+     "choices": []
+    },
+    {
+     "name": "Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 16.0,
+     "choices": []
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Blur",
+      "Min",
+      "Max"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "alpha_merge",
+   "name": "Alpha Merge",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/alpha-merge",
+   "inputs": [
+    {
+     "name": "RGB",
+     "type": "color"
+    },
+    {
+     "name": "A",
+     "type": "grayscale"
+    }
+   ]
+  },
+  {
+   "id": "alpha_split",
+   "name": "Alpha Split",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/alpha-split"
+  },
+  {
+   "id": "pre_multiplied_to_straight",
+   "name": "Pre-Multiplied to Straight",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/pre-multiplied-to-straight"
+  },
+  {
+   "id": "rgba_merge",
+   "name": "RGBA Merge",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/rgba-merge",
+   "inputs": [
+    {
+     "name": "R",
+     "type": "grayscale"
+    },
+    {
+     "name": "G",
+     "type": "grayscale"
+    },
+    {
+     "name": "B",
+     "type": "grayscale"
+    },
+    {
+     "name": "A",
+     "type": "grayscale"
+    }
+   ]
+  },
+  {
+   "id": "rgba_split",
+   "name": "RGBA Split",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/rgba-split"
+  },
+  {
+   "id": "straight_to_pre_multiplied",
+   "name": "Straight to Pre-multiplied",
+   "category": "Filters/Channels",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/channels/straight-to-pre-multiplied"
+  },
+  {
+   "id": "make_it_tile_patch",
+   "name": "Make It Tile Patch",
+   "category": "Filters/Tiling",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/tiling/make-it-tile-patch",
+   "parameters": [
+    {
+     "name": "Mask Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Precision",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Warping",
+     "type": "float",
+     "min": -100.0,
+     "max": 100.0,
+     "choices": []
+    },
+    {
+     "name": "Pattern size width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1000.0,
+     "choices": []
+    },
+    {
+     "name": "Pattern size height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1000.0,
+     "choices": []
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Size Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0,
+     "choices": []
+    },
+    {
+     "name": "Octave",
+     "type": "int",
+     "min": 0,
+     "max": 6,
+     "choices": []
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": -360.0,
+     "max": 360.0,
+     "choices": []
+    },
+    {
+     "name": "Rotation Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0,
+     "choices": []
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Color Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Luminosity Variation",
+     "type": "float",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "make_it_tile_photo",
+   "name": "Make It Tile Photo",
+   "category": "Filters/Tiling",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/tiling/make-it-tile-photo",
+   "parameters": [
+    {
+     "name": "Mask Warping H",
+     "type": "float",
+     "min": -100.0,
+     "max": 100.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Warping V",
+     "type": "float",
+     "min": -100.0,
+     "max": 100.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Size H",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Size V",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Precision H",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Mask Precision V",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "3d_texture_offset",
+   "name": "3D Texture Offset",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/3d-texture-offset",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Offset",
+     "type": "float3",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "auto_crop",
+   "name": "Auto Crop",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/auto-crop",
+   "parameters": [
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Crop square",
+      "Crop auto",
+      "Fit (Keep ratio)",
+      "Fill (Stretch)"
+     ]
+    },
+    {
+     "name": "Use alpha",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Filtering Mode",
+     "type": "enum",
+     "choices": [
+      "Nearest",
+      "Bilinear",
+      "Auto"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cartesian_to_polar",
+   "name": "Cartesian To Polar",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/cartesian-to-polar"
+  },
+  {
+   "id": "clone",
+   "name": "Clone (Filter Node)",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/clone-filter-node",
+   "inputs": [
+    {
+     "name": "Source",
+     "type": "color"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Offset",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "Blur Mask",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "mirror",
+   "name": "Mirror (Filter Node)",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/mirror-filter-node",
+   "parameters": [
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Mirror Axis X",
+      "Mirror Axis Y",
+      "Mirror Corner"
+     ]
+    },
+    {
+     "name": "Axis X Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Axis Y Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Invert Axis X",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Invert Axis Y",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Corner Type",
+     "type": "enum",
+     "choices": [
+      "Top Left",
+      "Top Right",
+      "Bottom Left",
+      "Bottom Right"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "noise_upscale_1",
+   "name": "Noise Upscale 1",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/noise-upscale-1",
+   "parameters": [
+    {
+     "name": "Offset1X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset1Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset2X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset2Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "noise_upscale_2",
+   "name": "Noise Upscale 2",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/noise-upscale-2",
+   "parameters": [
+    {
+     "name": "Offset1X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset1Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset2X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Offset2Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "noise_upscale_3",
+   "name": "Noise Upscale 3",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/noise-upscale-3",
+   "inputs": [
+    {
+     "name": "Grayscale",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask",
+     "type": "grayscale"
+    }
+   ]
+  },
+  {
+   "id": "non_square_transform",
+   "name": "Non-Square Transform",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/non-square-transform",
+   "parameters": [
+    {
+     "name": "Tile Mode",
+     "type": "enum",
+     "choices": [
+      "Automatic",
+      "Manual"
+     ]
+    },
+    {
+     "name": "Tile",
+     "type": "int",
+     "min": 1,
+     "max": 16,
+     "choices": []
+    },
+    {
+     "name": "Offset",
+     "type": "float2",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Safe Rotation (Square Only)",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "non_uniform_rotation",
+   "name": "Non-Uniform Rotation",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/non-uniform-rotation",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "any"
+    },
+    {
+     "name": "Rotation Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Rotation Pivot Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Rotation Angle Multiplier",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Rotation Angle Offset",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Use Pivot Position Map",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "PIvot Position",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Filtering Mode",
+     "type": "enum",
+     "choices": [
+      "Nearest",
+      "Bilinear"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "polar_to_cartesian",
+   "name": "Polar to Cartesian",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/polar-to-cartesian"
+  },
+  {
+   "id": "quad_transform",
+   "name": "Quad Transform",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/quad-transform",
+   "parameters": [
+    {
+     "name": "p00",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "p01",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "p10",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "p11",
+     "type": "float2",
+     "choices": []
+    },
+    {
+     "name": "Culling",
+     "type": "enum",
+     "choices": [
+      "Front only",
+      "Back only",
+      "Front over Back",
+      "Back over Front"
+     ]
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Background Color",
+     "type": "float",
+     "choices": []
+    },
+    {
+     "name": "Sampling",
+     "type": "enum",
+     "choices": [
+      "Bilinear",
+      "Nearest"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "safe_transform",
+   "name": "Safe Transform",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/safe-transform",
+   "parameters": [
+    {
+     "name": "Tile",
+     "type": "int",
+     "min": 1,
+     "max": 16,
+     "choices": []
+    },
+    {
+     "name": "Offset Mode",
+     "type": "enum",
+     "choices": [
+      "Manual",
+      "Random"
+     ]
+    },
+    {
+     "name": "Offset",
+     "type": "float2",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Tile Safe Rotation",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Symmetry",
+     "type": "enum",
+     "choices": [
+      "none",
+      "X",
+      "Y",
+      "X+Y"
+     ]
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Mipmap Mode",
+     "type": "enum",
+     "choices": [
+      "Automatic",
+      "Manual"
+     ]
+    },
+    {
+     "name": "Mipmap Level",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "skew",
+   "name": "Skew",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/skew",
+   "parameters": [
+    {
+     "name": "Axis",
+     "type": "enum",
+     "choices": [
+      "Horizontal",
+      "Vertical"
+     ]
+    },
+    {
+     "name": "Amount",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Align",
+     "type": "enum",
+     "choices": [
+      "Center",
+      "Top Left",
+      "Bottom Right"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "symmetry",
+   "name": "Symmetry",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/symmetry",
+   "parameters": [
+    {
+     "name": "Symmetry Mode",
+     "type": "enum",
+     "choices": [
+      "Mirror Y",
+      "Mirror X",
+      "Diagonal Left",
+      "Diagonal Right",
+      "Mirror X/Y",
+      "Mirror X / Mirror Y",
+      "Diagonal Left / Diagonal Right",
+      "Diagonal Right / Diagonal Left",
+      "8"
+     ]
+    },
+    {
+     "name": "Transfer Mode",
+     "type": "enum",
+     "min": 0,
+     "max": 6,
+     "choices": [
+      "Copy",
+      "Add",
+      "Subtract",
+      "Multiply",
+      "Add Sub",
+      "Max",
+      "Min"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "symmetry_slice",
+   "name": "Symmetry Slice",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/symmetry-slice",
+   "parameters": [
+    {
+     "name": "Symmetry Mode",
+     "type": "enum",
+     "min": 0,
+     "max": 6,
+     "choices": [
+      "Horizontal",
+      "Vertical",
+      "Diagonal Left-Right",
+      "Diagonal Right-Left",
+      "Vertical Invert",
+      "Corner",
+      "Diagonal Corner"
+     ]
+    },
+    {
+     "name": "Transfer Mode",
+     "type": "enum",
+     "min": 0,
+     "max": 6,
+     "choices": []
+    },
+    {
+     "name": "Blend",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Flip Side",
+     "type": "bool",
+     "choices": []
+    },
+    {
+     "name": "Flip Side2",
+     "type": "bool",
+     "choices": []
+    }
+   ]
+  },
+  {
+   "id": "trapezoid_transform",
+   "name": "Trapezoid Transform",
+   "category": "Filters/Transforms",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/filters/transforms/trapezoid-transform",
+   "parameters": [
+    {
+     "name": "Top Stretch",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Bottom Stretch",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "choices": []
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "choices": []
+    },
+    {
+     "name": "Sampling",
+     "type": "enum",
+     "choices": [
+      "Bilinear",
+      "Nearest"
+     ]
+    }
+   ]
+  }
+ ]
+}

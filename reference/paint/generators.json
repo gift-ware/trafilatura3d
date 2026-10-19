@@ -1,0 +1,1995 @@
+{
+ "items": [
+  {
+   "id": "painter.generators.overview",
+   "name": "Generators (overview)",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/generator"
+  },
+  {
+   "id": "painter.generator.3d_distance",
+   "name": "3D Distance",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/3d-distance",
+   "inputs": [
+    {
+     "name": "Position"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Position X"
+    },
+    {
+     "name": "Position Y"
+    },
+    {
+     "name": "Position Z"
+    },
+    {
+     "name": "Radius"
+    },
+    {
+     "name": "Offset"
+    },
+    {
+     "name": "Contrast"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.3d_linear_gradient",
+   "name": "3D Linear Gradient",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/3d-linear-gradient",
+   "inputs": [
+    {
+     "name": "Position"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Balance"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "3D Position Start"
+    },
+    {
+     "name": "3D Position End"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.ambient_occlusion",
+   "name": "Ambient Occlusion",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/ambient-occlusion",
+   "inputs": [
+    {
+     "name": "Texture Color"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "World Space Normals Color"
+    },
+    {
+     "name": "Position Gradient Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Global Invert"
+    },
+    {
+     "name": "Global Blur"
+    },
+    {
+     "name": "Global Balance"
+    },
+    {
+     "name": "Global Contrast"
+    },
+    {
+     "name": "Use Texture",
+     "type": "boolean"
+    },
+    {
+     "name": "Use Micro Details",
+     "type": "boolean"
+    },
+    {
+     "name": "Invert",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Blur",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Balance",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Contrast",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Texture Opacity",
+     "group": "Texture"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "group": "Texture"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Texture"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.auto_stitcher",
+   "name": "Auto Stitcher",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/auto-stitcher",
+   "inputs": [
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Custom Input Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Mask Mode",
+     "type": "enum",
+     "values": [
+      "UV Mask",
+      "Curvature",
+      "Custom Input"
+     ]
+    },
+    {
+     "name": "Path Smoothness"
+    },
+    {
+     "name": "Path Position"
+    },
+    {
+     "name": "Stitch Size"
+    },
+    {
+     "name": "Stitch Width"
+    },
+    {
+     "name": "Stitch Length"
+    },
+    {
+     "name": "Stitch Roundness"
+    },
+    {
+     "name": "Jitter"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.curvature",
+   "name": "Curvature",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/curvature",
+   "inputs": [
+    {
+     "name": "Texture Color"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    },
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "World Space Normals Color"
+    },
+    {
+     "name": "Position Gradient Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Global Invert"
+    },
+    {
+     "name": "Global Blur"
+    },
+    {
+     "name": "Global Balance"
+    },
+    {
+     "name": "Global Contrast"
+    },
+    {
+     "name": "Use Texture",
+     "type": "boolean"
+    },
+    {
+     "name": "Use Micro Details",
+     "type": "boolean"
+    },
+    {
+     "name": "Invert",
+     "group": "Curvature"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "values": [
+      "Edges",
+      "Cavities",
+      "Dual",
+      "Unprocessed"
+     ],
+     "group": "Curvature"
+    },
+    {
+     "name": "Sharp",
+     "group": "Curvature"
+    },
+    {
+     "name": "Fine",
+     "group": "Curvature"
+    },
+    {
+     "name": "Soft",
+     "group": "Curvature"
+    },
+    {
+     "name": "Medium",
+     "group": "Curvature"
+    },
+    {
+     "name": "Large",
+     "group": "Curvature"
+    },
+    {
+     "name": "Big",
+     "group": "Curvature"
+    },
+    {
+     "name": "Huge",
+     "group": "Curvature"
+    },
+    {
+     "name": "Contrast",
+     "group": "Curvature"
+    },
+    {
+     "name": "Brightness",
+     "group": "Curvature"
+    },
+    {
+     "name": "Texture Opacity",
+     "group": "Texture"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "type": "enum",
+     "group": "Texture"
+    },
+    {
+     "name": "Blending Mode",
+     "group": "Texture"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.dirt",
+   "name": "Dirt",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/dirt",
+   "inputs": [
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "World Space Normal Color"
+    },
+    {
+     "name": "Position Color"
+    },
+    {
+     "name": "Custom grunge Grayscale"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Dirt Level"
+    },
+    {
+     "name": "Dirt Contrast"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Blending Contrast"
+    },
+    {
+     "name": "Grunge Amount"
+    },
+    {
+     "name": "Grunge Scale"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "boolean"
+    },
+    {
+     "name": "Edges Masking"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.dripping_rust",
+   "name": "Dripping Rust",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/dripping-rust",
+   "inputs": [
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient occlusion Grayscale"
+    },
+    {
+     "name": "Position Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Rust Spreading"
+    },
+    {
+     "name": "Rust Contrast"
+    },
+    {
+     "name": "Spreading Smoothness"
+    },
+    {
+     "name": "Drips Intensity"
+    },
+    {
+     "name": "Drips Smoothness"
+    },
+    {
+     "name": "Drips Samples Amount"
+    },
+    {
+     "name": "Position axis",
+     "type": "enum",
+     "values": [
+      "Y-Green channel",
+      "X-Red channel",
+      "B-Blue channel"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.fiber_glass_edge_wear",
+   "name": "Fiber Glass Edge Wear",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/fiber-glass-edge-wear",
+   "inputs": [
+    {
+     "name": "Custom grunge Grayscale"
+    },
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "World Space Normal Color"
+    },
+    {
+     "name": "Position Color"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Wear Level"
+    },
+    {
+     "name": "Wear Contrast"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Blending Contrast"
+    },
+    {
+     "name": "Grunge Amount"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "boolean"
+    },
+    {
+     "name": "Edges Smoothness"
+    },
+    {
+     "name": "Ambient Occlusion Masking"
+    },
+    {
+     "name": "Curvature Weight"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.grayscale_conversion",
+   "name": "Grayscale Conversion",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/grayscale-conversion",
+   "inputs": [
+    {
+     "name": "Source Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Grayscale type",
+     "type": "enum",
+     "values": [
+      "Desaturation",
+      "Luma",
+      "Average",
+      "Max",
+      "Min",
+      "Red channel",
+      "Green channel",
+      "Blue channel"
+     ]
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Balance"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Tile"
+    },
+    {
+     "name": "Rotation"
+    },
+    {
+     "name": "Safe Rotation",
+     "type": "boolean"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.inflate_shrinkwrap",
+   "name": "Inflate Shrinkwrap",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/inflate-shrinkwrap",
+   "inputs": [
+    {
+     "name": "Curvature Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Preset",
+     "type": "enum",
+     "values": [
+      "Inflated",
+      "Vacuum Pulled",
+      "Tight"
+     ]
+    },
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Inflate or Shrinkwrap",
+     "type": "enum",
+     "values": [
+      "inflate",
+      "shrinkwrap"
+     ]
+    },
+    {
+     "name": "Seam Intensity"
+    },
+    {
+     "name": "Raised Edge Width"
+    },
+    {
+     "name": "Raised Edge Intensity"
+    },
+    {
+     "name": "Wrinkle Density"
+    },
+    {
+     "name": "Wrinkle Tightness"
+    },
+    {
+     "name": "Wrinkle Range"
+    },
+    {
+     "name": "Wrinkle Scale"
+    },
+    {
+     "name": "Height Range",
+     "group": "Technical Parameters"
+    },
+    {
+     "name": "Height Position",
+     "group": "Technical Parameters"
+    },
+    {
+     "name": "Surface Size (cm)",
+     "group": "Technical Parameters"
+    },
+    {
+     "name": "Surface Depth (cm)",
+     "group": "Technical Parameters"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.light",
+   "name": "Light",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/light",
+   "inputs": [
+    {
+     "name": "World Space Normal Color"
+    },
+    {
+     "name": "Position Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Horizontal Angle"
+    },
+    {
+     "name": "Vertical Angle"
+    },
+    {
+     "name": "Highlight Glossiness"
+    },
+    {
+     "name": "Highlight Level"
+    },
+    {
+     "name": "Light Attenuation"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.mask_builder",
+   "name": "Mask Builder",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/mask-builder",
+   "inputs": [
+    {
+     "name": "World space normal Color"
+    },
+    {
+     "name": "Custom grunge 1 Grayscale"
+    },
+    {
+     "name": "Custom grunge 2 Grayscale"
+    },
+    {
+     "name": "Scatter input Grayscale"
+    },
+    {
+     "name": "Position Color"
+    },
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Level"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Blending Contrast"
+    },
+    {
+     "name": "Grunge"
+    },
+    {
+     "name": "AO"
+    },
+    {
+     "name": "Curvature"
+    },
+    {
+     "name": "Top/Down Gradient"
+    },
+    {
+     "name": "World Space Normal"
+    },
+    {
+     "name": "Scratches"
+    },
+    {
+     "name": "Scatter"
+    },
+    {
+     "name": "Scale",
+     "group": "Grunge"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "boolean",
+     "group": "Grunge"
+    },
+    {
+     "name": "Secondary Custom Grunge",
+     "group": "Grunge"
+    },
+    {
+     "name": "Invert",
+     "group": "Grunge"
+    },
+    {
+     "name": "Range",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Contrast",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Noisiness",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Invert",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Convex Range",
+     "group": "Curvature"
+    },
+    {
+     "name": "Convex Contrast",
+     "group": "Curvature"
+    },
+    {
+     "name": "Convex Invert",
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Range",
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Contrast",
+     "group": "Curvature"
+    },
+    {
+     "name": "Concave Invert",
+     "group": "Curvature"
+    },
+    {
+     "name": "Smoothness",
+     "group": "Curvature"
+    },
+    {
+     "name": "Level Boost",
+     "group": "Curvature"
+    },
+    {
+     "name": "Noisiness",
+     "group": "Curvature"
+    },
+    {
+     "name": "Range",
+     "group": "Gradient"
+    },
+    {
+     "name": "Contrast",
+     "group": "Gradient"
+    },
+    {
+     "name": "Invert",
+     "group": "Gradient"
+    },
+    {
+     "name": "Top Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Bottom Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Front Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Back Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Right Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Left Intensity",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Amount",
+     "group": "Scratches"
+    },
+    {
+     "name": "Scale",
+     "group": "Scratches"
+    },
+    {
+     "name": "Scale",
+     "group": "Scatter"
+    },
+    {
+     "name": "Density",
+     "group": "Scatter"
+    },
+    {
+     "name": "Size",
+     "group": "Scatter"
+    },
+    {
+     "name": "Size Variation",
+     "group": "Scatter"
+    },
+    {
+     "name": "Opacity Variation",
+     "group": "Scatter"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.mask_editor",
+   "name": "Mask Editor",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/mask-editor",
+   "inputs": [
+    {
+     "name": "Texture Color"
+    },
+    {
+     "name": "Texture (Secondary) Color"
+    },
+    {
+     "name": "World Space Normals Color"
+    },
+    {
+     "name": "Position Gradient Color"
+    },
+    {
+     "name": "Thickness Grayscale"
+    },
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Global Invert"
+    },
+    {
+     "name": "Global Blur"
+    },
+    {
+     "name": "Global Balance"
+    },
+    {
+     "name": "Global Contrast"
+    },
+    {
+     "name": "Texture Opacity"
+    },
+    {
+     "name": "Texture 2 Opacity"
+    },
+    {
+     "name": "Ambient Occlusion Opacity"
+    },
+    {
+     "name": "Curvature Opacity"
+    },
+    {
+     "name": "World Space Normal Opacity"
+    },
+    {
+     "name": "Position Gradient Opacity"
+    },
+    {
+     "name": "Thickness Opacity"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "group": "Texture"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Texture"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Non-Square Tiling",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Non-Square Tiling",
+     "type": "boolean",
+     "group": "Texture 2"
+    },
+    {
+     "name": "Invert",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Blur",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Balance",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Contrast",
+     "group": "Ambient Occlusion"
+    },
+    {
+     "name": "Invert",
+     "group": "Curvature"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Curvature"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "values": [
+      "Edges",
+      "Cavities",
+      "Dual",
+      "Unprocessed"
+     ],
+     "group": "Curvature"
+    },
+    {
+     "name": "Sharp",
+     "group": "Curvature"
+    },
+    {
+     "name": "Fine",
+     "group": "Curvature"
+    },
+    {
+     "name": "Soft",
+     "group": "Curvature"
+    },
+    {
+     "name": "Medium",
+     "group": "Curvature"
+    },
+    {
+     "name": "Large",
+     "group": "Curvature"
+    },
+    {
+     "name": "Big",
+     "group": "Curvature"
+    },
+    {
+     "name": "Huge",
+     "group": "Curvature"
+    },
+    {
+     "name": "Contrast",
+     "group": "Curvature"
+    },
+    {
+     "name": "Brightness",
+     "group": "Curvature"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Blur",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Balance",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Contrast",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Brightness",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Right to Left",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Top To Bottom",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Front to Back",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Right to Left"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Right to Left"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Top To Bottom"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Top To Bottom"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Front to Back"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Front to Back"
+    },
+    {
+     "name": "Invert",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Balance",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Contrast",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Brightness",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Blending mode",
+     "type": "enum",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Right to Left",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Top To Bottom",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Front to Back",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum"
+    },
+    {
+     "name": "Invert",
+     "group": "Thickness"
+    },
+    {
+     "name": "Blur",
+     "group": "Thickness"
+    },
+    {
+     "name": "Contrast",
+     "group": "Thickness"
+    },
+    {
+     "name": "Brightness",
+     "group": "Thickness"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.metal_edge_wear",
+   "name": "Metal Edge Wear",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/metal-edge-wear",
+   "inputs": [
+    {
+     "name": "World space normal Color"
+    },
+    {
+     "name": "Position Color"
+    },
+    {
+     "name": "Custom grunge Grayscale"
+    },
+    {
+     "name": "Curvature Grayscale"
+    },
+    {
+     "name": "Ambient Occlusion Grayscale"
+    },
+    {
+     "name": "Micro Normal Color"
+    },
+    {
+     "name": "Micro Height Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Wear Level"
+    },
+    {
+     "name": "Wear Contrast"
+    },
+    {
+     "name": "Use Triplanar",
+     "type": "boolean"
+    },
+    {
+     "name": "Triplanar Blending Contrast"
+    },
+    {
+     "name": "Grunge Amount"
+    },
+    {
+     "name": "Grunge Scale"
+    },
+    {
+     "name": "Use Custom Grunge",
+     "type": "boolean"
+    },
+    {
+     "name": "Edges Smoothness"
+    },
+    {
+     "name": "Ambient Occlusion Masking"
+    },
+    {
+     "name": "Curvature Weight"
+    },
+    {
+     "name": "Micro Height",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Micro Normal",
+     "type": "boolean",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Type",
+     "type": "enum",
+     "values": [
+      "Standard",
+      "Sobel",
+      "Smooth"
+     ],
+     "group": "Micro Details"
+    },
+    {
+     "name": "Curvature Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "Height Details Intensity",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Radius",
+     "group": "Micro Details"
+    },
+    {
+     "name": "AO Depth",
+     "group": "Micro Details"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.position",
+   "name": "Position",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/position",
+   "inputs": [
+    {
+     "name": "Texture Color"
+    },
+    {
+     "name": "Position Gradient Color"
+    },
+    {
+     "name": "World Space Normals Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Global Invert"
+    },
+    {
+     "name": "Global Blur"
+    },
+    {
+     "name": "Global Balance"
+    },
+    {
+     "name": "Global Contrast"
+    },
+    {
+     "name": "Use Texture",
+     "type": "boolean"
+    },
+    {
+     "name": "Invert",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Balance",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Contrast",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Brightness",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Right to Left",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Top To Bottom",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Front to Back",
+     "group": "Position Gradient"
+    },
+    {
+     "name": "Invert",
+     "group": "Position Gradient/Right to Left"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Position Gradient/Right to Left"
+    },
+    {
+     "name": "Invert",
+     "group": "Position Gradient/Top To Bottom"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Position Gradient/Top To Bottom"
+    },
+    {
+     "name": "Invert",
+     "group": "Position Gradient/Front to Back"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Position Gradient/Front to Back"
+    },
+    {
+     "name": "Texture Opacity",
+     "group": "Texture"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "group": "Texture"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "Texture"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.tri_planar_advanced",
+   "name": "Tri-Planar Advanced",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/tri-planar-advanced",
+   "inputs": [
+    {
+     "name": "World Space Normal Color"
+    },
+    {
+     "name": "Position Color"
+    },
+    {
+     "name": "mask Grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Projection",
+     "type": "enum"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "values": [
+      "Linear",
+      "Advanced"
+     ]
+    },
+    {
+     "name": "Blending Contrast"
+    },
+    {
+     "name": "Texture Tiling"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis X"
+    },
+    {
+     "name": "Offset X X",
+     "group": "Axis X"
+    },
+    {
+     "name": "Offset X Y",
+     "group": "Axis X"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Offset Y X",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Offset Y Y",
+     "group": "Axis Y"
+    },
+    {
+     "name": "Rotation X",
+     "group": "Axis Z"
+    },
+    {
+     "name": "Offset Z X",
+     "group": "Axis Z"
+    },
+    {
+     "name": "Offset Z Y",
+     "group": "Axis Z"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.uv_border_distance",
+   "name": "UV Border Distance",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/uv-border-distance",
+   "parameters": [
+    {
+     "name": "Invert"
+    },
+    {
+     "name": "Balance"
+    },
+    {
+     "name": "Contrast"
+    },
+    {
+     "name": "Smoothness"
+    },
+    {
+     "name": "Distance"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.uv_checker",
+   "name": "UV Checker",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/uv-checker",
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Checker Color Mode",
+     "type": "enum",
+     "values": [
+      "Uniform",
+      "Random"
+     ]
+    },
+    {
+     "name": "Checker Color",
+     "type": "color"
+    },
+    {
+     "name": "Checker Grid Tile"
+    },
+    {
+     "name": "Checker Grid Opacity"
+    },
+    {
+     "name": "UV Borders Color",
+     "type": "color"
+    },
+    {
+     "name": "UV Borders Width"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.uv_random_color",
+   "name": "UV Random Color",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/uv-random-color",
+   "inputs": [
+    {
+     "name": "Custom Gradient"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Seed",
+     "type": "random_seed"
+    },
+    {
+     "name": "Color Source Mode",
+     "type": "enum",
+     "values": [
+      "Random",
+      "Custom Gradient"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.uv_texel_density",
+   "name": "UV Texel Density",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/uv-texel-density",
+   "parameters": [
+    {
+     "name": "Color Low",
+     "type": "color"
+    },
+    {
+     "name": "Color Medium",
+     "type": "color"
+    },
+    {
+     "name": "Color High",
+     "type": "color"
+    }
+   ]
+  },
+  {
+   "id": "painter.generator.world_space_normals",
+   "name": "World Space Normals",
+   "category": "generators",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/world-space-normals",
+   "inputs": [
+    {
+     "name": "Texture Color"
+    },
+    {
+     "name": "World Space Normals Color"
+    },
+    {
+     "name": "Position Gradient Color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Global Invert"
+    },
+    {
+     "name": "Global Blur"
+    },
+    {
+     "name": "Global Balance"
+    },
+    {
+     "name": "Global Contrast"
+    },
+    {
+     "name": "Use Texture",
+     "type": "boolean"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Blur",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Balance",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Contrast",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Brightness",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Right to Left",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Top To Bottom",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Front to Back",
+     "group": "World Space Normal"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Right to Left"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Right to Left"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Top To Bottom"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Top To Bottom"
+    },
+    {
+     "name": "Invert",
+     "group": "World Space Normal/Front to Back"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "group": "World Space Normal/Front to Back"
+    },
+    {
+     "name": "Texture Opacity",
+     "group": "Texture"
+    },
+    {
+     "name": "Invert",
+     "group": "Texture"
+    },
+    {
+     "name": "Grayscale Conversion",
+     "group": "Texture"
+    },
+    {
+     "name": "Blending Mode",
+     "group": "Texture"
+    },
+    {
+     "name": "Scale",
+     "group": "Texture"
+    },
+    {
+     "name": "Contrast",
+     "group": "Texture"
+    },
+    {
+     "name": "Brightness",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar",
+     "type": "boolean",
+     "group": "Texture"
+    },
+    {
+     "name": "Triplanar Contrast",
+     "group": "Texture"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,2 @@
+v0.23.1
+https://github.com/ufbx/ufbx/archive/refs/tags/v0.23.1.tar.gz

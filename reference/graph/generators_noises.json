@@ -1,0 +1,3970 @@
+{
+ "nodes": [
+  {
+   "id": "3d_perlin_noise",
+   "name": "3D Perlin Noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-perlin-noise",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Baseline",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Absolute",
+     "type": "bool"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "3d_perlin_noise_fractal",
+   "name": "3D Perlin Noise Fractal",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-perlin-noise-fractal",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Min Level",
+     "type": "int"
+    },
+    {
+     "name": "Max Level",
+     "type": "int"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Lacunarity",
+     "type": "float"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Baseline",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Absolute",
+     "type": "bool"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "3d_ridged_noise_fractal",
+   "name": "3D Ridged Noise Fractal",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-ridged-noise-fractal",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Min Level",
+     "type": "int"
+    },
+    {
+     "name": "Max Level",
+     "type": "int"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Lacunarity",
+     "type": "float"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Baseline",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "3d_simplex_noise",
+   "name": "3D Simplex Noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-simplex-noise",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 64.0
+    },
+    {
+     "name": "Size",
+     "type": "float3",
+     "min": 0.0,
+     "max": 2.0
+    }
+   ]
+  },
+  {
+   "id": "3d_voronoi",
+   "name": "3D Voronoi",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-voronoi",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Disorder",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Rounded Curve",
+     "type": "float"
+    },
+    {
+     "name": "Distance Scale",
+     "type": "float"
+    },
+    {
+     "name": "Distance Mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev",
+      "Minkowski"
+     ]
+    },
+    {
+     "name": "Minkowski Number",
+     "type": "float"
+    },
+    {
+     "name": "Style",
+     "type": "enum",
+     "choices": [
+      "F1",
+      "F2",
+      "F2-F1",
+      "F1*F2",
+      "F1/F2",
+      "Edge",
+      "Random color"
+     ]
+    },
+    {
+     "name": "Edge Thickness",
+     "type": "float"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "3d_voronoi_fractal",
+   "name": "3D Voronoi Fractal",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-voronoi-fractal",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Disorder",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Min Level",
+     "type": "int"
+    },
+    {
+     "name": "Max Level",
+     "type": "int"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Lacunarity",
+     "type": "float"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Rounded Curve",
+     "type": "float"
+    },
+    {
+     "name": "Distance Scale",
+     "type": "float"
+    },
+    {
+     "name": "Distance Mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev",
+      "Minkowski"
+     ]
+    },
+    {
+     "name": "Minkowski Number",
+     "type": "float"
+    },
+    {
+     "name": "Blend Mode",
+     "type": "enum",
+     "choices": [
+      "Add",
+      "Max",
+      "Min"
+     ]
+    },
+    {
+     "name": "Style",
+     "type": "enum",
+     "choices": [
+      "F1",
+      "F2",
+      "F2-F1",
+      "F1*F2",
+      "F1/F2",
+      "Edge",
+      "Random color"
+     ]
+    },
+    {
+     "name": "Edge Thickness",
+     "type": "float"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "3d_worley_noise",
+   "name": "3D Worley Noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/3d-worley-noise",
+   "inputs": [
+    {
+     "name": "Position Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Size",
+     "type": "float3",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev",
+      "Minkowski"
+     ]
+    },
+    {
+     "name": "Minkowski Number",
+     "type": "float",
+     "min": 0.0,
+     "max": 20.0
+    },
+    {
+     "name": "Style",
+     "type": "enum",
+     "choices": [
+      "F1",
+      "F2",
+      "F2-F1",
+      "Border",
+      "Random Color"
+     ]
+    },
+    {
+     "name": "Border Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Roundess",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "anisotropic_noise",
+   "name": "Anisotropic noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/anisotropic-noise",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "X amount",
+     "type": "int"
+    },
+    {
+     "name": "Y amount",
+     "type": "int"
+    },
+    {
+     "name": "Y amount by resolution",
+     "type": "bool"
+    },
+    {
+     "name": "Rotate",
+     "type": "bool"
+    },
+    {
+     "name": "Smoothness",
+     "type": "float"
+    },
+    {
+     "name": "Smoothness interpolation",
+     "type": "float"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "blue_noise_fast",
+   "name": "Blue Noise Fast",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/blue-noise-fast",
+   "parameters": [
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "bnw_spots_1",
+   "name": "BnW spots 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/bnw-spots-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "bnw_spots_2",
+   "name": "BnW spots 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/bnw-spots-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "bnw_spots_3",
+   "name": "BnW spots 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/bnw-spots-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "caustics",
+   "name": "Caustics",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/caustics",
+   "inputs": [
+    {
+     "name": "Height map",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Output Color Space",
+     "type": "enum",
+     "choices": [
+      "Raw",
+      "sRGB"
+     ]
+    },
+    {
+     "name": "Photon Grid Size",
+     "type": "enum",
+     "choices": [
+      "Auto",
+      "512",
+      "1024",
+      "2048",
+      "4096"
+     ]
+    },
+    {
+     "name": "Surface Height Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Surface Height Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Surface IOR",
+     "type": "float",
+     "min": 1.0,
+     "max": 2.0
+    },
+    {
+     "name": "Photon Size",
+     "type": "float",
+     "min": 1.0,
+     "max": 50.0
+    },
+    {
+     "name": "Dispersion",
+     "type": "float",
+     "min": 0.0,
+     "max": 0.01
+    },
+    {
+     "name": "Jittering",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Light Position",
+     "type": "other"
+    },
+    {
+     "name": "Background Color",
+     "type": "color"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cells_1",
+   "name": "Cells 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/cells-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum"
+    },
+    {
+     "name": "Pattern size",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern scale",
+     "type": "float"
+    },
+    {
+     "name": "Luminance random",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cells_2",
+   "name": "Cells 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/cells-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Edge width",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cells_3",
+   "name": "Cells 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/cells-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Hardness",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Pattern size",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern scale",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cells_4",
+   "name": "Cells 4",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/cells-4",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Color source",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "Pseudorandom",
+      "Image input"
+     ]
+    },
+    {
+     "name": "Pseudorandom seed",
+     "type": "int"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "clouds_1",
+   "name": "Clouds 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/clouds-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "clouds_2",
+   "name": "Clouds 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/clouds-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "clouds_3",
+   "name": "Clouds 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/clouds-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "creased",
+   "name": "Creased",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/creased",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 128.0
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "crystal_1",
+   "name": "Crystal 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/crystal-1",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 256
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "crystal_2",
+   "name": "Crystal 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/crystal-2",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "directional_noise_1",
+   "name": "Directional noise 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/directional-noise-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "directional_noise_2",
+   "name": "Directional noise 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/directional-noise-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "directional_noise_3",
+   "name": "Directional noise 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/directional-noise-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "directional_noise_4",
+   "name": "Directional noise 4",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/directional-noise-4",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "directional_scratches",
+   "name": "Directional scratches",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/directional-scratches",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Pattern amount",
+     "type": "float"
+    },
+    {
+     "name": "Pattern size",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern size random",
+     "type": "float2"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_1",
+   "name": "Dirt 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_2",
+   "name": "Dirt 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_3",
+   "name": "Dirt 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_4",
+   "name": "Dirt 4",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-4",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_5",
+   "name": "Dirt 5",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-5",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "dirt_gradient",
+   "name": "Dirt gradient",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/dirt-gradient",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fluid",
+   "name": "Fluid",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fluid",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fractal_sum_1",
+   "name": "Fractal sum 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fractal-sum-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fractal_sum_2",
+   "name": "Fractal sum 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fractal-sum-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fractal_sum_3",
+   "name": "Fractal sum 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fractal-sum-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fractal_sum_4",
+   "name": "Fractal sum 4",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fractal-sum-4",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fractal_sum_base",
+   "name": "Fractal sum base",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fractal-sum-base",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Min. level",
+     "type": "int"
+    },
+    {
+     "name": "Max. level",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Global opacity",
+     "type": "float"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fur_1",
+   "name": "Fur 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fur-1",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fur_2",
+   "name": "Fur 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fur-2",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Waves Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Waves Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fur_3",
+   "name": "Fur 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/fur-3",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Waves Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 8.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gaussian_noise",
+   "name": "Gaussian noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/gaussian-noise",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gaussian_spots_1",
+   "name": "Gaussian spots 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/gaussian-spots-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gaussian_spots_2",
+   "name": "Gaussian spots 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/gaussian-spots-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_concrete",
+   "name": "Grunge Concrete",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-concrete",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Base Noisiness",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dirt Specks Opacity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Invert Dirt",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratches Opacity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Large Variation Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_damas",
+   "name": "Grunge Damas",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-damas",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Distortion",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Divisions",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Waves",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Details",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_galvanic_large",
+   "name": "Grunge Galvanic Large",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-galvanic-large",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Warp Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Ridge Detail Opacity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_galvanic_small",
+   "name": "Grunge Galvanic Small",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-galvanic-small",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Crispness",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dirt",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Micro Distortion",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_leaks",
+   "name": "Grunge Leaks",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-leaks",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Drip Length",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Shape Contrast",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Drip Crispness",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_leaky_paint",
+   "name": "Grunge Leaky Paint",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-leaky-paint",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Leak Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Leak Scale",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Leak Angle Random",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Leak Crispness",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_001",
+   "name": "Grunge Map 001",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-001",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_002",
+   "name": "Grunge Map 002",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-002",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_003",
+   "name": "Grunge Map 003",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-003",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_004",
+   "name": "Grunge Map 004",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-004",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_005",
+   "name": "Grunge Map 005",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-005",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_006",
+   "name": "Grunge Map 006",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-006",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_007",
+   "name": "Grunge Map 007",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-007",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_008",
+   "name": "Grunge Map 008",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-008",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_009",
+   "name": "Grunge Map 009",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-009",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_010",
+   "name": "Grunge Map 010",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-010",
+   "parameters": [
+    {
+     "name": "Cracks",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_011",
+   "name": "Grunge Map 011",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-011",
+   "parameters": [
+    {
+     "name": "Cracks",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_012",
+   "name": "Grunge Map 012",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-012",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_013",
+   "name": "Grunge Map 013",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-013",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_014",
+   "name": "Grunge Map 014",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-014",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_map_015",
+   "name": "Grunge Map 015",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-map-015",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Brush Pattern",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "grunge_rough_dirty",
+   "name": "Grunge Rough Dirty",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-rough-dirty",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Main Grunge Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Invert Scratches",
+     "type": "bool",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratches Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Grain Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_rust_fine",
+   "name": "Grunge Rust Fine",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-rust-fine",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Base Grunge Contrast",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Base Warp Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Streaks Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Noise Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_scratches_dirty",
+   "name": "Grunge Scratches Dirty",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-scratches-dirty",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Base Grunge Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratches Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_scratches_fine",
+   "name": "Grunge Scratches Fine",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-scratches-fine",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Scratches Amount",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Value Bias",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_scratches_rough",
+   "name": "Grunge Scratches Rough",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-scratches-rough",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Scratch Quantity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Tiling",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Blur",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Width",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Length",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Masking",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Dirtiness",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Double Scratch",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Spots Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Spots Tiling",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust Tiling",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_shavings",
+   "name": "Grunge Shavings",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-shavings",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Scratch Spots Amount",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scratch Spots Tiling",
+     "type": "int",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dust Intensity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Sharpen Intensity",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_splashes_dusty",
+   "name": "Grunge Splashes Dusty",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-splashes-dusty",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Splashes Quantity",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Splashes Distortion",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Splash/Dirt Ratio",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Dirt Spread",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_spots",
+   "name": "Grunge Spots",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-spots",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Details",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Coverage",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Coverage Contrast",
+     "type": "float",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "grunge_spots_dirty",
+   "name": "Grunge Spots Dirty",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/grunge-spots-dirty",
+   "parameters": [
+    {
+     "name": "Balance",
+     "type": "float"
+    },
+    {
+     "name": "Contrast",
+     "type": "float"
+    },
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Coverage",
+     "type": "float",
+     "group": "Advanced"
+    },
+    {
+     "name": "Scale",
+     "type": "int",
+     "group": "Advanced"
+    }
+   ]
+  },
+  {
+   "id": "liquid",
+   "name": "Liquid",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/liquid",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 128
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "messy_fibers_1",
+   "name": "Messy fibers 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/messy-fibers-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Lines number",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "messy_fibers_2",
+   "name": "Messy fibers 2",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/messy-fibers-2",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Lines number",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "messy_fibers_3",
+   "name": "Messy fibers 3",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/messy-fibers-3",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle",
+     "type": "float"
+    },
+    {
+     "name": "Angle random",
+     "type": "float"
+    },
+    {
+     "name": "Luminance random",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "microscope_view",
+   "name": "Microscope View",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/microscope-view",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 0,
+     "max": 10
+    },
+    {
+     "name": "Warp Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "moisture_noise",
+   "name": "Moisture noise 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/moisture-noise",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy",
+     "type": "float"
+    },
+    {
+     "name": "Disorder anisotropy angle",
+     "type": "float"
+    },
+    {
+     "name": "Pattern size",
+     "type": "float2"
+    },
+    {
+     "name": "Pattern angle",
+     "type": "float"
+    },
+    {
+     "name": "Pattern angle random",
+     "type": "float"
+    },
+    {
+     "name": "Global opacity",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "perlin_noise",
+   "name": "Perlin noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/perlin-noise",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    },
+    {
+     "name": "Tile offset",
+     "type": "float2"
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "plasma",
+   "name": "Plasma",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/plasma",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 128
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "voronoi",
+   "name": "Voronoi",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/voronoi",
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Disorder",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Rounded Curve",
+     "type": "float"
+    },
+    {
+     "name": "Distance Scale",
+     "type": "float"
+    },
+    {
+     "name": "Distance Mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev",
+      "Minkowski"
+     ]
+    },
+    {
+     "name": "Minkowski Number",
+     "type": "float"
+    },
+    {
+     "name": "Style",
+     "type": "enum",
+     "choices": [
+      "F1",
+      "F2",
+      "F2-F1",
+      "F1*F2",
+      "F1/F2",
+      "Edge",
+      "Random color"
+     ]
+    },
+    {
+     "name": "Edge Thickness",
+     "type": "float"
+    },
+    {
+     "name": "Random Color Seed Mode",
+     "type": "enum",
+     "choices": [
+      "Global Random Seed",
+      "Manual Seed"
+     ]
+    },
+    {
+     "name": "Random Color Seed",
+     "type": "int"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "voronoi_fractal",
+   "name": "Voronoi Fractal",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/voronoi-fractal",
+   "parameters": [
+    {
+     "name": "Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Offset",
+     "type": "float3"
+    },
+    {
+     "name": "Disorder",
+     "type": "float3"
+    },
+    {
+     "name": "Distortion Intensity",
+     "type": "float"
+    },
+    {
+     "name": "Distortion Scale Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Min Level",
+     "type": "int"
+    },
+    {
+     "name": "Max Level",
+     "type": "int"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Lacunarity",
+     "type": "float"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Rounded Curve",
+     "type": "float"
+    },
+    {
+     "name": "Distance Scale",
+     "type": "float"
+    },
+    {
+     "name": "Distance Mode",
+     "type": "enum",
+     "choices": [
+      "Euclidean",
+      "Manhattan",
+      "Chebyshev",
+      "Minkowski"
+     ]
+    },
+    {
+     "name": "Minkowski Number",
+     "type": "float"
+    },
+    {
+     "name": "Blend Mode",
+     "type": "enum",
+     "choices": [
+      "Add",
+      "Max",
+      "Min"
+     ]
+    },
+    {
+     "name": "Style",
+     "type": "enum",
+     "choices": [
+      "F1",
+      "F2",
+      "F2-F1",
+      "F1*F2",
+      "F1/F2",
+      "Edge",
+      "Random color"
+     ]
+    },
+    {
+     "name": "Edge Thickness",
+     "type": "float"
+    },
+    {
+     "name": "Random Color Seed Mode",
+     "type": "enum",
+     "choices": [
+      "Global Random Seed",
+      "Manual Seed"
+     ]
+    },
+    {
+     "name": "Random Color Seed",
+     "type": "int"
+    },
+    {
+     "name": "Enable Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "waveform_1",
+   "name": "Waveform 1",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/waveform-1",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Samples",
+     "type": "int"
+    },
+    {
+     "name": "Function",
+     "type": "enum",
+     "choices": [
+      "Value noise",
+      "Cosine",
+      "Custom function"
+     ]
+    },
+    {
+     "name": "Custom function",
+     "type": "float"
+    },
+    {
+     "name": "Roughness",
+     "type": "float"
+    },
+    {
+     "name": "Scale",
+     "type": "int"
+    },
+    {
+     "name": "Amplitude min.",
+     "type": "float"
+    },
+    {
+     "name": "Amplitude max.",
+     "type": "float"
+    },
+    {
+     "name": "Noise",
+     "type": "float"
+    },
+    {
+     "name": "Position",
+     "type": "enum",
+     "choices": [
+      "Centered",
+      "Bottom"
+     ]
+    },
+    {
+     "name": "Pattern",
+     "type": "enum"
+    },
+    {
+     "name": "Pattern variation",
+     "type": "float"
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "white_noise",
+   "name": "White noise",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/white-noise",
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Noise distribution",
+     "type": "enum",
+     "choices": [
+      "Uniform",
+      "Gaussian",
+      "Triangle"
+     ]
+    },
+    {
+     "name": "Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Disorder speed",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "white_noise_fast",
+   "name": "White Noise Fast",
+   "category": "Texture generators/Noises",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/noises/white-noise-fast"
+  }
+ ]
+}

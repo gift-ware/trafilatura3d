@@ -1,0 +1,3864 @@
+{
+ "nodes": [
+  {
+   "id": "3d_linear_gradient",
+   "name": "3D Linear Gradient",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/3d-linear-gradient",
+   "parameters": [
+    {
+     "name": "Points Position Mode",
+     "type": "enum",
+     "choices": [
+      "UV Positions",
+      "World Space Positions"
+     ]
+    },
+    {
+     "name": "Point 1",
+     "type": "other"
+    },
+    {
+     "name": "Point 2",
+     "type": "other"
+    },
+    {
+     "name": "Contrast",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "3d_volume_mask",
+   "name": "3D Volume Mask",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/3d-volume-mask",
+   "inputs": [
+    {
+     "name": "Position",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Cube",
+      "Cylinder",
+      "Sphere"
+     ]
+    },
+    {
+     "name": "Scale",
+     "type": "float"
+    },
+    {
+     "name": "Size",
+     "type": "float3"
+    },
+    {
+     "name": "Position Input",
+     "type": "enum",
+     "choices": [
+      "UV Position",
+      "World Space Position"
+     ]
+    },
+    {
+     "name": "Position UV",
+     "type": "float2"
+    },
+    {
+     "name": "Position",
+     "type": "float3"
+    },
+    {
+     "name": "Rotation",
+     "type": "float3"
+    },
+    {
+     "name": "Feather Width",
+     "type": "float"
+    }
+   ]
+  },
+  {
+   "id": "alveolus",
+   "name": "Alveolus",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/alveolus",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Gradient Filled Cells",
+     "type": "bool"
+    },
+    {
+     "name": "Interstice Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "arc_pavement",
+   "name": "Arc Pavement",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/arc-pavement",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Pattern Amount",
+     "type": "int",
+     "min": 1,
+     "max": 32
+    },
+    {
+     "name": "Pattern Amount Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Minimum Amount",
+     "type": "int",
+     "min": 1,
+     "max": 10
+    },
+    {
+     "name": "Arcs Amount",
+     "type": "int",
+     "min": 0,
+     "max": 20
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Input Image",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradations",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule",
+      "Cone"
+     ]
+    },
+    {
+     "name": "Input Image Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ]
+    },
+    {
+     "name": "Pattern Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Width Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Height Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Global Pattern Width Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Height Decrease",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Color Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "brick_1",
+   "name": "Brick 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/brick-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Edge Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Interstice Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "brick_2",
+   "name": "Brick 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/brick-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Edge Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Interstice Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "brick_generator",
+   "name": "Brick Generator",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/brick-generator",
+   "parameters": [
+    {
+     "name": "Bricks",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Bevel",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Keep Ratio",
+     "type": "bool"
+    },
+    {
+     "name": "Gap",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Middle Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Height",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Slope",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "checker_1",
+   "name": "Checker 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/checker-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotate 45 Degrees",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cube_3d_gbuffers",
+   "name": "Cube 3D GBuffers",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/cube-3d-gbuffers",
+   "parameters": [
+    {
+     "name": "Orientation Offset",
+     "type": "other"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "cube_3d",
+   "name": "Cube 3D",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/cube-3d",
+   "parameters": [
+    {
+     "name": "Orientation Offset",
+     "type": "other"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fibers_1",
+   "name": "Fibers 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/fibers-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "fibers_2",
+   "name": "Fibers 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/fibers-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gaussian_1",
+   "name": "Gaussian 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gaussian-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gaussian_2",
+   "name": "Gaussian 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gaussian-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gradient_axial_reflected",
+   "name": "Gradient Axial Reflected",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-axial-reflected",
+   "parameters": [
+    {
+     "name": "Point 1",
+     "type": "other"
+    },
+    {
+     "name": "Point 2",
+     "type": "other"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gradient_axial",
+   "name": "Gradient Axial",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-axial",
+   "parameters": [
+    {
+     "name": "Point 1",
+     "type": "other"
+    },
+    {
+     "name": "Point 2",
+     "type": "other"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gradient_circular",
+   "name": "Gradient Circular",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-circular",
+   "parameters": [
+    {
+     "name": "Point 1",
+     "type": "other"
+    },
+    {
+     "name": "Point 2",
+     "type": "other"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "gradient_linear_1",
+   "name": "Gradient Linear 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-linear-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0°",
+      "90°",
+      "180°",
+      "270°"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gradient_linear_2",
+   "name": "Gradient Linear 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-linear-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90°"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gradient_linear_3",
+   "name": "Gradient Linear 3",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-linear-3",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90°"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gradient_radial",
+   "name": "Gradient Radial",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/gradient-radial",
+   "parameters": [
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Cone",
+      "Hemisphere"
+     ]
+    },
+    {
+     "name": "Point 1",
+     "type": "other"
+    },
+    {
+     "name": "Point 2",
+     "type": "other"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "height_extrude",
+   "name": "Height Extrude",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/height-extrude",
+   "parameters": [
+    {
+     "name": "Camera Angle",
+     "type": "other"
+    },
+    {
+     "name": "Camera Scale",
+     "type": "float",
+     "min": 0.001,
+     "max": 3.0
+    },
+    {
+     "name": "Height Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0
+    },
+    {
+     "name": "Vertical Offset",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Ground",
+     "type": "bool"
+    },
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ]
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 256.0
+    }
+   ]
+  },
+  {
+   "id": "mesh_1",
+   "name": "Mesh 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/mesh-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotate 45 Degrees",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "mesh_2",
+   "name": "Mesh 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/mesh-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotate 45 Degrees",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "panorama_shape",
+   "name": "Panorama Shape",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/panorama-shape",
+   "parameters": [
+    {
+     "name": "Shape Matrix",
+     "type": "other"
+    },
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "square",
+      "disc"
+     ]
+    },
+    {
+     "name": "Shape Color",
+     "type": "color"
+    },
+    {
+     "name": "Shape Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Shape Soft Border",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Hotspot Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Hotspot Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Hotspot Falloff",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Hotspot Position",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Enable Backgound",
+     "type": "bool"
+    },
+    {
+     "name": "Background Color",
+     "type": "color"
+    },
+    {
+     "name": "Enable Texture Input",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "polygon_1",
+   "name": "Polygon 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/polygon-1",
+   "parameters": [
+    {
+     "name": "Sides",
+     "type": "int",
+     "min": 3,
+     "max": 32
+    },
+    {
+     "name": "Explode",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Triangle Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Auto Scale",
+     "type": "bool"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Gradient",
+     "type": "bool"
+    },
+    {
+     "name": "Gradient Invert",
+     "type": "bool"
+    },
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "polygon_2",
+   "name": "Polygon 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/polygon-2",
+   "parameters": [
+    {
+     "name": "Sides",
+     "type": "int",
+     "min": 3,
+     "max": 32
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Curve",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Gradient",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Invert Gradient",
+     "type": "bool"
+    },
+    {
+     "name": "Auto Scale",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "scratches_generator",
+   "name": "Scratches Generator",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/scratches-generator",
+   "parameters": [
+    {
+     "name": "Spline Number",
+     "type": "int",
+     "min": 1,
+     "max": 512
+    },
+    {
+     "name": "Max Segments Per Spline",
+     "type": "int",
+     "min": 2,
+     "max": 256
+    },
+    {
+     "name": "Spline Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Distortion",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Distortion Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Distortion Frequency",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0
+    },
+    {
+     "name": "Spline Width Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Spline Position Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Set Spline Width in px",
+     "type": "bool"
+    },
+    {
+     "name": "Luminance Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Normal Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Normal Intensity Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Normal Format",
+     "type": "enum",
+     "choices": [
+      "DirectX",
+      "OpenGL"
+     ]
+    },
+    {
+     "name": "Fade Mode",
+     "type": "enum",
+     "choices": [
+      "None",
+      "Start",
+      "End",
+      "Start + End"
+     ]
+    },
+    {
+     "name": "Fade Length",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "shape_extrude",
+   "name": "Shape Extrude",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-extrude",
+   "inputs": [
+    {
+     "name": "Extrude Shape Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Profile Gradient",
+     "type": "grayscale"
+    },
+    {
+     "name": "Profile Mask",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Extrude Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Extrude Depth",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Extrude Shape",
+     "type": "enum",
+     "choices": [
+      "Cube",
+      "Cylinder",
+      "Custom Input"
+     ]
+    },
+    {
+     "name": "Extrude Shape Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Profile Type",
+     "type": "enum",
+     "choices": [
+      "Straight",
+      "Vertical Gradient",
+      "Mask"
+     ]
+    },
+    {
+     "name": "Bevel Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Bevel Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Bevel Curve",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Mirror Bevel",
+     "type": "bool"
+    },
+    {
+     "name": "Downscale Mulitplier",
+     "type": "int",
+     "min": 0,
+     "max": 2
+    },
+    {
+     "name": "Position",
+     "type": "other"
+    },
+    {
+     "name": "Output Range",
+     "type": "enum",
+     "choices": [
+      "[0, 1]",
+      "[-1, 1]"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "shape_mapper",
+   "name": "Shape mapper",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-mapper",
+   "inputs": [
+    {
+     "name": "Input",
+     "type": "grayscale"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Shape",
+     "type": "enum",
+     "choices": [
+      "Circle",
+      "Polygon"
+     ]
+    },
+    {
+     "name": "Pattern amount",
+     "type": "int"
+    },
+    {
+     "name": "Link segments with pattern amount",
+     "type": "bool"
+    },
+    {
+     "name": "Segments",
+     "type": "int"
+    },
+    {
+     "name": "Radius",
+     "type": "float"
+    },
+    {
+     "name": "Width",
+     "type": "float"
+    },
+    {
+     "name": "Rotation",
+     "type": "float"
+    },
+    {
+     "name": "Flip one on two",
+     "type": "bool"
+    },
+    {
+     "name": "Filtering mode",
+     "type": "enum",
+     "choices": [
+      "Nearest",
+      "Bilinear"
+     ]
+    },
+    {
+     "name": "Non-square expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "shape_splatter_blend",
+   "name": "Shape Splatter Blend",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-splatter-blend",
+   "inputs": [
+    {
+     "name": "Background Color",
+     "type": "color"
+    },
+    {
+     "name": "Pattern 1-8",
+     "type": "color"
+    },
+    {
+     "name": "Color Input",
+     "type": "color"
+    },
+    {
+     "name": "Splatter Data 1",
+     "type": "color"
+    },
+    {
+     "name": "Splatter Data 2",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Pattern Number",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Random Pattern Assignment",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Is Normal Map",
+     "type": "bool"
+    },
+    {
+     "name": "HSL/Luminance Adjustment",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "HSL/Luminance Random",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0
+    },
+    {
+     "name": "Normal Angle Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Color Input Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "shape_splatter_data_extract",
+   "name": "Shape Splatter Data Extract",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-splatter-data-extract",
+   "inputs": [
+    {
+     "name": "Splatter Data 1",
+     "type": "color"
+    },
+    {
+     "name": "Splatter Data 2",
+     "type": "color"
+    }
+   ]
+  },
+  {
+   "id": "shape_splatter_to_mask",
+   "name": "Shape Splatter to Mask",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-splatter-to-mask",
+   "parameters": [
+    {
+     "name": "Pattern ID Start Range",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Pattern ID End Range",
+     "type": "int",
+     "min": 1,
+     "max": 8
+    },
+    {
+     "name": "Random Mask",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Output",
+     "type": "enum",
+     "choices": [
+      "Binary Mask",
+      "Integer Mask",
+      "Grayscale Values"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "shape_splatter",
+   "name": "Shape Splatter",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape-splatter",
+   "inputs": [
+    {
+     "name": "Background Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Pattern 1-8",
+     "type": "grayscale"
+    },
+    {
+     "name": "Pattern Distribution",
+     "type": "grayscale"
+    },
+    {
+     "name": "Shape Scale",
+     "type": "grayscale"
+    },
+    {
+     "name": "Shape Rotation",
+     "type": "grayscale"
+    },
+    {
+     "name": "Height Offset",
+     "type": "grayscale"
+    },
+    {
+     "name": "Height Scale",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask Random",
+     "type": "grayscale"
+    },
+    {
+     "name": "Vector Map",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "X Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Y Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Pattern Input Number",
+     "type": "int",
+     "min": 1,
+     "max": 8,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Distribution Mode",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "Pattern Index",
+      "Line Index",
+      "Column Index"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Distribution Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90",
+      "180",
+      "270"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 5.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale No Overlap",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size Ratio from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size by X/Y Amount Ratio",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Position Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Random Distribution",
+     "type": "enum",
+     "choices": [
+      "Gaussian",
+      "Uniform"
+     ],
+     "group": "Position"
+    },
+    {
+     "name": "Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Horizontal",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Vertical",
+     "type": "float",
+     "min": -2.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Out of Bounds Option",
+     "type": "enum",
+     "choices": [
+      "Scale Shape",
+      "Constrain Position"
+     ],
+     "group": "Position"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Height Scale Auto Adjust",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Offset Map Mulitplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Height Scale Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Conform to Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Smooth Conformed Background",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Height"
+    },
+    {
+     "name": "Skew from Bg Slope",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Height"
+    },
+    {
+     "name": "Background Slope Smoothness",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Height"
+    },
+    {
+     "name": "Cutout Black Pixels",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Flatten Pattern Base",
+     "type": "bool",
+     "group": "Height"
+    },
+    {
+     "name": "Mask Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Mask Random Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Masking"
+    },
+    {
+     "name": "Mask from Bg Slope",
+     "type": "float",
+     "min": -1.0,
+     "max": 1.0,
+     "group": "Masking"
+    }
+   ]
+  },
+  {
+   "id": "shape",
+   "name": "Shape",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/shape",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescant",
+      "Capsule",
+      "Cone",
+      "Hemisphere"
+     ]
+    },
+    {
+     "name": "Pattern Specific",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Rotation 45°",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Tiling",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "splatter_circular",
+   "name": "Splatter Circular",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/splatter-circular",
+   "inputs": [
+    {
+     "name": "Pattern Image Input 1-6",
+     "type": "any"
+    },
+    {
+     "name": "Background",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Pattern Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Pattern Amount Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Pattern Amount Random Min",
+     "type": "int",
+     "min": 1,
+     "max": 10
+    },
+    {
+     "name": "Ring Amount",
+     "type": "int",
+     "min": 1,
+     "max": 10
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Image Input",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule",
+      "Cone"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Number",
+     "type": "int",
+     "min": 1,
+     "max": 6,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Distribution",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "By Pattern Number",
+      "By Ring Number"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Image Input Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random Mode",
+     "type": "enum",
+     "choices": [
+      "Horizontal + Vertical",
+      "Horizontal",
+      "Vertical"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Radius",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Radius Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Ring Radius Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Angle Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Spiral Factor",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Spread",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset along Direction",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Global Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Connect Patterns",
+     "type": "bool",
+     "group": "Size"
+    },
+    {
+     "name": "Size (Connected)",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale by Pattern Number",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Invert Pattern Number",
+     "type": "bool",
+     "group": "Size"
+    },
+    {
+     "name": "Scale by Ring Number",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Invert Ring Number",
+     "type": "bool",
+     "group": "Size"
+    },
+    {
+     "name": "Pattern Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Pattern Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Pattern Rotation Pivot",
+     "type": "enum",
+     "choices": [
+      "Center",
+      "Min X",
+      "Max X",
+      "Min Y",
+      "Max Y"
+     ],
+     "group": "Rotation"
+    },
+    {
+     "name": "Center Orientation",
+     "type": "bool",
+     "group": "Rotation"
+    },
+    {
+     "name": "Ring Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Ring Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Ring Rotation Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Color",
+     "type": "float",
+     "group": "Color"
+    },
+    {
+     "name": "Luminance Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Luminance By Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Luminance by Pattern Number",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Invert Pattern Number",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Luminance by Ring Number",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Invert Ring Number",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Random Mask",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Background Color",
+     "type": "float",
+     "group": "Color"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Add",
+      "Max",
+      "Add Sub"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    }
+   ]
+  },
+  {
+   "id": "splatter",
+   "name": "Splatter",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/splatter",
+   "parameters": [
+    {
+     "name": "Pattern Size Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1000.0
+    },
+    {
+     "name": "Pattern Size Height",
+     "type": "float",
+     "min": 0.0,
+     "max": 1000.0
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": -360.0,
+     "max": 360.0
+    },
+    {
+     "name": "Rotation Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0
+    },
+    {
+     "name": "Zoom",
+     "type": "float",
+     "min": 100.0,
+     "max": 10000.0
+    },
+    {
+     "name": "Gain",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0
+    },
+    {
+     "name": "Pan X",
+     "type": "float",
+     "min": -100.0,
+     "max": 100.0
+    },
+    {
+     "name": "Pan Y",
+     "type": "float",
+     "min": -100.0,
+     "max": 100.0
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Grid Number",
+     "type": "int",
+     "min": 0,
+     "max": 8
+    },
+    {
+     "name": "Disorder Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 360.0
+    },
+    {
+     "name": "Disorder Random",
+     "type": "bool"
+    },
+    {
+     "name": "Pattern Size",
+     "type": "int",
+     "min": 5,
+     "max": 12
+    },
+    {
+     "name": "Size Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Image Input Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ]
+    },
+    {
+     "name": "Output Level Min",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Output Level Max",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Background Color",
+     "type": "float"
+    },
+    {
+     "name": "Luminance Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Color Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    }
+   ]
+  },
+  {
+   "id": "star",
+   "name": "Star",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/star",
+   "parameters": [
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "starburst",
+   "name": "Starburst",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/starburst",
+   "parameters": [
+    {
+     "name": "Branches",
+     "type": "int",
+     "min": 3,
+     "max": 512
+    },
+    {
+     "name": "Blur Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 32.0
+    },
+    {
+     "name": "Randomness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Size Min",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Size Max",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0
+    },
+    {
+     "name": "Size Variation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    }
+   ]
+  },
+  {
+   "id": "stripes",
+   "name": "Stripes",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/stripes",
+   "parameters": [
+    {
+     "name": "Stripes",
+     "type": "int",
+     "min": 1,
+     "max": 100
+    },
+    {
+     "name": "Width",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Softness",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Shift",
+     "type": "int",
+     "min": 0,
+     "max": 20
+    },
+    {
+     "name": "Align",
+     "type": "enum",
+     "choices": [
+      "Edges",
+      "Center"
+     ]
+    },
+    {
+     "name": "Filtering",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "tile_generator",
+   "name": "Tile Generator",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/tile-generator",
+   "inputs": [
+    {
+     "name": "Pattern Input 1-6",
+     "type": "grayscale"
+    },
+    {
+     "name": "Background",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "X Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Y Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Image Input",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule",
+      "Cone"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Number",
+     "type": "int",
+     "min": 1,
+     "max": 6,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Distribution",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "By Pattern Number"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Image Input Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90",
+      "180",
+      "270"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Quincunx Flip",
+     "type": "bool",
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random Mode",
+     "type": "enum",
+     "choices": [
+      "Horizontal + Vertical",
+      "Horizontal",
+      "Vertical"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Size Mode",
+     "type": "enum",
+     "choices": [
+      "Normal - Interstice",
+      "Normal - Size",
+      "Keep Ratio",
+      "Absolute",
+      "Pixel"
+     ],
+     "group": "Size"
+    },
+    {
+     "name": "Middle Size",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Interstice X/Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size (Absolute/Pixel)",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 2.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random Seed",
+     "type": "int",
+     "min": 0,
+     "max": 1000,
+     "group": "Size"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Random Seed",
+     "type": "int",
+     "min": 0,
+     "max": 1000,
+     "group": "Position"
+    },
+    {
+     "name": "Vertical Offset",
+     "type": "bool",
+     "group": "Position"
+    },
+    {
+     "name": "Position Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Global Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Color",
+     "type": "float",
+     "group": "Color"
+    },
+    {
+     "name": "Luminance/Color Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Luminance By Number",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Luminance By Scale",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Checker Mask",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Horizontal Mask",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Vertical Mask",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Random Mask",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Invert Mask",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Add",
+      "Max",
+      "Add Sub"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Background Color",
+     "type": "float",
+     "group": "Color"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Reverse Rendering Order",
+     "type": "bool",
+     "group": "Color"
+    }
+   ]
+  },
+  {
+   "id": "tile_random_2",
+   "name": "Tile Random 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/tile-random-2",
+   "inputs": [
+    {
+     "name": "Random Size Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Random Slant Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Round Corners Radius Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Bevel Distance Map",
+     "type": "grayscale"
+    },
+    {
+     "name": "Mask Map",
+     "type": "grayscale"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Amount X",
+     "type": "int"
+    },
+    {
+     "name": "Amount Y",
+     "type": "int"
+    },
+    {
+     "name": "Random Size Multiplier",
+     "type": "float",
+     "group": "Size"
+    },
+    {
+     "name": "Random Size Input Map Multiplier",
+     "type": "float",
+     "group": "Size"
+    },
+    {
+     "name": "Random Size X",
+     "type": "float",
+     "group": "Size"
+    },
+    {
+     "name": "Random Size Y",
+     "type": "float",
+     "group": "Size"
+    },
+    {
+     "name": "Random Size Distribution",
+     "type": "enum",
+     "choices": [
+      "Uniform",
+      "Blue Noise"
+     ],
+     "group": "Size"
+    },
+    {
+     "name": "Interstice Thickness",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Random Position Multiplier",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Round Corners Radius",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Round Corners Radius Input Map Mult.",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Scale Multiplier",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Corners Position Random",
+     "type": "float",
+     "group": "Shape Aspect - Transform"
+    },
+    {
+     "name": "Random Slant Multiplier",
+     "type": "float",
+     "group": "Slant"
+    },
+    {
+     "name": "Random Slant Input Map Multiplier",
+     "type": "float",
+     "group": "Slant"
+    },
+    {
+     "name": "Random Slant X",
+     "type": "float",
+     "group": "Slant"
+    },
+    {
+     "name": "Random Slant Y",
+     "type": "float",
+     "group": "Slant"
+    },
+    {
+     "name": "Random Slant Distribution",
+     "type": "enum",
+     "choices": [
+      "Uniform",
+      "Blue Noise"
+     ],
+     "group": "Slant"
+    },
+    {
+     "name": "Bevel Distance Mode",
+     "type": "enum",
+     "choices": [
+      "Relative to Grid Size",
+      "Relative to Shape Size",
+      "Relative to Image Size"
+     ],
+     "group": "Bevel"
+    },
+    {
+     "name": "Bevel Distance Multiplier",
+     "type": "float",
+     "group": "Bevel"
+    },
+    {
+     "name": "Bevel Distance Input Map Mult.",
+     "type": "float",
+     "group": "Bevel"
+    },
+    {
+     "name": "Bevel Rounded Curve",
+     "type": "float",
+     "group": "Bevel"
+    },
+    {
+     "name": "Enable per Axis Bevel Control",
+     "type": "bool",
+     "group": "Bevel"
+    },
+    {
+     "name": "Bevel Distance X",
+     "type": "float",
+     "group": "Bevel"
+    },
+    {
+     "name": "Bevel Distance Y",
+     "type": "float",
+     "group": "Bevel"
+    },
+    {
+     "name": "Mask Random Invert",
+     "type": "bool",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask Random Start",
+     "type": "float",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask Random End",
+     "type": "float",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask by Cell Area Invert",
+     "type": "bool",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask by Cell Area Start",
+     "type": "float",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask by Cell Area End",
+     "type": "float",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask Map Input Invert",
+     "type": "bool",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask Map Input Start",
+     "type": "float",
+     "group": "Mask"
+    },
+    {
+     "name": "Mask Map Input End",
+     "type": "float",
+     "group": "Mask"
+    }
+   ]
+  },
+  {
+   "id": "tile_random",
+   "name": "Tile Random",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/tile-random",
+   "inputs": [
+    {
+     "name": "Pattern Input",
+     "type": "any"
+    },
+    {
+     "name": "Background Input",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "X Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Y Amount",
+     "type": "int",
+     "min": 1,
+     "max": 64
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Pattern Input",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half Bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule",
+      "Cone"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Image Input Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90",
+      "180",
+      "270",
+      "random horizontal",
+      "random vertical"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random Mode",
+     "type": "enum",
+     "choices": [
+      "Horizontal + Vertical",
+      "Horizontal",
+      "Vertical"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "none",
+      "auto",
+      "auto horizontal",
+      "auto vertical",
+      "random h+v"
+     ],
+     "group": "Split"
+    },
+    {
+     "name": "Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Split"
+    },
+    {
+     "name": "Multiplier",
+     "type": "int",
+     "min": 0,
+     "max": 10,
+     "group": "Split"
+    },
+    {
+     "name": "Random X",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Random Y",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Mode",
+     "type": "enum",
+     "choices": [
+      "Relative to smallest brick",
+      "Relative to largest brick"
+     ],
+     "group": "Interstice"
+    },
+    {
+     "name": "Amount",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Interstice"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Shape"
+    },
+    {
+     "name": "Rotation Constraint",
+     "type": "bool",
+     "group": "Shape"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Random Constraints",
+     "type": "bool",
+     "group": "Position"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Color"
+    },
+    {
+     "name": "Color Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrisation",
+     "type": "enum",
+     "choices": [
+      "none",
+      "area",
+      "size x",
+      "size y"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrisation Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrisation Effect",
+     "type": "enum",
+     "choices": [
+      "RGB+Alpha",
+      "RGB only",
+      "Alpha only"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Color"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Add/Sub",
+      "Max",
+      "Alpha Blend"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Mask"
+    },
+    {
+     "name": "Invert",
+     "type": "bool",
+     "group": "Mask"
+    }
+   ]
+  },
+  {
+   "id": "tile_sampler",
+   "name": "Tile Sampler",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/tile-sampler",
+   "inputs": [
+    {
+     "name": "Pattern Input 1-6",
+     "type": "any"
+    },
+    {
+     "name": "Scale Map Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Displacement Map Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Rotation Map Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Vector Map Input",
+     "type": "color"
+    },
+    {
+     "name": "Color Map Input",
+     "type": "any"
+    },
+    {
+     "name": "Mask Map Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Pattern Distribution Map Input",
+     "type": "grayscale"
+    },
+    {
+     "name": "Background Input",
+     "type": "any"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "X Amount",
+     "type": "int",
+     "min": 0,
+     "max": 64
+    },
+    {
+     "name": "Y Amount",
+     "type": "int",
+     "min": 0,
+     "max": 64
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    },
+    {
+     "name": "Pattern",
+     "type": "enum",
+     "choices": [
+      "Pattern Input",
+      "Square",
+      "Disc",
+      "Paraboloid",
+      "Bell",
+      "Gaussian",
+      "Thorn",
+      "Pyramid",
+      "Brick",
+      "Gradation",
+      "Waves",
+      "Half bell",
+      "Ridged Bell",
+      "Crescent",
+      "Capsule",
+      "Cone"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Number",
+     "type": "int",
+     "min": 1,
+     "max": 6,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Distribution",
+     "type": "enum",
+     "choices": [
+      "Random",
+      "Pattern Number",
+      "Distribution Map"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Input Filtering",
+     "type": "enum",
+     "choices": [
+      "Bilinear + Mipmaps",
+      "Bilinear",
+      "Nearest"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Pattern Specific Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation",
+     "type": "enum",
+     "choices": [
+      "0",
+      "90",
+      "180",
+      "270"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Pattern"
+    },
+    {
+     "name": "Symmetry Random Mode",
+     "type": "enum",
+     "choices": [
+      "Horizontal + Vertical",
+      "Horizontal",
+      "Vertical"
+     ],
+     "group": "Pattern"
+    },
+    {
+     "name": "Size Mode",
+     "type": "enum",
+     "choices": [
+      "Normal",
+      "Keep Ratio",
+      "Absolute",
+      "Pixel"
+     ],
+     "group": "Size"
+    },
+    {
+     "name": "Size (Absolute/Pixel)",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Size Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Size"
+    },
+    {
+     "name": "Scale Parametrization Affect",
+     "type": "enum",
+     "choices": [
+      "X and Y",
+      "X",
+      "Y"
+     ],
+     "group": "Size"
+    },
+    {
+     "name": "Position Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 10.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Offset Type",
+     "type": "enum",
+     "choices": [
+      "horizontal quincux",
+      "vertical quincux",
+      "horizontal global",
+      "vertical global"
+     ],
+     "group": "Position"
+    },
+    {
+     "name": "Global Offset",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Displacement Map Intensity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Displacement Angle",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Vector Map Displacement",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Position"
+    },
+    {
+     "name": "Rotation",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Rotation Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Vector Map Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Rotation"
+    },
+    {
+     "name": "Mask Map Threshold",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Mask Map Invert",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Mask Map Sampling Technique",
+     "type": "enum",
+     "choices": [
+      "Pattern Center",
+      "Pattern Bounding Box (slower)"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Mask Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Invert Mask",
+     "type": "bool",
+     "group": "Color"
+    },
+    {
+     "name": "Blending Mode",
+     "type": "enum",
+     "choices": [
+      "Add/Sub",
+      "Max",
+      "Alpha Blend"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Color",
+     "type": "color",
+     "group": "Color"
+    },
+    {
+     "name": "Color/Luminance Random",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrization Mode",
+     "type": "enum",
+     "choices": [
+      "Color Input",
+      "Color Map",
+      "Scale",
+      "Line Index",
+      "Row Index",
+      "Pattern Index",
+      "Pattern Center Position",
+      null
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrization Multiplier",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Color Parametrization Affect",
+     "type": "enum",
+     "choices": [
+      "RGB+Alpha",
+      "RGB only",
+      "Alpha only"
+     ],
+     "group": "Color"
+    },
+    {
+     "name": "Global Opacity",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0,
+     "group": "Color"
+    },
+    {
+     "name": "Background Color",
+     "type": "color",
+     "group": "Color"
+    },
+    {
+     "name": "Reverse Rendering Order",
+     "type": "bool",
+     "group": "Color"
+    }
+   ]
+  },
+  {
+   "id": "triangle_grid",
+   "name": "Triangle Grid",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/triangle-grid",
+   "inputs": [
+    {
+     "name": "Height",
+     "type": "grayscale"
+    },
+    {
+     "name": "Vector map",
+     "type": "color"
+    },
+    {
+     "name": "Color input",
+     "type": "color"
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Output",
+     "type": "color"
+    }
+   ],
+   "parameters": [
+    {
+     "name": "Color Output",
+     "type": "enum",
+     "choices": [
+      "Per Vertex",
+      "Per Triangle",
+      "Thin Line",
+      "Distance to Edge",
+      "Center"
+     ]
+    },
+    {
+     "name": "Triangulation",
+     "type": "enum",
+     "choices": [
+      "Auto",
+      "45°",
+      "-45°",
+      "Quincux horizontal",
+      "Quincux vertical"
+     ]
+    },
+    {
+     "name": "X Amount",
+     "type": "int"
+    },
+    {
+     "name": "Y Amount",
+     "type": "int"
+    },
+    {
+     "name": "Random Position Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Random Position",
+     "type": "float2"
+    },
+    {
+     "name": "Vector Map Displacement",
+     "type": "float"
+    },
+    {
+     "name": "Quincux Offset X",
+     "type": "float"
+    },
+    {
+     "name": "Quincux Offset Y",
+     "type": "float"
+    },
+    {
+     "name": "Rotation",
+     "type": "float"
+    },
+    {
+     "name": "Rotation Disorder",
+     "type": "float"
+    },
+    {
+     "name": "Height Input Multiplier",
+     "type": "float"
+    },
+    {
+     "name": "Height Random",
+     "type": "float"
+    },
+    {
+     "name": "Blend Mode",
+     "type": "enum",
+     "choices": [
+      "Min",
+      "Max",
+      "Depth Test",
+      "Alpha Blend"
+     ]
+    },
+    {
+     "name": "Color Source",
+     "type": "enum",
+     "choices": [
+      "Height",
+      "Random",
+      "Color Input"
+     ]
+    },
+    {
+     "name": "Color Source Opacity",
+     "type": "float"
+    },
+    {
+     "name": "Distance to Edge Thickness",
+     "type": "float"
+    },
+    {
+     "name": "Line Color",
+     "type": "color"
+    },
+    {
+     "name": "Background Color",
+     "type": "color"
+    },
+    {
+     "name": "Random Color Seed Mode",
+     "type": "enum",
+     "choices": [
+      "Global Random Seed",
+      "Manual Seed"
+     ]
+    },
+    {
+     "name": "Random Color Seed",
+     "type": "int"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "weave_1",
+   "name": "Weave 1",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/weave-1",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Rotate 45 Degrees",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "weave_2",
+   "name": "Weave 2",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/weave-2",
+   "parameters": [
+    {
+     "name": "Tiling",
+     "type": "int",
+     "min": 1,
+     "max": 16
+    },
+    {
+     "name": "Disorder",
+     "type": "float",
+     "min": 0.0,
+     "max": 100.0
+    },
+    {
+     "name": "Rotate 45 Degrees",
+     "type": "bool"
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  },
+  {
+   "id": "weave_generator",
+   "name": "Weave Generator",
+   "category": "Texture generators/Patterns",
+   "doc_url": "https://experienceleague.adobe.com/en/docs/substance-3d-designer/using/substance-graphs/nodes-reference-for-substance-graphs/node-library/texture-generators/patterns/weave-generator",
+   "parameters": [
+    {
+     "name": "Tile X",
+     "type": "int",
+     "min": 1,
+     "max": 20
+    },
+    {
+     "name": "Tile Y",
+     "type": "int",
+     "min": 1,
+     "max": 20
+    },
+    {
+     "name": "Shape",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Weave",
+     "type": "int",
+     "min": 1,
+     "max": 10
+    },
+    {
+     "name": "Gap",
+     "type": "float",
+     "min": 0.0,
+     "max": 1.0
+    },
+    {
+     "name": "Non Square Expansion",
+     "type": "bool"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trafilatura3d"
+version = "0.1.0"
+description = "Node-based procedural texture graphs cooked on the GPU (wgpu)."
+readme = "README.md"
+authors = [{name = "gift-ware"}]
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.10"
+dependencies = [
+    "wgpu==0.32.0",
+    "numpy==2.5.4",
+    "OpenImageIO==3.1.18.1",
+    "opencolorio==2.6.0",  # color management (OCIO configs, display / view transforms)
+    "trimesh==5.1.1",  # meshes for the bakers and the 3D View: OBJ / glTF / PLY / STL
+    "pillow==12.3.0",  # trimesh's glTF textures
+    "usd-core==26.8",  # USD meshes and scenes (Pixar)
+    "h5py==3.16.0",  # .spp project containers (HDF5)
+    "lz4==4.4.5",  # the images inside .spp projects
+]
+
+[project.optional-dependencies]
+editor = [
+    "PySide6==6.11.2",
+    "rendercanvas==2.7.2",
+]
+mcp = [
+    "mcp==2.3.0",  # trafilatura3d-mcp: the running editor's graph for an agent (docs/MCP.md)
+]
+
+[project.urls]
+Homepage = "https://github.com/gift-ware/trafilatura3d"
+
+[project.scripts]
+trafilatura3d = "trafilatura3d.cli:main"
+trafilatura3d-mcp = "trafilatura3d.mcp_server:main"
+
+[project.gui-scripts]
+trafilatura3d-editor = "trafilatura3d.editor.app:main"  # Windows: started without a console
+
+[tool.setuptools.packages.find]
+include = ["trafilatura3d*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.wgsl", "*.png", "*.json"]  # json: the importer's tables, the nodes' depths
+"trafilatura3d.native" = ["*.c", "*/*.dylib", "*/*.so", "*/*.dll", "*/*.txt"]  # ufbx (tools/build_ufbx.py)
+"trafilatura3d.editor" = ["fonts/*.ttf", "fonts/*.txt"]  # the UI font (Inter)

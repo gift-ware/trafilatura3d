@@ -1,0 +1,14 @@
+# Environment and build
+.venv/
+__pycache__/
+*.egg-info/
+.ruff_cache/
+.pytest_cache/
+
+# Claude
+CLAUDE.md
+.claude/
+
+# Examples and autosaves
+examples/
+.autosave/

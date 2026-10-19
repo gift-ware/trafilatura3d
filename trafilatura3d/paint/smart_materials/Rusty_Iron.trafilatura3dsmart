@@ -1,0 +1,203 @@
+{
+ "version": 1,
+ "name": "Rusty Iron",
+ "layer": {
+  "uid": "cd00d72cc8bf",
+  "kind": "folder",
+  "name": "Rusty Iron",
+  "visible": true,
+  "blend": {},
+  "children": [
+   {
+    "uid": "40a19c86fe1f",
+    "kind": "fill",
+    "name": "Iron",
+    "visible": true,
+    "blend": {},
+    "projection": {
+     "filtering": "Bilinear | HQ",
+     "wrap": "Repeat",
+     "tiling": 1.0,
+     "rotation": 0.0,
+     "offset": [
+      0.0,
+      0.0
+     ]
+    },
+    "material": {
+     "basecolor": {
+      "color": [
+       0.45,
+       0.45,
+       0.47
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "roughness": {
+      "color": [
+       0.45,
+       0.45,
+       0.45
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "metallic": {
+      "color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     }
+    }
+   },
+   {
+    "uid": "412ddc030b1e",
+    "kind": "fill",
+    "name": "Rust",
+    "visible": true,
+    "blend": {},
+    "mask": {
+     "background": 0.0,
+     "enabled": true,
+     "effects": [
+      {
+       "uid": "090b59aef65a",
+       "kind": "generator",
+       "name": "Dirt",
+       "visible": true,
+       "blend": {},
+       "procedural": "node:paint_dirt",
+       "values": {
+        "dirt_level": 0.6,
+        "grunge_amount": 0.7
+       }
+      }
+     ]
+    },
+    "projection": {
+     "filtering": "Bilinear | HQ",
+     "wrap": "Repeat",
+     "tiling": 1.0,
+     "rotation": 0.0,
+     "offset": [
+      0.0,
+      0.0
+     ]
+    },
+    "material": {
+     "basecolor": {
+      "color": [
+       0.42,
+       0.2,
+       0.08
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "roughness": {
+      "color": [
+       0.85,
+       0.85,
+       0.85
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "metallic": {
+      "color": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "height": {
+      "color": [
+       0.02,
+       0.02,
+       0.02
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     }
+    }
+   },
+   {
+    "uid": "811c0f373cab",
+    "kind": "fill",
+    "name": "Drips",
+    "visible": true,
+    "blend": {},
+    "mask": {
+     "background": 0.0,
+     "enabled": true,
+     "effects": [
+      {
+       "uid": "dcba80aba2c0",
+       "kind": "generator",
+       "name": "Dripping Rust",
+       "visible": true,
+       "blend": {},
+       "procedural": "node:dripping_rust",
+       "values": {}
+      }
+     ]
+    },
+    "projection": {
+     "filtering": "Bilinear | HQ",
+     "wrap": "Repeat",
+     "tiling": 1.0,
+     "rotation": 0.0,
+     "offset": [
+      0.0,
+      0.0
+     ]
+    },
+    "material": {
+     "basecolor": {
+      "color": [
+       0.35,
+       0.15,
+       0.06
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "roughness": {
+      "color": [
+       0.9,
+       0.9,
+       0.9
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     },
+     "metallic": {
+      "color": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "image": "",
+      "procedural": "",
+      "values": {}
+     }
+    }
+   }
+  ]
+ }
+}

@@ -1,0 +1,10 @@
+Shader-Ball.fbx
+
+"Shader-Ball" by ZaNNoZa
+https://sketchfab.com/3d-models/shader-ball-fc08e698fd5d4f66a10c15bb5c0359b0
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+The file is unchanged. Trafilatura 3D subdivides it (Catmull-Clark, at load time) as the high poly of a bake and
+renders it into the thumbnails of the Paint filters and generators (trafilatura3d/editor/thumbnails/paint_*.png).
+The original work is provided as is, without warranties of any kind.

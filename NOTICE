@@ -1,0 +1,50 @@
+Trafilatura 3D
+Copyright (c) 2026 gift-ware. Released under the MIT License (see LICENSE).
+
+This software bundles or depends on the third-party works listed below, each under its own license.
+
+Bundled
+-------
+- ufbx v0.23.1 (https://github.com/ufbx/ufbx): FBX reader, compiled into
+  trafilatura3d/native/<platform>/ with our shim (trafilatura3d/native/ufbx_shim.c).
+  Dual licensed MIT / public domain (Unlicense); text in trafilatura3d/native/macos-arm64/LICENSE-ufbx.txt.
+- "Shader-Ball" by ZaNNoZa (https://sketchfab.com/3d-models/shader-ball-fc08e698fd5d4f66a10c15bb5c0359b0),
+  trafilatura3d/editor/paint/shaderball/Shader-Ball.fbx, unchanged. Licensed under Creative Commons Attribution
+  4.0 International (CC BY 4.0, https://creativecommons.org/licenses/by/4.0/). The Paint thumbnails
+  (trafilatura3d/editor/thumbnails/paint_*.png) are renders of it. Credits in shaderball/CREDITS.txt.
+- Inter 4.0 by The Inter Project Authors (https://github.com/rsms/inter): the UI font,
+  trafilatura3d/editor/fonts/InterVariable.ttf, unchanged. Licensed under the SIL Open Font License 1.1; text in
+  trafilatura3d/editor/fonts/LICENSE-Inter.txt.
+
+Adapted code and published methods
+----------------------------------
+- "Hash without Sine" by David Hoskins (https://www.shadertoy.com/view/4djSRW), MIT License, Copyright (c) 2014
+  David Hoskins (the permission notice is the MIT text in LICENSE): the hash functions hash11, hash14, hash21,
+  hash31 and the seed hash of global_random in trafilatura3d/functions.py.
+- The ACES RRT and ODT fit by Stephen Hill, as published in Baking Lab by MJP and David Neubelt
+  (https://github.com/TheRealMJP/BakingLab, BakingLab/ACES.hlsl), MIT License: tonemap_aces in
+  trafilatura3d/functions.py.
+- C. Wyman, P.-P. Sloan, P. Shirley, "Simple Analytic Approximations to the CIE XYZ Color Matching Functions",
+  Journal of Computer Graphics Techniques 2(2), 2013: the colour matching functions behind the blackbody fit of
+  temperature_to_rgb in trafilatura3d/functions.py.
+
+Python dependencies (installed separately, not bundled)
+-------------------------------------------------------
+- wgpu-py 0.32.0 ............ BSD 2-Clause (https://github.com/pygfx/wgpu-py)
+- numpy 2.5.4 ............... BSD 3-Clause and others (https://numpy.org)
+- OpenImageIO 3.1.18.1 ...... Apache 2.0 (https://github.com/AcademySoftwareFoundation/OpenImageIO)
+- OpenColorIO 2.6.0 ......... BSD 3-Clause (https://opencolorio.org)
+- trimesh 5.1.1 ............. MIT (https://github.com/mikedh/trimesh)
+- Pillow 12.3.0 ............. MIT-CMU (https://python-pillow.org)
+- usd-core 26.8 ............. Tomorrow Open Source Technology License 1.0 (https://openusd.org)
+- h5py 3.16.0 ............... BSD 3-Clause (https://www.h5py.org)
+- lz4 4.4.5 ................. BSD 3-Clause (https://github.com/python-lz4/python-lz4)
+- PySide6 6.11.2 (editor) ... LGPL 3.0 (https://www.qt.io/qt-for-python)
+- rendercanvas 2.7.2 (editor) BSD 2-Clause (https://github.com/pygfx/rendercanvas)
+- resvg-py 0.5.0 (optional) . MIT (https://github.com/baseplate-admin/resvg-py)
+
+Trademarks
+----------
+Adobe, Substance 3D Designer and Substance 3D Painter are trademarks of Adobe Inc. Trafilatura 3D is an independent
+project, not affiliated with, endorsed by or sponsored by Adobe. The names are used only to describe compatibility
+(reading .sbs files) and interface conventions.
