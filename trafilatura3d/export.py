@@ -65,7 +65,6 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
     ext = format or default_format()
     if ext not in FORMATS:
         raise ValueError(f"format {ext!r} (formats: {', '.join(FORMATS)})")
-    plugins.emit("before_export", package=package, graph_id=graph_id, out_dir=Path(out_dir))  # Veto refuses
     if size is not None:
         parent = application_context(tuple(size))
     ev = evaluator or Evaluator()
@@ -73,6 +72,10 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
     attributes = {a["identifier"]: a for a in output_attributes(package, graph_id)}
     chosen = {k: v for k, v in compiled.outputs.items() if outputs is None or k in outputs}
     out_dir = Path(out_dir)
+    paths = {identifier: out_dir / f"{file_name(pattern, graph_id, attributes.get(identifier, {'identifier': identifier}))}.{ext}"
+             for identifier in chosen}
+    plugins.emit("before_export", package=package, graph_id=graph_id, out_dir=out_dir,
+                 paths=list(paths.values()))  # Veto refuses
     out_dir.mkdir(parents=True, exist_ok=True)
     ev.cook([job for job, _ in chosen.values()])
     written = []
@@ -94,7 +97,7 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
                 pixels = (f[..., :1] if job.is_gray(out) else f).astype(np.float32)
                 if was_int:
                     pixels = np.clip(pixels, 0, 1)
-        path = out_dir / f"{file_name(pattern, graph_id, attributes.get(identifier, {'identifier': identifier}))}.{ext}"
+        path = paths[identifier]
         imageio.write(path, convert(pixels, job.depths[out], ext))
         written.append(path)
     plugins.emit("outputs_exported", package=package, graph_id=graph_id, paths=written)

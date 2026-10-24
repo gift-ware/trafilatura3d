@@ -414,6 +414,10 @@ class ProjectEditor(QWidget):
         self.library.setReadOnly(ro)
         self.library.setPlaceholderText("watched folders, separated by ;")
         f.addRow("Watched paths", self.library)
+        self.libraries = QLineEdit("; ".join(project.get("libraries", "paths", [])))
+        self.libraries.setReadOnly(ro)
+        self.libraries.setPlaceholderText("folders with " + ", ".join(projects.LIBRARY_KINDS) + "; separated by ;")
+        f.addRow("Libraries (restart)", self.libraries)
         f.addRow(QLabel("<b>Color management</b>"))
         combo("color_management", "mode", "Mode", list(projects.COLOR_MODES))
         line("color_management", "ocio_config", "OCIO config (empty: built-in studio config)", "OCIO (*.ocio)")
@@ -438,4 +442,5 @@ class ProjectEditor(QWidget):
                 aliases[n.text().strip()] = v.text().strip()
         self.p.data["aliases"] = aliases
         self.p.set("library", "paths", [x.strip() for x in self.library.text().split(";") if x.strip()])
+        self.p.set("libraries", "paths", [x.strip() for x in self.libraries.text().split(";") if x.strip()])
         self.p.save()

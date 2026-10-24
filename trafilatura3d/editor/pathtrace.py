@@ -43,7 +43,7 @@ PACKS = (
     (*_rgb("transmissionColor"), ("transmissionWeight", 0)),
     (("fuzzRoughness", 0), ("subsurfaceRadius", 0), ("subsurfaceRadius", 0), ("subsurfaceRadius", 0)),
 )
-M_SIZE = 112  # bytes of SURFACE's `M`
+M_SIZE = 240  # bytes of SURFACE's `M` (its fields, then the library shaders' `custom`)
 
 # One pack: four sources (the same texture for the components of a color), a component of each.
 PACK = """
@@ -284,7 +284,7 @@ fn surface(h: Hit, o: vec3f, d: vec3f) -> Surface {
     s.fr.b = cross(s.fr.n, s.fr.t);
     s.unlit = s.L.model == MODEL_UNLIT || s.L.model == MODEL_MESH_INFO;
     s.emissive = emitted(s.L, max(dot(s.fr.n, -d), 1e-4));
-    if (s.L.model == MODEL_UNLIT) { s.emissive = lin(c.base); }
+    if (s.L.model == MODEL_UNLIT) { s.emissive = s.L.albedo; }  // lin(c.base), or an unlit library shader's color
     if (s.L.model == MODEL_MESH_INFO) {
         let col = verts[i0 + 3u] * w + verts[i1 + 3u] * h.b.x + verts[i2 + 3u] * h.b.y;
         s.emissive = lin(mesh_info(m.mode, n, tt, bv, mesh_uv(h.tri, h.b), col, s.pos));

@@ -355,17 +355,22 @@ class MainWindow(QMainWindow):
 
     # --- workspaces -------------------------------------------------------------------------------
 
-    def graph_menu(self, title: str):
-        """The graph workspace's top menu `title`, created at the end if missing (plugins add theirs here)."""
-        found = next((m for m in self.graph_menus if m.title().replace("&", "") == title), None)
+    def _menus_of(self, workspace: str) -> list:
+        return {"graph": self.graph_menus, "paint": self.paint.menus}[workspace]
+
+    def workspace_menu(self, workspace: str, title: str):
+        """A workspace's ("graph" or "paint") top menu `title`, created at the end if missing (plugins add theirs
+        here)."""
+        menus = self._menus_of(workspace)
+        found = next((m for m in menus if m.title().replace("&", "") == title), None)
         if found is None:
             found = QMenu(title, self)
-            self.graph_menus.append(found)
+            menus.append(found)
             self._workspace_menus(self.shown)
         return found
 
-    def remove_graph_menu(self, menu) -> None:
-        self.graph_menus.remove(menu)
+    def remove_workspace_menu(self, workspace: str, menu) -> None:
+        self._menus_of(workspace).remove(menu)
         self._workspace_menus(self.shown)
 
     def _workspace_menus(self, shown: str):

@@ -20,7 +20,8 @@ from PySide6.QtWidgets import (QComboBox, QDialog, QFileDialog, QFormLayout, QHB
 
 from trafilatura3d.paint.channels import CHANNELS
 from trafilatura3d.paint.export import (COMPONENTS, CONVERTED, FILE_TYPES, MAP_TYPES, PADDING, PREDEFINED, SIZES,
-                                    ExportSettings, Exporter, OutputMap, Template, load_templates, save_templates)
+                                    ExportSettings, Exporter, OutputMap, Template, library_templates, load_templates,
+                                    save_templates)
 from trafilatura3d.paint.model import MESH_MAPS
 
 
@@ -49,7 +50,7 @@ class ExportDialog(QDialog):
         if not self.settings.output_dir:
             base = doc.session.path.parent if doc.session.path else Path.home()
             self.settings.output_dir = str(base / "export")
-        self.templates = PREDEFINED + load_templates(templates_path())
+        self.templates = PREDEFINED + library_templates() + load_templates(templates_path())
         lay = QVBoxLayout(self)
         self.tabs = QTabWidget()
         self.tabs.addTab(self._settings_tab(), "Export settings")

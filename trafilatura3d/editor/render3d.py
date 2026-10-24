@@ -62,6 +62,7 @@ UNIFORM_FIELDS = {
     "film_ior": 1.4, "transmission_depth": 0.0, "normal_scale": 1.0, "coat_normal_scale": 1.0,
     "radius_r": 1.0, "radius_g": 1.0, "radius_b": 1.0, "alpha_threshold": shaders.ALPHA_THRESHOLD,
     "coat_specular_level": 0.5, "pad0": 0.0, "pad1": 0.0, "pad2": 0.0}
+CUSTOM_SIZE = shaders.MAX_CUSTOM * 4  # floats of `M.custom`, after the fields
 FLAG_THIN, FLAG_SCATTER, FLAG_SPECULAR_WORKFLOW = 1, 2, 4
 UNLIT = shaders.index("Unlit")
 
@@ -91,8 +92,11 @@ def material_uniform(spec: dict) -> bytes:
         else:
             v[key] = value
     v["shader"], v["blending"], v["flags"] = spec.get("shader", 0), blending(spec), flags
-    return struct.pack("4I 24f", int(v["shader"]), int(v["blending"]), int(v["mode"]), int(v["flags"]),
-                       *(float(v[k]) for k in list(UNIFORM_FIELDS)[4:]))
+    custom = [0.0] * CUSTOM_SIZE
+    for i, value in enumerate(v.get("custom", [])):  # a library shader's parameters: a vec4f each
+        custom[i * 4:i * 4 + len(value)] = [float(x) for x in value]
+    return struct.pack(f"4I 24f {CUSTOM_SIZE}f", int(v["shader"]), int(v["blending"]), int(v["mode"]),
+                       int(v["flags"]), *(float(v[k]) for k in list(UNIFORM_FIELDS)[4:]), *custom)
 
 # Lat-long mapping identical to the HDRI nodes (lib.wgsl ll_dir / dir_ll): Y up, the centre of the
 # image looks along -Z.
@@ -157,6 +161,7 @@ struct M {
     film_ior: f32, transmission_depth: f32, normal_scale: f32, coat_normal_scale: f32,
     radius_r: f32, radius_g: f32, radius_b: f32, alpha_threshold: f32,
     coat_specular_level: f32, pad0: f32, pad1: f32, pad2: f32,
+    custom: array<vec4f, 8>,  // a library shader's parameters (shaders.MAX_CUSTOM)
 };
 const ALPHA_TEST = 1u;   // shaders.BLEND_MODES (0 opaque)
 const ALPHA_BLEND = 2u;
@@ -294,7 +299,7 @@ fn lobes(m: M, c: Ch) -> Lobes {
         case 9u: {  // Specular glossiness
             L.direct = 1.0; L.f0d = lin(c.spec_color); L.rough = 1.0 - clamp(c.rough, 0.0, 1.0);
         }
-        default: { L.model = MODEL_UNLIT; }
+        default: { L = library_lobes(m, c, L); }  // a library shader (shaders.library_wgsl), else unlit
     }
     L.metal = clamp(L.metal, 0.0, 1.0);
     L.coat = clamp(L.coat, 0.0, 1.0);
@@ -493,7 +498,7 @@ fn mesh_info(mode: u32, n: vec3f, t: vec3f, b: vec3f, uv: vec2f, color: vec4f, p
     }
     return clamp(c, vec3f(0.0), vec3f(1.0));
 }
-"""
+""" + shaders.library_wgsl()  # the library shaders' `shade` functions and the dispatch `lobes()` calls
 
 # Any float lat-long texture -> level 0 of the environment (bilinear, wrapping in longitude).
 RESAMPLE = COMMON + """
@@ -978,14 +983,15 @@ fn fs(i: VOut, @builtin(front_facing) front: bool) -> @location(0) vec4f {
     var uv = i.uv;
     if (m.shader != UNLIT && m.shader != MESH_INFO) { uv = parallax(i.uv, vec3f(dot(v, t), dot(v, bv), dot(v, ng))); }
     let c = channels(uv);
-    var alpha = 1.0;
-    if (m.blending == ALPHA_BLEND) { alpha = clamp(c.opacity, 0.0, 1.0); }
-    if (m.blending == ALPHA_TEST && c.opacity < m.alpha_threshold) { discard; }
+    let L = lobes(m, c);
+    var alpha = 1.0;  // the lobes' opacity: the Opacity channel, or what a library shader makes of its channels
+    if (m.blending == ALPHA_BLEND) { alpha = L.opacity; }
+    if (m.blending == ALPHA_TEST && L.opacity < m.alpha_threshold) { discard; }
     if (u.flags.z == 1u || m.shader == UNLIT) { return vec4f(display(c.base), alpha); }  // Preview / Unlit
     if (m.shader == MESH_INFO) {
         return vec4f(display(mesh_info(m.mode, ng, t, bv, i.mesh_uv, i.color, i.world)), 1.0);
     }
-    let L = lobes(m, c);
+    if (L.model == MODEL_UNLIT) { return vec4f(display(linear_to_srgb(L.albedo)), alpha); }  // an unlit library shader
     let ao = mix(1.0, L.ao, u.extra.x);
     var fr: Frame;
     fr.ng = ng;

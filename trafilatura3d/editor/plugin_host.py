@@ -23,24 +23,43 @@ class EditorAccess(plugins.EditorAccess):
         self.menus: list = []  # menus this plugin created
         self.docks: list = []
 
-    def _menu(self, title: str):
-        """The graph workspace's menu `title` (the window's own, or one this plugin creates)."""
-        before = list(self.window.graph_menus)
-        menu = self.window.graph_menu(title)
+    def _menu(self, workspace: str, title: str):
+        """A workspace's menu `title` (the window's own, or one this plugin creates)."""
+        before = list(self.window._menus_of(workspace))
+        menu = self.window.workspace_menu(workspace, title)
         if menu not in before:
-            self.menus.append(menu)
+            self.menus.append((workspace, menu))
         return menu
 
-    def add_menu_action(self, menu, text, callback, shortcut=""):
-        m = self._menu(menu)
+    def add_menu_action(self, menu, text, callback, shortcut="", workspaces=("graph", "paint")):
         action = QAction(text, self.window)
         if shortcut:
             action.setShortcuts(variants(shortcut))
             self.window.addAction(action)  # a menu is a window of its own: shortcuts work on the main window
         action.triggered.connect(lambda _checked=False: self._call(callback))
-        m.addAction(action)
-        self.actions.append((m, action))
+        for workspace in workspaces:  # one action in each workspace's menu of that title
+            m = self._menu(workspace, menu)
+            m.addAction(action)
+            self.actions.append((m, action))
         return action
+
+    def add_menu_separator(self, menu, workspaces=("graph", "paint")):
+        for workspace in workspaces:
+            m = self._menu(workspace, menu)
+            self.actions.append((m, m.addSeparator()))
+
+    def workspace(self):
+        return self.window.shown
+
+    def current_paint(self):
+        doc = self.window.paint.doc
+        return doc.session if doc is not None else None
+
+    def edit(self, package, label, fn):
+        self.window.doc.edit(package, label, fn)
+
+    def open(self, path):
+        self.window.open_path(path)
 
     def add_dock(self, title, widget):
         dock = QDockWidget(title, self.window.workspace)
@@ -57,14 +76,22 @@ class EditorAccess(plugins.EditorAccess):
         g = self.window.graph
         return (g.package, g.graph_id) if g.package is not None else (None, "")
 
+    def save(self, document):
+        w = self.window
+        paint = w.paint.doc
+        saved = w.paint.save() if paint is not None and document is paint.session else w.save_package(document)
+        if not saved:
+            raise OSError(f"{document.path.name if document.path else 'the document'} could not be saved")
+
     def remove_all(self):
         for menu, action in self.actions:
             menu.removeAction(action)
             self.window.removeAction(action)
+        for action in {id(a): a for _, a in self.actions}.values():  # one action can sit in both workspaces' menus
             action.deleteLater()
-        for menu in self.menus:
+        for workspace, menu in self.menus:
             if menu.isEmpty():
-                self.window.remove_graph_menu(menu)
+                self.window.remove_workspace_menu(workspace, menu)
                 menu.deleteLater()
         for dock in self.docks:
             self.window.workspace.removeDockWidget(dock)

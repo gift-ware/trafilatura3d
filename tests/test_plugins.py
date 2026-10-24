@@ -42,10 +42,29 @@ from trafilatura3d.plugins import Veto
 
 
 def initialize_plugin(host):
-    def check(package, graph_id, out_dir):
+    def check(package, graph_id, out_dir, paths):
         if graph_id == "blocked":
             raise Veto("naming: blocked is not a valid graph name")
+        planned.extend(paths)
     host.events.subscribe("before_export", check)
+
+
+planned = []  # the files before_export announced
+'''
+PAINT_VETOER = '''
+"""Refuses Paint exports into a folder called locked."""
+from trafilatura3d.plugins import Veto
+
+seen = []
+
+
+def initialize_plugin(host):
+    def check(session, out_dir, paths):
+        if out_dir.name == "locked":
+            raise Veto("locked folder")
+        seen.append(("before", list(paths)))
+    host.events.subscribe("before_export_textures", check)
+    host.events.subscribe("textures_exported", lambda session, paths: seen.append(("after", list(paths))))
 '''
 BROKEN = '''
 def initialize_plugin(host):
@@ -72,6 +91,7 @@ class PluginTest(unittest.TestCase):
         (folder / "sample" / "__init__.py").write_text(textwrap.dedent(SAMPLE_INIT), encoding="utf-8")
         (folder / "sample" / "recorder.py").write_text(RECORDER, encoding="utf-8")
         (folder / "vetoer.py").write_text(textwrap.dedent(VETOER), encoding="utf-8")
+        (folder / "paint_vetoer.py").write_text(textwrap.dedent(PAINT_VETOER), encoding="utf-8")
         (folder / "broken.py").write_text(textwrap.dedent(BROKEN), encoding="utf-8")
         self.m = plugins.manager()
         self.m.plugins, self.m.editor_factory = {}, None
@@ -95,14 +115,15 @@ class PluginTest(unittest.TestCase):
     def test_load_events_veto_and_failures(self):
         from trafilatura3d.export import export
         self.m.load_all()
-        self.assertEqual({n for n, i in self.m.plugins.items() if i.loaded}, {"sample", "vetoer"})
+        self.assertEqual({n for n, i in self.m.plugins.items() if i.loaded}, {"sample", "vetoer", "paint_vetoer"})
         self.assertIn("cannot reach the server", self.m.plugins["broken"].error)  # reported, not fatal
         self.assertTrue(any("broken failed to load" in msg for msg in self.messages))
         self.assertEqual(self.m.plugins["sample"].description, "Records what Trafilatura 3D does (a sample pipeline integration).")
         self.assertIn(("initialized", False), self.recorder().seen)  # no editor here
         pkg = flat_package("ok")
         pkg.save(self.dir / "ok.trafilatura3d")
-        export(pkg, "ok", self.dir / "out")
+        written = export(pkg, "ok", self.dir / "out")
+        self.assertEqual(sys.modules["trafilatura3d_plugin_vetoer"].planned, written)  # announced before writing
         events = [e for e, _ in self.recorder().seen]
         self.assertIn("package_saved", events)
         self.assertIn("outputs_exported", events)
@@ -110,6 +131,21 @@ class PluginTest(unittest.TestCase):
             export(flat_package("blocked"), "blocked", self.dir / "out2")
         self.assertIn("vetoer: naming", str(refused.exception))
         self.assertFalse((self.dir / "out2").exists())  # refused before anything was written
+
+    def test_paint_export_events(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parent))  # however the suite is started
+        from test_paint import ev, write_obj
+        from trafilatura3d.paint.export import ExportSettings, Exporter, PREDEFINED
+        from trafilatura3d.paint.session import Session
+        self.m.load_all()
+        seen = sys.modules["trafilatura3d_plugin_paint_vetoer"].seen
+        s = Session.new(write_obj(self.dir), resolution=32, evaluator=ev())
+        written = Exporter(s).run(PREDEFINED[0], ExportSettings(output_dir=str(self.dir / "maps")))
+        self.assertTrue(written)
+        self.assertEqual(seen, [("before", written), ("after", written)])  # the planned files are the written ones
+        with self.assertRaises(plugins.Veto):
+            Exporter(s).run(PREDEFINED[0], ExportSettings(output_dir=str(self.dir / "locked")))
+        self.assertFalse((self.dir / "locked").exists())
 
     def test_disable_reload_and_project_paths(self):
         self.m.load_all()
@@ -168,13 +204,23 @@ class PluginTest(unittest.TestCase):
             action.trigger()
             self.assertIn(("menu", True), self.recorder().seen)
             self.assertTrue(any(d.windowTitle() == "Studio" for d in w.workspace.findChildren(QDockWidget)))
+            paint_menu = next(m for m in w.paint.menus if m.title() == "Studio")  # the Paint workspace's too
+            self.assertIs(next(a for a in paint_menu.actions() if a.text() == "Validate"), action)
+            editor = self.m.plugins["sample"].host.editor
+            self.assertEqual((editor.workspace(), editor.current_paint()), ("graph", None))
             dlg = PluginManager(w)
             rows = {dlg.tree.topLevelItem(i).text(0): dlg.tree.topLevelItem(i).text(1)
                     for i in range(dlg.tree.topLevelItemCount())}
-            self.assertEqual(rows, {"broken": "Failed", "sample": "Loaded", "vetoer": "Loaded"})
+            self.assertEqual(rows, {"broken": "Failed", "sample": "Loaded", "vetoer": "Loaded", "paint_vetoer": "Loaded"})
+            flat_package("gui").save(self.dir / "gui.trafilatura3d")
+            pkg = w.doc.open(self.dir / "gui.trafilatura3d")
+            w.doc.dirty.add(id(pkg))  # an unsaved edit
+            self.m.plugins["sample"].host.editor.save(pkg)  # saved as Save does: no unsaved mark left
+            self.assertNotIn(id(pkg), w.doc.dirty)
             self.m.unload("sample")
             app.processEvents()
             self.assertNotIn("Studio", [a.text() for a in w.menuBar().actions()])  # removed with it
+            self.assertNotIn("Studio", [m.title() for m in w.paint.menus])
             w.doc.undo.indexChanged.disconnect()
             w.graph.scene.selectionChanged.disconnect()
         finally:

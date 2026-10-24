@@ -28,8 +28,10 @@ EVENTS = (
     "package_opened",     # package
     "before_save",        # package, path: raise Veto to refuse
     "package_saved",      # package, path
-    "before_export",      # package, graph_id, out_dir: raise Veto to refuse
+    "before_export",      # package, graph_id, out_dir, paths (the files it will write): raise Veto to refuse
     "outputs_exported",   # package, graph_id, paths
+    "before_export_textures",  # session, out_dir, paths (the files it will write): raise Veto to refuse
+    "textures_exported",  # session, paths
     "before_bake",        # low_path, bakers, settings, out_dir: raise Veto to refuse
     "bake_finished",      # low_path, bakers, settings, paths
 )
@@ -45,8 +47,30 @@ class EditorAccess(ABC):
     """What a plugin may add to the editor (trafilatura3d.editor.plugin_host implements it)."""
 
     @abstractmethod
-    def add_menu_action(self, menu: str, text: str, callback: Callable[[], None], shortcut: str = ""):
-        """An action in a menu of the main window's menu bar (created when missing, e.g. "Studio")."""
+    def add_menu_action(self, menu: str, text: str, callback: Callable[[], None], shortcut: str = "",
+                        workspaces: tuple = ("graph", "paint")):
+        """An action in a menu of the menu bar of each workspace in `workspaces` ("graph", "paint"; the menu created
+        when missing, e.g. "Studio")."""
+
+    @abstractmethod
+    def add_menu_separator(self, menu: str, workspaces: tuple = ("graph", "paint")) -> None:
+        """A separator in that menu."""
+
+    @abstractmethod
+    def workspace(self) -> str:
+        """What the window shows: "home", "graph" or "paint"."""
+
+    @abstractmethod
+    def current_paint(self):
+        """The Paint project open (its session), or None."""
+
+    @abstractmethod
+    def edit(self, package, label: str, fn: Callable[[], object]) -> None:
+        """Change an open package with `fn()` as one undoable step (marked unsaved, the views refreshed)."""
+
+    @abstractmethod
+    def open(self, path) -> None:
+        """Open a package or a Paint project in the editor, as File > Open does."""
 
     @abstractmethod
     def add_dock(self, title: str, widget):
@@ -59,6 +83,11 @@ class EditorAccess(ABC):
     @abstractmethod
     def current(self) -> tuple:
         """(package, graph id) shown in the Graph view, or (None, "")."""
+
+    @abstractmethod
+    def save(self, document) -> None:
+        """Save an open package or the Paint project (its session) as the editor's Save does, its unsaved marks
+        cleared; raises OSError when it could not be saved (the editor has shown why)."""
 
     @abstractmethod
     def remove_all(self) -> None:

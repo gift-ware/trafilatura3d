@@ -261,19 +261,25 @@ class Exporter:
 
     def run(self, template: Template, settings: ExportSettings, log=None) -> list[Path]:
         """Export the checked Texture Sets; `log(text, error)` reports each file (List of exports)."""
+        from trafilatura3d import plugins
         out_dir = Path(settings.output_dir)
         written = []
         sets = [ts for ts in self.s.project.texture_sets if not settings.texture_sets or ts.name in settings.texture_sets]
-        work = [(ts, udim, m) for ts in sets for m in expand(template, ts) for udim in ts.tiles]
-        for ts, udim, m in work:
-            ftype = m.file_type if settings.file_type == "Based on output template" else settings.file_type
-            depth = m.depth if settings.file_type == "Based on output template" else settings.depth
-            ext, depths = FILE_TYPES[ftype]
-            if depth not in depths:
-                depth = depths[0]
-            name = file_name(m.name, self.s.path.stem if self.s.path else "project", self.s.project.mesh, ts, udim,
-                             bool(self.s.project.uv_tiles))
-            path = out_dir / f"{name}.{ext}"
+        work = []
+        for ts in sets:
+            for m in expand(template, ts):
+                for udim in ts.tiles:
+                    ftype = m.file_type if settings.file_type == "Based on output template" else settings.file_type
+                    depth = m.depth if settings.file_type == "Based on output template" else settings.depth
+                    ext, depths = FILE_TYPES[ftype]
+                    if depth not in depths:
+                        depth = depths[0]
+                    name = file_name(m.name, self.s.path.stem if self.s.path else "project", self.s.project.mesh, ts,
+                                     udim, bool(self.s.project.uv_tiles))
+                    work.append((ts, udim, m, ext, depth, out_dir / f"{name}.{ext}"))
+        plugins.emit("before_export_textures", session=self.s, out_dir=out_dir,
+                     paths=[w[-1] for w in work])  # Veto refuses
+        for ts, udim, m, ext, depth, path in work:
             try:
                 pixels = self.pack(ts, udim, m, settings.padding, settings.dilation)
                 if settings.size != SIZES[0]:
@@ -288,6 +294,7 @@ class Exporter:
             except (OSError, ValueError) as e:
                 if log:
                     log(f"{path.name}: {e}", True)
+        plugins.emit("textures_exported", session=self.s, paths=written)
         return written
 
 
@@ -334,6 +341,17 @@ def load_templates(path: Path) -> list[Template]:
     if not path.exists():
         return []
     return [Template.from_dict(d) for d in json.loads(path.read_text(encoding="utf-8"))]
+
+
+def library_templates() -> list[Template]:
+    """The output templates of the project's libraries (their `export_presets` folder: .json files in the format of
+    `save_templates`), read only like the predefined ones."""
+    from trafilatura3d.project import configuration
+    out = []
+    for folder in configuration().library_folders("export_presets"):
+        for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+            out += [Template(t.name, t.maps, predefined=True) for t in load_templates(path)]
+    return out
 
 
 def save_templates(path: Path, templates: list[Template]) -> None:

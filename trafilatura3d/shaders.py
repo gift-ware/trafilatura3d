@@ -26,7 +26,10 @@ the channels in its Texture Sets and the shader in its Shader settings.
 
 from __future__ import annotations
 
+import re
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 
 # Renderer slots: one texture each (a constant 1x1 when no output feeds it). name -> (default rgba, one channel)
 SLOTS: dict[str, tuple[tuple, bool]] = {
@@ -90,6 +93,9 @@ class Shader:
     channels: dict  # usage -> slot (the Channels rows, in this order)
     params: tuple
     aliases: dict = field(default_factory=dict)  # other usages matched to a channel (legacy usages)
+    wgsl: str = ""  # a library shader's code (its functions renamed per shader, `library_wgsl`); "" for the table's
+    fixed: dict = field(default_factory=dict)  # uniforms the shader sets itself (a library shader's fixed blending)
+    path: str = ""  # a library shader's file
 
 
 def _p(key, label, group, kind, default, target, lo=0.0, hi=1.0, choices=()):
@@ -292,8 +298,124 @@ UNLIT = Shader("Unlit", {"baseColor": "baseColor"},
 
 # The order (the Rasterizer's OpenPBR, ASM and UsdPreviewSurface, then the OpenGL list); the index is the
 # shader id of render3d's WGSL (`M.shader`).
-TABLE = (OPENPBR, ASM, USD_PREVIEW, BLINN, LAMBERT, MESH_INFO, METALLIC_ROUGHNESS, MR_COATED, MR_SSS,
-         SPECULAR_GLOSSINESS, UNLIT)
+CORE = (OPENPBR, ASM, USD_PREVIEW, BLINN, LAMBERT, MESH_INFO, METALLIC_ROUGHNESS, MR_COATED, MR_SSS,
+        SPECULAR_GLOSSINESS, UNLIT)
+
+# --- Library shaders --------------------------------------------------------------------------------------------
+# A library's `shaders` folder (project.LIBRARY_KINDS) holds one shader per .wgsl file: a header of `//:` lines,
+# then WGSL that defines `fn shade(m: M, c: Ch, L: Lobes) -> Lobes`. `shade` receives the channels as sampled
+# (render3d `Ch`: colors sRGB encoded) and the lobes at their defaults, and returns them filled: the rasterizer and
+# the path tracer render them like the table's shaders (docs/SHADERS.md). The header:
+#   //: shader "Name"                                   the name in the shader lists (unique)
+#   //: channel <usage> <slot> "Label" [= v,v,v]        a channel (graph output usage, Texture Set channel) read in
+#                                                       a renderer slot (SLOTS); its row is the slot's value without
+#                                                       a texture (default: the slot's)
+#   //: param <float|color> <key> "Label" [= v[,v,v]] [[lo,hi]]   a parameter: `fn <key>(m: M) -> f32 | vec3f`
+#   //: blending <opaque | alpha_test <threshold> | alpha_blend | choice>   choice: the Blending mode rows
+# Library shaders are loaded once, when the module is imported (the project configuration of the start).
+MAX_CUSTOM = 8  # parameters of a library shader: render3d `M.custom`, a vec4f each
+_HEADER = re.compile(r"^//:\s*(\w+)\s*(.*)$")
+_CHANNEL = re.compile(r'^(\w+)\s+(\w+)\s+"([^"]*)"\s*(?:=\s*([-\d.,\s]+))?$')
+_PARAM = re.compile(r'^(float|color)\s+(\w+)\s+"([^"]*)"\s*(?:=\s*([-\d.,\s]+?))?\s*(?:\[\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\])?$')
+_FN = re.compile(r"\bfn\s+(\w+)\s*\(")
+_BLENDINGS = {"opaque": OPAQUE, "alpha_test": ALPHA_TEST, "alpha_blend": ALPHA_BLEND}
+
+
+class ShaderFileError(ValueError):
+    """A library shader file that does not follow the format: its path and line say where."""
+
+
+def _numbers(text: str, count: int, where: str) -> tuple:
+    values = tuple(float(v) for v in text.split(","))
+    if len(values) != count:
+        raise ShaderFileError(f"{where}: {count} value(s) expected, got {len(values)}")
+    return values
+
+
+def load_shader(path, number: int) -> Shader:
+    """A library shader from its file; `number` makes its WGSL names unique (`shade` becomes `shade_l<number>`)."""
+    path = Path(path)
+    name, channels, params, fixed, custom = "", {}, [TILING], {}, 0
+    accessors = []
+    body = []
+    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        m = _HEADER.match(line.strip())
+        if not m:
+            body.append(line)
+            continue
+        key, rest, where = m.group(1), m.group(2).strip(), f"{path.name}:{n}"
+        if key == "shader":
+            name = rest.strip('"')
+        elif key == "channel":
+            c = _CHANNEL.match(rest)
+            if not c or c.group(2) not in SLOTS:
+                raise ShaderFileError(f"{where}: channel <usage> <slot> \"Label\" [= values], slot one of SLOTS")
+            usage, slot, label = c.group(1), c.group(2), c.group(3)
+            channels[usage] = slot
+            gray = SLOTS[slot][1]
+            default = _numbers(c.group(4), 1 if gray else 3, where) if c.group(4) else SLOTS[slot][0][:1 if gray else 3]
+            params.append(_slot(usage, label, "Channels", "float" if gray else "color", default[0] if gray else default,
+                                slot))
+        elif key == "param":
+            p = _PARAM.match(rest)
+            if not p:
+                raise ShaderFileError(f"{where}: param <float|color> <key> \"Label\" [= values] [[lo,hi]]")
+            if custom == MAX_CUSTOM:
+                raise ShaderFileError(f"{where}: at most {MAX_CUSTOM} parameters")
+            kind, pkey, label = p.group(1), p.group(2), p.group(3)
+            size = 1 if kind == "float" else 3
+            default = _numbers(p.group(4), size, where) if p.group(4) else (0.0,) * size
+            lo, hi = (float(p.group(5)), float(p.group(6))) if p.group(5) else (0.0, 1.0)
+            params.append(_p(pkey, label, "Parameters", kind, default[0] if size == 1 else default, ("custom", custom),
+                             lo, hi))
+            accessors.append(f"fn {pkey}(m: M) -> f32 {{ return m.custom[{custom}].x; }}" if size == 1 else
+                             f"fn {pkey}(m: M) -> vec3f {{ return m.custom[{custom}].xyz; }}")
+            custom += 1
+        elif key == "blending":
+            mode, *threshold = rest.split()
+            if mode == "choice":
+                params += list(_transparency("Parameters"))
+            elif mode in _BLENDINGS:
+                fixed["blending"] = _BLENDINGS[mode]
+                if mode == "alpha_test":
+                    fixed["alpha_threshold"] = float(threshold[0]) if threshold else ALPHA_THRESHOLD
+            else:
+                raise ShaderFileError(f"{where}: blending opaque | alpha_test <threshold> | alpha_blend | choice")
+        else:
+            raise ShaderFileError(f"{where}: unknown header key {key!r}")
+    if not name:
+        raise ShaderFileError(f"{path.name}: no //: shader \"Name\" line")
+    code = "\n".join(accessors + body)
+    names = set(_FN.findall(code))
+    if "shade" not in names:
+        raise ShaderFileError(f"{path.name}: no fn shade(m: M, c: Ch, L: Lobes) -> Lobes")
+    for fn in names:  # not after a dot: a field of the same name (L.rough) stays
+        code = re.sub(rf"(?<![.\w]){fn}\b", f"{fn}_l{number}", code)
+    return Shader(name, channels, tuple(params), wgsl=code, fixed=fixed, path=str(path))
+
+
+def _library() -> list:
+    """The library shaders of the project configuration, by folder then file name; a broken file is reported and
+    left out, a name the table has already is refused."""
+    from trafilatura3d.project import configuration
+    out, names = [], {s.name for s in CORE}
+    for folder in configuration().library_folders("shaders"):
+        for path in sorted(folder.glob("*.wgsl")) if folder.is_dir() else []:
+            try:
+                s = load_shader(path, len(out))
+            except (OSError, ShaderFileError) as e:
+                print(f"trafilatura3d: shader {path}: {e}", file=sys.stderr)
+                continue
+            if s.name in names:
+                print(f"trafilatura3d: shader {path}: the name {s.name!r} is taken", file=sys.stderr)
+                continue
+            names.add(s.name)
+            out.append(s)
+    return out
+
+
+LIBRARY = tuple(_library())
+TABLE = CORE + LIBRARY
 SHADERS = tuple(s.name for s in TABLE)
 BY_NAME = {s.name: s for s in TABLE}
 DEFAULT = "OpenPBR"
@@ -301,6 +423,22 @@ DEFAULT = "OpenPBR"
 
 def index(name: str) -> int:
     return SHADERS.index(name)
+
+
+def library_wgsl() -> str:
+    """The library shaders' code and `library_lobes`, what the WGSL `lobes()` (render3d SURFACE) calls for a shader
+    past the table's; an unknown one is drawn unlit."""
+    cases = "".join(f"        case {index(s.name)}u: {{ return shade_l{i}(m, c, L); }}\n" for i, s in enumerate(LIBRARY))
+    return "\n".join(s.wgsl for s in LIBRARY) + f"""
+fn library_lobes(m: M, c: Ch, L: Lobes) -> Lobes {{
+    switch m.shader {{
+{cases}        default: {{}}
+    }}
+    var out = L;
+    out.model = MODEL_UNLIT;
+    return out;
+}}
+"""
 
 
 def constants(shader_name: str, values: dict) -> dict:
@@ -318,6 +456,11 @@ def uniforms(shader_name: str, values: dict) -> dict:
     the blending mode of a shader without the row: by its threshold (UsdPreviewSurface), else Opaque."""
     s = BY_NAME[shader_name]
     out = {p.target[1]: values.get(p.key, p.default) for p in s.params if p.target[0] == "uniform"}
+    out.update(s.fixed)
+    custom = [p for p in s.params if p.target[0] == "custom"]
+    if custom:  # a library shader's parameters: one vec4f each, in their order
+        out["custom"] = [tuple(v) if isinstance(v := values.get(p.key, p.default), (tuple, list)) else (float(v),)
+                         for p in custom]
     if "blending" not in out:
         out["blending"] = ALPHA_TEST if out.get("alpha_threshold", 0.0) > 0.0 else (
             ALPHA_BLEND if "alpha_threshold" in out else OPAQUE)

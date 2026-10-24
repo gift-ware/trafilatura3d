@@ -36,8 +36,14 @@ DEFAULTS = {
     "view3d": {"environment": "Studio", "hdri": ""},
     "baking": {"high_suffix": "_high", "low_suffix": "_low"},
     "plugins": {"paths": []},  # folders holding plugins (trafilatura3d/plugins.py), e.g. a pipeline's integration
+    # libraries of resources with a folder per kind (LIBRARY_KINDS), as the Paint's libraries: a pipeline's shaders,
+    # export presets, materials… read by every workspace while the project is loaded
+    "libraries": {"paths": []},
 }
-EXPANDING = {("aliases",), ("library", "paths"), ("general", "templates"), ("plugins", "paths")}
+EXPANDING = {("aliases",), ("library", "paths"), ("general", "templates"), ("plugins", "paths"), ("libraries", "paths")}
+# The kinds of a library, one folder each: `shaders` (.wgsl, shaders.py), `export_presets` (the Paint's output
+# templates, .json), `materials` (packages) and `smart_materials` (the Paint's Assets).
+LIBRARY_KINDS = ("shaders", "export_presets", "materials", "smart_materials")
 _ALIAS = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)://(.*)$")
 
 
@@ -162,6 +168,15 @@ class Configuration:
         out = []
         for p in self.projects:
             out += [p.resolve_path(x) for x in p.get("library", "paths", [])]
+        return out
+
+    def library_folders(self, kind: str) -> list[Path]:
+        """A kind's folder (LIBRARY_KINDS) in every library the projects declare, in project order."""
+        if kind not in LIBRARY_KINDS:
+            raise ValueError(f"library kind {kind!r} (kinds: {', '.join(LIBRARY_KINDS)})")
+        out = []
+        for p in self.projects:
+            out += [Path(p.resolve_path(x)) / kind for x in p.get("libraries", "paths", [])]
         return out
 
     def plugin_paths(self) -> list[str]:

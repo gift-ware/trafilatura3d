@@ -101,8 +101,9 @@ def library_folder(lib: dict, kind: str) -> Path:
 
 
 def folders(kind: str) -> list[Path]:
-    """A kind's folder in every enabled library."""
-    return [library_folder(lib, kind) for lib in libraries() if lib["enabled"]]
+    """A kind's folder in every enabled library, then in the libraries of the project configuration."""
+    from trafilatura3d.project import configuration
+    return [library_folder(lib, kind) for lib in libraries() if lib["enabled"]] + configuration().library_folders(kind)
 
 
 def material_folders() -> list[Path]:
