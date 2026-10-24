@@ -176,6 +176,11 @@ class Resources:
             return None
         return seq.get(udim) if udim is not None else next(iter(seq.values()))
 
+    def signature(self) -> tuple:
+        """The images there are, each by name and identity (a replaced image is another object): what changes when
+        an image is added, removed or replaced, without unpacking any."""
+        return tuple((name, id(packed)) for name, packed in dict.items(self.images))
+
     def listing(self) -> list[tuple[str, str]]:
         """The resources as the Assets show them: (name, image of its preview), a sequence once under its name."""
         out, seen = [], set()
@@ -798,9 +803,11 @@ class StackCompiler:
             return None
         return self._checkpoint(self.image_job(name, self._size(ts), "16f", gray))
 
-    def normal(self, ts: TextureSet, directx_out: bool = False, with_height: bool = True) -> Job:
-        """The normal the shader reads: baked normal + Normal channel + Height (Texture Set settings)."""
-        ids = ts.channel_ids()
+    def normal(self, ts: TextureSet, directx_out: bool = False, with_height: bool = True,
+               baked_only: bool = False) -> Job:
+        """The normal the shader reads: baked normal + Normal channel + Height (Texture Set settings); `baked_only`:
+        the baked normal alone (the Baking mode's neutral material)."""
+        ids = () if baked_only else ts.channel_ids()
         baked = self.mesh_map(ts, "normal")
         nrm = self.channel(ts, "normal") if "normal" in ids else None
         hgt = self.channel(ts, "height") if "height" in ids and with_height else None

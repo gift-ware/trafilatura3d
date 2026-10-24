@@ -37,7 +37,7 @@ from trafilatura3d.editor.paint.texture_sets import TextureSetList, TextureSetSe
 from trafilatura3d.editor.paint.viewport import PaintView2D, PaintView3D, circle_lines
 from trafilatura3d.editor.paint.widgets import PressureButton, PSlider
 from trafilatura3d.paint.brush import TILING_MODES, Stroke, Target, TileTargets, stamp_radius
-from trafilatura3d.paint.channels import CHANNELS, FORMATS, render_slots
+from trafilatura3d.paint.channels import CHANNELS, FORMATS, is_hdr, render_slots
 from trafilatura3d.paint.model import MESH_MAPS, PROJECT_SUFFIX, ProjectError, local_uv, udim_at
 from trafilatura3d.paint.paint import MASK, storage_for
 from trafilatura3d.paint.session import IMAGE_FILTER, Session
@@ -72,6 +72,7 @@ class PaintWorkspace(QMainWindow):
         self._lazy = (0.0, 0.0)
         self.display = "material"  # "material", "channel:<id>" or "mesh:<slot>"
         self.mode = "painting"  # Mode menu: painting | baking
+        self._panel_sigs: dict = {}  # panel -> what it showed when last made (`_panel_changed`)
         self._quick = None  # the viewport's quick Properties popup (Mouse right)
         self.mask_clipboard = None  # Copy mask content: (Mask, PaintStore snapshot)
         self.clipboard = None  # Copy layer: ("layers", [Layer], snapshot) or ("effect", Effect, snapshot)
@@ -994,18 +995,42 @@ class PaintWorkspace(QMainWindow):
 
     # --- panels ---------------------------------------------------------------------------------------
 
+    def _panel_changed(self, key: str, signature) -> bool:
+        """Whether what a panel shows changed since it was last made (`signature`: the document and what the panel
+        reads), recording it: an edit made every panel again (~75 ms on a 19 layer stack), most for nothing."""
+        if self._panel_sigs.get(key) == signature:
+            return False
+        self._panel_sigs[key] = signature
+        return True
+
     def _rebuild_panels(self):
+        """After an edit of the structure: each panel made again if what it shows changed (`_panel_changed`), the
+        layer stack row by row (LayersPanel.rebuild), the Baking mode's panels only in that mode (`set_mode`
+        makes them on the way in)."""
         if self.mode == "baking":
-            QTimer.singleShot(0, self._update_bake_overlay)
-        self.baking.rebuild()
+            QTimer.singleShot(0, self, self._update_bake_overlay)
+            self.baking.rebuild()
         self.texture_sets.rebuild()
         self.layers.rebuild()
-        self.ts_settings.rebuild()
-        self.properties.rebuild()
-        self.shader_settings.rebuild()
-        self.assets.refresh()
+        self._rebuild_ts_settings()
+        self._rebuild_properties()
+        doc = self.doc
+        if self._panel_changed("shader", (id(doc), repr(doc.project.shader) if doc else None)):
+            self.shader_settings.rebuild()
+        if self._panel_changed("assets", self.assets.signature()):
+            self.assets.refresh()
         self._fill_display_combos()
         self.live.schedule()
+
+    def _rebuild_ts_settings(self):
+        if self._panel_changed("ts_settings", self.ts_settings.signature()):
+            self.ts_settings.rebuild()
+
+    def _rebuild_properties(self):
+        """After an edit or a selection: Properties made again if what it shows changed (a new layer is an edit,
+        then its selection: the fill's panel was made twice, ~15 ms each)."""
+        if self._panel_changed("properties", self.properties.signature()):
+            self.properties.rebuild()
 
     def _selection_changed(self):
         from trafilatura3d.editor.paint import color_picker
@@ -1014,11 +1039,11 @@ class PaintWorkspace(QMainWindow):
             self._fast_layer = None
         color_picker.close_context()  # semi-persistent: another layer or effect is another context
         if self.mode == "baking":
-            QTimer.singleShot(0, self._update_bake_overlay)
-        self.baking.rebuild()
+            QTimer.singleShot(0, self, self._update_bake_overlay)
+            self.baking.rebuild()
         self.layers.sync_selection()  # not a rebuild: the row under the mouse stays (drags, clicks)
-        self.properties.rebuild()
-        self.ts_settings.rebuild()
+        self._rebuild_properties()
+        self._rebuild_ts_settings()
         self.texture_sets.rebuild()
         self._fill_display_combos()
         if self.geometry_edit is not None and self.doc.selected != self.geometry_edit:  # another part: edition ends
@@ -1282,9 +1307,9 @@ class PaintWorkspace(QMainWindow):
         self.view3d.renderer.extra_lines = None
         self.texture_sets.rebuild()
         self.baking.rebuild()
-        from trafilatura3d.editor.paint import settings as prefs
-        if prefs.get("selected_material_only"):  # the other Texture Sets come back (or go) with the mode
-            self.refresh_materials()
+        # the neutral material (or the painted one back), and the other Texture Sets with Only display the selected
+        # material, come or go with the mode
+        self.refresh_materials()
         self.view3d.refresh()
 
     def _update_bake_overlay(self):
@@ -1348,24 +1373,30 @@ class PaintWorkspace(QMainWindow):
         self.resizeDocks([d["map_settings"], d["baking_log"]], [520, 160], Qt.Vertical)
 
     def bake(self):
-        """Bake selected textures: the checked mesh maps of each checked Texture Set (one History step)."""
+        """Bake selected textures: the checked mesh maps of each checked Texture Set (one History step). The Baking
+        log (Baking process) shows this bake only: each Texture Set's checked maps baked (✓) or not (✗, with the
+        error), then the outcome, also in the Log; a Texture Set that fails leaves the others' maps baked."""
         from PySide6.QtWidgets import QApplication, QProgressDialog
         from trafilatura3d.paint import baking
         doc = self.doc
         checked = self.texture_sets.checked()
         names = [n for n, _tiles in checked]
+        log = self.baking.log
+        log.clear()
+        self.docks["baking_log"].raise_()
         if doc is None or not names:
-            self.baking.log.appendPlainText("No Texture Set checked.")
+            log.appendPlainText("No Texture Set checked.")
             return
         dlg = QProgressDialog("Baking…", "Cancel", 0, 100, self.main)
         dlg.setWindowModality(Qt.WindowModal)
         dlg.setMinimumDuration(0)
-        log = self.baking.log
-        stopped = []
+        stopped, failed, baked = [], [], []
 
         def do():
             for k, (name, tiles) in enumerate(checked):
                 ts = doc.project.texture_set(name)
+                cfg = baking.config(ts)
+                wanted = [(slot, label) for slot, label, *_ in baking.BAKERS if cfg["bakers"][slot]["enabled"]]
 
                 def progress(done, total, label, k=k):
                     dlg.setValue(int((k + done / max(total, 1)) / len(names) * 100))
@@ -1376,21 +1407,38 @@ class PaintWorkspace(QMainWindow):
                         return False
                     return True
                 t0 = time.perf_counter()
+                out, error = {}, ""
                 try:
                     out = baking.bake_texture_set(doc.session, ts, progress=progress, tiles=tiles)
-                except OSError as e:  # a high poly or cage file that does not load
-                    raise ValueError(f"{name}: {e}") from None
-                log.appendPlainText(f"{name}: {', '.join(out) or 'nothing checked'} ({time.perf_counter() - t0:.1f} s)")
+                except Exception as e:  # noqa: BLE001 - a high poly or cage file that does not load, a baker that
+                    error = str(e)      # fails: in the Baking log, the other Texture Sets still bake
+                    failed.append(name)
+                log.appendPlainText(f"{name} ({time.perf_counter() - t0:.1f} s)")
+                if not wanted:
+                    log.appendPlainText("    no mesh map checked")
+                for slot, label in wanted:
+                    if slot in out:
+                        baked.append(slot)
+                        log.appendPlainText(f"  ✓ {label}")
+                    else:
+                        why = error or ("canceled" if stopped else "not baked")
+                        log.appendPlainText(f"  ✗ {label}: {why}")
                 if stopped:
                     break
-        try:
-            doc.edit("Bake mesh maps", do)
-        except Exception as e:  # noqa: BLE001 - shown in the Baking log
-            log.appendPlainText(f"ERROR: {e}")
+        doc.edit("Bake mesh maps", do)
         dlg.close()
         doc.content_changed.emit()
         self.assets.refresh()
-        self.log("Bake finished" + (" (canceled)" if stopped else ""))
+        self._fill_display_combos()  # the new mesh maps in the Display lists
+        self.baking.rebuild()  # their visualize buttons
+        if failed:
+            outcome = f"Bake failed: {', '.join(failed)}, {len(baked)} maps baked"
+        elif stopped:
+            outcome = f"Bake canceled, {len(baked)} maps baked"
+        else:
+            outcome = f"Bake finished, {len(baked)} maps baked"
+        log.appendPlainText(outcome)
+        self.log(outcome, error=bool(failed))
 
     # --- display --------------------------------------------------------------------------------------
 
@@ -1413,6 +1461,11 @@ class PaintWorkspace(QMainWindow):
             if i < 0:
                 self.display = "material"
             combo.blockSignals(False)
+
+    def neutral(self) -> bool:
+        """The viewports show the Baking mode's neutral material (Baking visualization settings): the material
+        display while baking."""
+        return self.mode == "baking" and self.display == "material"
 
     def set_display(self, mode):
         self.display = mode
@@ -1474,7 +1527,12 @@ class PaintWorkspace(QMainWindow):
         sc = self.doc.session.compiler(udim) if full else self.view_compiler(udim)
         self.doc.session.uv_mask(ts, udim)  # the UV mask the padding needs
         ids = ts.channel_ids()
-        if self.display == "material":
+        if self.neutral():  # the Baking mode's neutral material: the baked normal and AO, the rest constants
+            jobs = {"normal": sc.normal(ts, baked_only=True)}
+            ao = sc.mesh_map(ts, "ambient_occlusion")
+            if ao is not None:
+                jobs["ambientOcclusion"] = ao
+        elif self.display == "material":
             jobs = {}
             want = lambda slot: only is None or slot in only
             skipped = ("normal", "height", "ambientocclusion") + (
@@ -1571,27 +1629,43 @@ class PaintWorkspace(QMainWindow):
         lines = self.doc.session.log_lines
         while lines:  # what the stack could not do (a missing material…)
             self.log(lines.pop(0), True)
+        warnings = self.doc.session.warnings
+        while warnings:  # what the mesh's import found (a new project, a reimport)
+            self.log(f"Warning: {warnings.pop(0)}")
         # hidden Texture Sets and hidden excluded geometry (Geometry mask) are not drawn
         materials = self.doc.session.materials
         for i, (m, subs) in enumerate(zip(r.meshes, self._full_submeshes)):
             m.submeshes = [s for s in subs if materials[self._slots[s[2]][0]] in visible
                            and not self._hidden(i, *self._slots[s[2]])]
         # One material (a tile) at a time: cooked, copied by the renderer, given back (the renderer's copies are
-        # what both views draw), so only one tile's results wait in the cache instead of every tile's.
-        return Plan([(i, jobs, full_keys[i]) for i, jobs in enumerate(specs)],
+        # what both views draw), so only one tile's results wait in the cache instead of every tile's. Then the
+        # layer thumbnails not computed yet.
+        return Plan([(i, jobs, full_keys[i]) for i, jobs in enumerate(specs)] + [self.THUMBNAILS],
                     [j for jobs in specs for j in jobs.values()], below)
 
+    THUMBNAILS = ("thumbnails",)  # the refresh's last step
+
     def _refresh_step(self, item):
-        """A material of the refresh: cooked, copied by the renderer, its results given back. Paused while a stroke
-        is painted (its frames update the renderer; replacing a material would erase them): the stroke's end resumes
-        it."""
-        index, jobs, full_keys = item
+        """A step of the refresh, a generator (a turn of the event loop at each wait for the GPU): a material, or the
+        layer thumbnails. Paused while a stroke is painted (its frames update the renderer; replacing a material
+        would erase them): the stroke's end resumes it."""
+        if item == self.THUMBNAILS:
+            return self.layers.thumbnail_steps(self.layers.stale_thumbnails(), self.live.related, self.live.precious)
+        return self._material_step(*item)
+
+    def _material_step(self, index, jobs, full_keys):
+        """A material of the refresh: cooked, copied by the renderer, its results given back; then the GPU's work
+        waited for as a step too (work submitted while the GPU is busy waits for it on this thread: the next step,
+        or the refresh's end freeing the preview, stalled the interface for ~60 ms)."""
         r = self.view3d.renderer
         spec = self.shader_spec() if self.display == "material" else {"shader": shaders.index("Unlit"),
                                                                        "constants": dict(SLOT_CONSTANTS)}
-        sig = (spec["shader"], tuple(sorted(spec.get("uniforms", {}).items())), frozenset(jobs))
+        if self.neutral():
+            spec["constants"].update(self.bake_vis.neutral_constants())
+        sig = (spec["shader"], tuple(sorted(spec.get("uniforms", {}).items())), repr(sorted(spec["constants"].items())),
+               frozenset(jobs))
         if sig != self._shown_sig.get(index):  # another shader or other slots: the material made again
-            self.live.cook(jobs.values())
+            yield from self.live.cook_steps(jobs.values())
             for slot, job in jobs.items():
                 spec[slot] = (self.ev.texture(job, "output"), job.is_gray("output"))
             r.materials[index] = r.material(spec)
@@ -1601,12 +1675,14 @@ class PaintWorkspace(QMainWindow):
             changed = {slot: job for slot, job in jobs.items()
                        if self._shown.get((index, slot)) not in (job.key, full_keys.get(slot))}
             if changed:
-                self.live.cook(changed.values())
+                yield from self.live.cook_steps(changed.values())
                 r.update_slots(index, {slot: (self.ev.texture(j, "output"), j.is_gray("output"))
                                        for slot, j in changed.items()})
         self._shown.update({(index, slot): job.key for slot, job in changed.items()})
         self.ev.drop(changed.values())
         self.view3d.refresh()
+        if changed:
+            yield self.ev.fence()
 
     POM_DEPTH = 0.05  # parallax depth (tangent space) of Strength 1: ours, the documentation gives no unit
 
@@ -1630,7 +1706,7 @@ class PaintWorkspace(QMainWindow):
         the surface by Scale amount x the bounding box's largest side), tessellation (meshes subdivided for the
         display; painting hits the surface without displacement)."""
         sh, look = self.doc.project.shader, self.view3d.look
-        look.ao_opacity = sh.ao_intensity
+        look.ao_opacity = self.bake_vis.ao_intensity.value() if self.neutral() else sh.ao_intensity
         look.parallax = sh.pom_strength * self.POM_DEPTH if sh.pom_enable else 0.0
         lo, hi = self.doc.session.bounds()
         size = float(np.max(hi - lo))
@@ -1821,15 +1897,14 @@ class PaintWorkspace(QMainWindow):
                 targets.append(Target((uid, MASK, udim), e.pages, (self.tools.mask_value,) * 3, erase))
         else:
             off = (self.tools.erase_disabled if erase else self.tools.proj_disabled if proj
-                   else self.tools.disabled)
+                   else self.tools.polygon_disabled if self.tools.tool == "polygon_fill" else self.tools.disabled)
             for ch in ts.channel_ids():
                 if ch in off or (erase and s.store.get(uid, ch, udim) is None):
                     continue
-                if self.tools.tool == "polygon_fill" and ch != "basecolor":  # the page: Base color only
-                    continue
                 e = s.store.ensure(uid, ch, udim, ts.size_of(udim), storage_for(ts.format_of(ch)))
                 value = self.tools.proj_source(ch).color if proj else self.tools.value(ch)
-                targets.append(Target((uid, ch, udim), e.pages, tuple(value), erase))
+                targets.append(Target((uid, ch, udim), e.pages, tuple(value), erase, color=CHANNELS[ch].color,
+                                      hdr=is_hdr(ts.format_of(ch))))
         return targets
 
     def _alpha_name(self) -> str:
@@ -1858,14 +1933,13 @@ class PaintWorkspace(QMainWindow):
         if t.tool == "clone" and not self._clone_sources(tiles, view, camera, x, y):
             return False
         smudge = self._content_sources(tiles) if t.tool == "smudge" else None
-        if t.tool == "polygon_fill":
+        if t.tool == "polygon_fill":  # the press is a corner of the rectangle; it fills on release
             self.stroke = Stroke(s.brush_engine(), tiles, view, self._meshes(), s.material_index(ts), t.brush,
-                                 s.bbox_diagonal(), camera=camera)
+                                 s.bbox_diagonal(), camera=camera, blending=(t.polygon_blend, t.polygon_opacity))
             self._stroke_keys = [k.key for k in self.stroke.targets()]
             self._freeze_stroke()
-            self._filled = set()
+            self._marquee = [x, y, x, y]
             self._line = False
-            self._polygon_fill(x, y)
             return True
         self.stroke = Stroke(s.brush_engine(), tiles, view, self._meshes(), s.material_index(ts), t.brush,
                              s.bbox_diagonal(), self._alpha_name(), seed=int(time.time() * 1000) & 0xFFFF,
@@ -2413,41 +2487,67 @@ class PaintWorkspace(QMainWindow):
         t = tris.pick(under[0][:3].astype(np.float64))
         return None if t is None else tris.select(t, self.tools.polygon_mode)
 
-    def _polygon_fill(self, x, y):
-        """Fill what is under the pointer that the stroke has not filled yet (dragging fills more)."""
-        sel = self._polygon_under(x, y)
-        if sel is None:
-            return
-        new = [int(i) for i in sel if int(i) not in self._filled]
-        if not new:
-            return
-        self._filled.update(new)
-        if self.stroke.fill(self.doc.session.triangles(self.doc.ts).uv[new]):
+    MARQUEE_CLICK = 3  # pixels: a press released closer than this to where it started is a click
+
+    def _polygon_selection(self, x0, y0, x1, y1):
+        """The triangles the Polygon Fill takes: a click, what is under it; a rectangle dragged, those its Hit-test
+        takes (only the visible ones with Visible polygons only); either in its Fill mode. None for nothing."""
+        t = self.tools
+        if abs(x1 - x0) < self.MARQUEE_CLICK and abs(y1 - y0) < self.MARQUEE_CLICK:
+            return self._polygon_under(x1, y1)
+        view, cam = self._camera()
+        s, ts = self.doc.session, self.doc.ts
+        tris = s.triangles(ts)
+        m, tol = s.material_index(ts), s.bbox_diagonal() * 2e-3
+
+        def sees(points):
+            return cam.sees(view, points, m, tol)
+        hit = tris.in_rect(view.view_proj, (view.width, view.height), (x0, y0, x1, y1), t.polygon_hit,
+                           sees if t.polygon_visible else None)
+        return tris.expand(hit, t.polygon_mode) if len(hit) else None
+
+    def _polygon_fill(self, x0, y0, x1, y1):
+        """The release of a Polygon Fill press: what it takes, filled (the stroke's end lays it in the viewports)."""
+        sel = self._polygon_selection(x0, y0, x1, y1)
+        self.view3d.renderer.extra_lines = None
+        if sel is not None and self.stroke.fill(self.doc.session.triangles(self.doc.ts).uv[sel]):
             self._touched()
-            if not self._stroke_timer.isActive():
-                self._stroke_timer.start()
 
     def _polygon_hover(self, pos) -> bool:
         """The Polygon Fill tool's cursor: the outline of what a click fills."""
-        r = self.view3d.renderer
-        sel = self._polygon_under(*pos)
-        if sel is None:
-            r.extra_lines = None
-            return True
-        tris = self.doc.session.triangles(self.doc.ts)
-        if len(sel) > 20000:  # a whole mesh or chunk: its first triangles are enough to show it
-            sel = sel[:20000]
-        p = tris.pos[sel]
-        n = np.cross(p[:, 1] - p[:, 0], p[:, 2] - p[:, 0])
-        n /= np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-20)
-        p = p + n[:, None] * self.doc.session.bbox_diagonal() * 1e-3
-        seg = np.empty((len(p) * 6, 7), np.float32)
-        for k in range(3):
-            seg[k * 2::6, :3] = p[:, k]
-            seg[k * 2 + 1::6, :3] = p[:, (k + 1) % 3]
-        seg[:, 3:] = (0.35, 0.65, 1.0, 0.9)
-        r.extra_lines = seg
+        self._polygon_overlay(self._polygon_under(*pos))
         return True
+
+    def _polygon_overlay(self, sel, rect=None):
+        """The viewport's lines while the Polygon Fill is used: the outline of the triangles `sel` and the rectangle
+        being dragged (`rect`, pixels: drawn just past the camera's near plane)."""
+        r = self.view3d.renderer
+        parts = []
+        if sel is not None:
+            tris = self.doc.session.triangles(self.doc.ts)
+            if len(sel) > 20000:  # a whole mesh or chunk: its first triangles are enough to show it
+                sel = sel[:20000]
+            p = tris.pos[sel]
+            n = np.cross(p[:, 1] - p[:, 0], p[:, 2] - p[:, 0])
+            n /= np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-20)
+            p = p + n[:, None] * self.doc.session.bbox_diagonal() * 1e-3
+            seg = np.empty((len(p) * 6, 7), np.float32)
+            for k in range(3):
+                seg[k * 2::6, :3] = p[:, k]
+                seg[k * 2 + 1::6, :3] = p[:, (k + 1) % 3]
+            seg[:, 3:] = (0.35, 0.65, 1.0, 0.9)
+            parts.append(seg)
+        if rect is not None:
+            view = self.view3d.brush_view()
+            inv = np.linalg.inv(np.asarray(view.view_proj, np.float64))
+            x0, y0, x1, y1 = rect
+            corners = []
+            for x, y in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
+                c = inv @ np.array([x / view.width * 2 - 1, 1 - y / view.height * 2, 0.01, 1.0])
+                corners.append(c[:3] / c[3])
+            parts.append(np.array([(*corners[i], 1.0, 1.0, 1.0, 0.9) for k in range(4) for i in (k, (k + 1) % 4)],
+                                  np.float32))
+        r.extra_lines = np.concatenate(parts) if parts else None
 
     def stroke_add(self, x, y, pressure):
         if self.manip._drag is not None:
@@ -2460,8 +2560,9 @@ class PaintWorkspace(QMainWindow):
         if self.stroke is None:
             return
         if self.tools.tool == "polygon_fill":
-            self._polygon_fill(x, y)
-            self.hover((x, y))
+            self._marquee[2:] = [x, y]
+            self._polygon_overlay(self._polygon_selection(*self._marquee), self._marquee)
+            self.view3d.refresh()
             return
         if self._line:  # a straight line is drawn by the click alone
             return
@@ -2512,6 +2613,8 @@ class PaintWorkspace(QMainWindow):
             return
         self._stroke_timer.stop()
         stroke = self.stroke
+        if self.tools.tool == "polygon_fill":
+            self._polygon_fill(*self._marquee)
         before = stroke.end()
         for tg in stroke.targets():  # per texel values of the stroke (Projection, Clone)
             if tg.source is not None:

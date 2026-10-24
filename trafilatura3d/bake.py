@@ -97,6 +97,23 @@ def udim_tiles(objects: list, material: int | None = None) -> list[tuple[int, in
     return sorted(tiles, key=lambda t: (t[1], t[0])) or [(0, 0)]
 
 
+def spanning_triangles(objects: list) -> list[tuple[str, int, list[int]]]:
+    """The meshes with triangles whose UVs reach more than one UDIM tile: (mesh name, how many, the tiles they
+    reach). Such a triangle takes the tile of its centroid (`udim_tiles`, `meshio.split_by_tile`): beyond that tile
+    it shows that tile's texture repeated. A corner on a tile's border counts in the triangle's tile (pulled a hair
+    toward the centroid)."""
+    out = []
+    for o in objects:
+        uv = o.uv[o.idx.reshape(-1, 3)].astype(np.float64)  # (n, 3, 2), stored y = 1 - V
+        uv = uv + (uv.mean(1, keepdims=True) - uv) * 1e-5
+        u, v = np.floor(uv[..., 0]).astype(int), np.floor(1.0 - uv[..., 1]).astype(int)
+        span = (u.min(1) != u.max(1)) | (v.min(1) != v.max(1))
+        if span.any():
+            tiles = sorted({udim(t) for t in zip(u[span].ravel().tolist(), v[span].ravel().tolist())})
+            out.append((o.name, int(span.sum()), tiles))
+    return out
+
+
 def udim(tile) -> int:
     return 1001 + tile[0] + 10 * tile[1]
 

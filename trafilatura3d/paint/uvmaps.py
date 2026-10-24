@@ -171,13 +171,70 @@ class Triangles:
 
     def select(self, t: int, mode: str) -> np.ndarray:
         """The triangles a click on `t` fills: mode Triangle Fill, Polygon Fill, Mesh Fill or UV Chunk Fill."""
+        return self.expand([t], mode)
+
+    def expand(self, tris, mode: str) -> np.ndarray:
+        """The triangles `tris` take in a fill mode: themselves, their polygons, their meshes or their UV chunks."""
+        tris = np.unique(np.asarray(tris, np.int64))
+        if not len(tris):
+            return tris
         if mode == "Mesh Fill":
-            return np.where(self.mesh == self.mesh[t])[0]
+            return np.where(np.isin(self.mesh, self.mesh[tris]))[0]
         if mode == "UV Chunk Fill":
-            return np.where(self.chunk == self.chunk[t])[0]
-        if mode == "Polygon Fill" and self.partner[t] >= 0:
-            return np.array([t, self.partner[t]])
-        return np.array([t])
+            return np.where(np.isin(self.chunk, self.chunk[tris]))[0]
+        if mode == "Polygon Fill":
+            p = self.partner[tris]
+            return np.unique(np.concatenate([tris, p[p >= 0]]))
+        return tris
+
+    def in_rect(self, view_proj, size, rect, hit_test: str, visible=None) -> np.ndarray:
+        """The triangles a screen rectangle takes: `rect` (x0, y0, x1, y1) in pixels of a view of `size` (w, h);
+        `hit_test` Intersection (any part of the triangle in it) or Contained center (its center in it);
+        `visible(points (M, 3)) -> bool (M,)`, when given, keeps only the triangles seen (a point of each: its
+        center and its corners pulled a fifth toward it). Triangles crossing the camera plane are left out."""
+        n = len(self.pos)
+        if not n:
+            return np.zeros(0, np.int64)
+        x0, x1 = sorted(rect[0::2])
+        y0, y1 = sorted(rect[1::2])
+        m = np.asarray(view_proj, np.float64)
+        clip = np.concatenate([self.pos, np.ones((n, 3, 1))], 2) @ m.T
+        front = np.all(clip[..., 3] > 1e-9, 1)
+        w = np.where(clip[..., 3:] > 1e-9, clip[..., 3:], 1.0)
+        ndc = clip[..., :2] / w
+        s = np.stack([(ndc[..., 0] * 0.5 + 0.5) * size[0], (0.5 - ndc[..., 1] * 0.5) * size[1]], -1)  # (n, 3, 2)
+        if hit_test == "Contained center":
+            c = s.mean(1)
+            hit = (c[:, 0] >= x0) & (c[:, 0] <= x1) & (c[:, 1] >= y0) & (c[:, 1] <= y1)
+        else:
+            hit = _triangles_meet_rect(s, x0, y0, x1, y1)
+        tris = np.where(hit & front)[0]
+        if visible is not None and len(tris):
+            p = self.pos[tris]
+            c = p.mean(1, keepdims=True)
+            points = np.concatenate([c, p + (c - p) * 0.2], 1)  # (k, 4, 3)
+            seen = visible(points.reshape(-1, 3)).reshape(len(tris), 4).any(1)
+            tris = tris[seen]
+        return tris
+
+
+def _triangles_meet_rect(s: np.ndarray, x0, y0, x1, y1) -> np.ndarray:
+    """Per screen triangle ((n, 3, 2)): does any part of it lie in the rectangle? A corner inside it, a corner of the
+    rectangle inside the triangle, or an edge crossing one of its sides."""
+    inside = np.any((s[..., 0] >= x0) & (s[..., 0] <= x1) & (s[..., 1] >= y0) & (s[..., 1] <= y1), 1)
+    a, b, c = s[:, 0], s[:, 1], s[:, 2]
+    def cross(o, p, q):
+        return (p[..., 0] - o[..., 0]) * (q[..., 1] - o[..., 1]) - (p[..., 1] - o[..., 1]) * (q[..., 0] - o[..., 0])
+    corners = [np.array([x, y], np.float64) for x in (x0, x1) for y in (y0, y1)]
+    for q in corners:
+        d1, d2, d3 = cross(a, b, q), cross(b, c, q), cross(c, a, q)
+        inside |= ((d1 >= 0) & (d2 >= 0) & (d3 >= 0)) | ((d1 <= 0) & (d2 <= 0) & (d3 <= 0))
+    sides = [(corners[0], corners[1]), (corners[1], corners[3]), (corners[3], corners[2]), (corners[2], corners[0])]
+    for p, q in ((a, b), (b, c), (c, a)):
+        for r, t in sides:
+            r, t = np.broadcast_to(r, p.shape), np.broadcast_to(t, p.shape)
+            inside |= ((cross(p, q, r) * cross(p, q, t) < 0) & (cross(r, t, p) * cross(r, t, q) < 0))
+    return inside
 
 
 def density_values(uv: np.ndarray, pos: np.ndarray, size) -> np.ndarray:

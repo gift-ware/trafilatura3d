@@ -92,6 +92,57 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.w._close_home()
         self.assertIs(self.w.stack.currentWidget(), self.ws)
 
+    def test_generator_parameter_groups(self):
+        """A generator's parameters: the ungrouped ones, then each group under its collapsible title (collapsed it
+        stays so when the panel is built again); the resources (Micro Normal…) after the parameters."""
+        from PySide6.QtWidgets import QLabel, QPushButton
+        ws, doc, lp = self.ws, self.ws.doc, self.ws.layers
+        lp.add_layer("fill")
+        lp.add_effect("generator")
+        ws.properties._set_procedural(doc.effect().uid, "node:paint_ambient_occlusion")
+        def titles():
+            body = ws.properties.widget()  # a rebuild makes another
+            groups = {b.text()[3:]: b for b in body.findChildren(QPushButton) if b.text()[:1] in ("▾", "▸")}
+            sections = [w.text() for w in body.findChildren(QLabel) if w.property("section")]
+            return groups, sections
+        groups, sections = titles()
+        self.assertEqual(list(groups), ["Ambient Occlusion", "Texture", "Micro Details"])
+        self.assertLess(sections.index("Parameters"), sections.index("Resources"))
+        lay = ws.properties.lay
+        order = [lay.itemAt(i).widget() for i in range(lay.count())]
+        self.assertLess(order.index(groups["Micro Details"]), order.index(next(
+            w for w in order if isinstance(w, QLabel) and w.text() == "Resources")))
+        groups["Texture"].setChecked(False)
+        ws.properties.rebuild()
+        groups, _ = titles()
+        self.assertFalse(groups["Texture"].isChecked())
+        self.assertTrue(groups["Micro Details"].isChecked())
+
+    def test_viewport_wireframe_and_grid_colors(self):
+        """Display settings > Viewport: the wireframe's and the grid's color and opacity reach the viewport."""
+        from trafilatura3d.editor.paint.widgets import PSlider, Swatch
+        ws = self.ws
+        panel, look = ws.display_settings, ws.view3d.look
+        swatches = {s.title: s for s in panel.widget().findChildren(Swatch)}
+        sliders = {s.label.text(): s for s in panel.widget().findChildren(PSlider)}
+        ws.frame()
+
+        def colored(rgb):  # pixels close to the color
+            img = ws.view3d.render_image(128, 128)[..., :3].astype(np.float32)
+            img = img / 255.0 if img.max() > 1.0 else img
+            return int((np.abs(img - np.array(rgb)).max(axis=-1) < 0.1).sum())
+
+        for attr, name, rgb in (("wireframe", "Wireframe", (1.0, 0.0, 0.0)), ("grid", "Grid", (0.0, 1.0, 0.0))):
+            setattr(look, attr, True)
+            swatches[name]._picked(list(rgb), True)
+            self.assertEqual(tuple(getattr(look, f"{attr}_color")), rgb)
+            sliders[f"{name} opacity"].edited.emit(1.0, True)
+            self.assertGreater(colored(rgb), 20, name)
+            sliders[f"{name} opacity"].edited.emit(0.0, True)
+            self.assertEqual(getattr(look, f"{attr}_opacity"), 0.0)
+            self.assertEqual(colored(rgb), 0, name)
+            setattr(look, attr, False)
+
     def test_home(self):
         """The Home: a tile per kind of document (click creates), an Open link below each, the recent files with
         their kind's icon, folder and date; double click opens."""
@@ -352,7 +403,8 @@ class PaintWorkspaceTest(unittest.TestCase):
         row.opacity.setValue(70)
         self.assertEqual(row.opacity_slider.value(), 70)
         self.assertEqual(row.objectName(), "stackRow")
-        self.assertIn("#stackRow QLabel", lp.tree.styleSheet())
+        from trafilatura3d.editor import theme
+        self.assertIn("#stackRow, #stackRow QLabel", theme.STYLESHEET)  # the rows' parts let the selection through
         homes = [a for a in ws.docks_bar.actions() if a.text() == "Home screen"]
         self.assertEqual(len(homes), 1)
         homes[0].trigger()
@@ -1037,9 +1089,32 @@ class PaintWorkspaceTest(unittest.TestCase):
         from PySide6.QtCore import Qt
         it.setCheckState(Qt.Checked)
         ws.texture_sets.unchecked = {"Right"}
+        b.log.appendPlainText("an older bake")
         ws.bake()
         self.assertIn("normal", ws.doc.project.texture_set("Left").mesh_maps)
         self.assertNotIn("normal", ws.doc.project.texture_set("Right").mesh_maps)
+        text = b.log.toPlainText()  # this bake only, map by map, and its outcome (also in the Log)
+        self.assertNotIn("an older bake", text)
+        self.assertIn("✓ Normal", text)
+        self.assertTrue(text.endswith(" maps baked") and "\nBake finished, " in text)
+        self.assertIn("Bake finished, ", ws.log_view.toPlainText())
+        # the neutral material: the baked normal on the project mesh, its Roughness a constant
+        ws.doc.select_texture_set("Left")
+        index = ws._slot(ws.doc.ts, 1001)
+        ws.bake_vis.roughness.set_value(0.8)
+        ws.refresh_materials()
+        spec = ws.view3d.renderer.materials[index]["spec"]
+        self.assertIn("normal", spec)
+        self.assertNotIn("baseColor", spec)
+        self.assertAlmostEqual(spec["constants"]["roughness"][0], 0.8, 3)
+        # a map's visualize icon: that map in the viewport, again: the neutral material; a map not baked: nothing
+        b._visualize("normal")
+        self.assertEqual(ws.display, "mesh:normal")
+        self.assertIn("baseColor", ws.view3d.renderer.materials[index]["spec"])
+        b._visualize("normal")
+        self.assertEqual(ws.display, "material")
+        b._visualize("bent_normals")
+        self.assertEqual(ws.display, "material")
         ws.doc.undo.undo()
         self.assertNotIn("normal", ws.doc.project.texture_set("Left").mesh_maps)
         r = ws.view3d.renderer
@@ -1048,6 +1123,18 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.assertTrue(ws.view3d.look.show_cage)
         img = ws.view3d.render_image(64, 64)
         self.assertEqual(img.shape, (64, 64, 4))
+        # a bake that fails says so, map by map
+        b._save("High poly", lambda cfg: cfg["common"].update(use_low_as_high=False,
+                                                                high_meshes=[str(self.dir / "missing.obj")]))
+        ws.bake()
+        text = b.log.toPlainText()
+        self.assertIn("✗ Normal", text)
+        self.assertIn("Bake failed: Left", text)
+        self.assertIn("ERROR: Bake failed: Left", ws.log_view.toPlainText())
+        self.assertFalse(r.bake_high)  # the missing high poly: nothing to show
+        ws.doc.undo.undo()  # the low as high poly again: shown again (rebuilt on the next turn of the event loop)
+        self.app.processEvents()
+        self.assertTrue(r.bake_cage and r.bake_high)
         ws.set_mode("painting")
         self.assertTrue(ws.docks["layers"].isVisibleTo(ws))
         self.assertFalse(ws.bake_bar.isVisibleTo(ws))
@@ -1263,6 +1350,76 @@ class PaintWorkspaceTest(unittest.TestCase):
         ws.stroke_begin(w * 0.3, h * 0.5, 1.0)
         ws.stroke_end()
         self.assertGreater((doc.session.store.read(uid, MASK, 1001)[..., 3] > 0.5).mean(), 0.95)
+
+    def test_polygon_fill_rectangle(self):
+        """A rectangle dragged: Intersection takes the triangles it touches, Contained center those whose center it
+        holds; nothing filled until the release; the Material's channels and the Blending (Multiply, opacity)."""
+        from trafilatura3d.paint.paint import MASK
+        ws, doc = self.ws, self.ws.doc
+        self.paint_layer_under(0.3, 0.5)
+        view = ws.view3d.brush_view()
+
+        def screen(p):
+            c = np.asarray(view.view_proj, np.float64) @ np.array([*p, 1.0])
+            return (c[0] / c[3] * 0.5 + 0.5) * view.width, (0.5 - c[1] / c[3] * 0.5) * view.height
+        cx, cy = screen((-0.5, 0.0, 0.0))  # the left quad's center, on its diagonal
+        ax, ay = screen((-0.98, 0.0, -0.48))
+        bx, by = screen((-0.02, 0.0, 0.48))
+        doc.select_texture_set("Left")
+        doc.select(doc.ts.layers[-1].uid)
+        uid = doc.layer().uid
+        ws.layers.add_mask(0.0)
+        ws.set_tool("polygon_fill")
+        t = ws.tools
+        t.polygon_mode, t.polygon_hit = "Triangle Fill", "Contained center"
+
+        def drag(x0, y0, x1, y1):
+            self.assertTrue(ws.stroke_begin(x0, y0, 1.0))
+            ws.stroke_add(x1, y1, 1.0)
+            self.assertIsNotNone(ws.view3d.renderer.extra_lines)  # the rectangle (and what it takes) shown
+            ws.stroke_end()
+
+        def covered(ch=MASK):
+            a = doc.session.store.read(uid, ch, 1001)
+            return 0.0 if a is None else float((a[..., 3] > 0.5).mean())
+        drag(cx - 6, cy - 6, cx + 6, cy + 6)  # no triangle's center in it
+        self.assertEqual(covered(), 0.0)
+        t.polygon_hit = "Intersection"
+        self.assertTrue(ws.stroke_begin(cx - 6, cy - 6, 1.0))
+        ws.stroke_add(cx + 6, cy + 6, 1.0)
+        self.assertEqual(covered(), 0.0)  # filled on the release only
+        ws.stroke_end()
+        self.assertGreater(covered(), 0.95)  # both triangles touch it
+        doc.undo.undo()
+        # Visible polygons only: a point of the surface is seen, one under it is not; nothing seen, nothing taken
+        cam_view, cam = ws._camera()
+        m = doc.session.material_index(doc.ts)
+        self.assertEqual(list(cam.sees(cam_view, [(-0.5, 0.0, 0.0), (-0.5, -0.3, 0.0)], m, 1e-3)), [True, False])
+        tris = doc.session.triangles(doc.ts)
+        rect = (ax, ay, bx, by)
+        self.assertEqual(len(tris.in_rect(cam_view.view_proj, (cam_view.width, cam_view.height), rect,
+                                          "Intersection", lambda p: np.zeros(len(p), bool))), 0)
+        self.assertEqual(len(tris.in_rect(cam_view.view_proj, (cam_view.width, cam_view.height), rect,
+                                          "Intersection", lambda p: cam.sees(cam_view, p, m, 1e-3))), 2)
+        t.polygon_hit = "Contained center"
+        drag(ax, ay, bx, by)
+        self.assertGreater(covered(), 0.95)
+        # on the layer: its own channels, blended
+        doc.select(uid)
+        t.values["basecolor"] = [1.0, 1.0, 1.0]
+        t.values["roughness"] = [0.25] * 3
+        drag(ax, ay, bx, by)
+        self.assertAlmostEqual(float(doc.session.store.read(uid, "roughness", 1001)[64, 64, 0]), 0.25, delta=0.01)
+        t.polygon_disabled = {"roughness"}
+        t.polygon_blend, t.values["basecolor"] = "multiply", [0.5, 0.5, 0.5]
+        drag(ax, ay, bx, by)
+        drag(ax, ay, bx, by)  # 0.5 x 0.5 in linear
+        c = doc.session.store.read(uid, "basecolor", 1001)[64, 64]
+        self.assertAlmostEqual(float(c[0]), 0.235, delta=0.02)
+        self.assertAlmostEqual(float(doc.session.store.read(uid, "roughness", 1001)[64, 64, 0]), 0.25, delta=0.01)
+        t.polygon_blend, t.polygon_opacity, t.values["basecolor"] = "normal", 0.5, [1.0, 1.0, 1.0]
+        drag(ax, ay, bx, by)
+        self.assertAlmostEqual(float(doc.session.store.read(uid, "basecolor", 1001)[64, 64, 0]), 0.6175, delta=0.02)
 
     def test_material_picker(self):
         """P equips the picker; a click takes the material under the cursor (a fill's roughness) into the paint
@@ -1563,6 +1720,20 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.assertGreater((img[..., 3] > 0.5).mean(), 0.02)
         self.assertEqual(doc.undo.undoText(), "Paint stroke")
 
+    def test_uv_tiles_crossing_warning(self):
+        """A UV Tile project on a mesh with triangles across a tile border: the Log warns, naming the mesh."""
+        from tests.test_paint import write_cross_obj
+        from trafilatura3d.editor.paint.document import PaintDocument
+        from trafilatura3d.paint.model import UV_TILE_MODES
+        from trafilatura3d.paint.session import Session
+        self.ws.doc.dirty = False
+        s = Session.new(write_cross_obj(self.dir), 128, evaluator=self.w.doc.ev, uv_tiles=UV_TILE_MODES[0])
+        self.ws.set_document(PaintDocument(s))
+        self.ws.refresh_materials()
+        log = self.ws.log_view.toPlainText()
+        self.assertIn("Warning: Mesh Cross: 2 triangle(s) span several UV tiles", log)
+        self.assertNotIn("ERROR", log)
+
     def test_uv_tiles_paint_across(self):
         """A UV Tile project: a renderer material per (mesh material, tile); a stroke over the two quads of Body
         (tiles 1001 and 1002) paints both tiles, in the 3D view and in the 2D view where the tiles lie side by side."""
@@ -1643,6 +1814,7 @@ class PaintWorkspaceTest(unittest.TestCase):
         ws.layers.add_layer("fill")
         self.app.processEvents()
         ws.layers.update_thumbnails()  # fill layers computed (the same on every tile), the rest icons
+        ws.live.refresh_now()  # the refresh's last step computes them
         from trafilatura3d.editor.paint.layers import THUMB
         self.assertEqual(ws.layers.rows[doc.selected].thumb.pixmap().width(), THUMB - 2)
         self.assertLess(ws.layers.rows[paint].thumb.pixmap().width(), THUMB - 2)  # the icon

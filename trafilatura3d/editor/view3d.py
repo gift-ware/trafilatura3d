@@ -794,7 +794,7 @@ class View3D(QWidget):
         section = getattr(self, "_editing", None)
         if section:
             from PySide6.QtCore import QTimer
-            QTimer.singleShot(0, lambda: self.edit_settings(*section))
+            QTimer.singleShot(0, self, lambda: self.edit_settings(*section))
 
     # --- scene ------------------------------------------------------------------------------------
 
@@ -977,7 +977,7 @@ class View3D(QWidget):
         from PySide6.QtCore import QTimer
         if not getattr(self, "_browser_pending", False):
             self._browser_pending = True
-            QTimer.singleShot(0, self._rebuild_browser)
+            QTimer.singleShot(0, self.browser, self._rebuild_browser)  # dropped if the browser is gone by then
 
     def _rebuild_browser(self):
         """The scene browser: objects added by the view in bold (camera, environment, point lights),

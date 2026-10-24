@@ -365,7 +365,7 @@ class GraphPanel(QWidget):
         self.package, self.graph_id = self.tabs_data[index]
         self.scene.clear()
         self.sync()
-        QTimer.singleShot(0, self.view.focus)
+        QTimer.singleShot(0, self.view, self.view.focus)  # dropped if the view is gone by then
         self.graph_shown.emit(self.package, self.graph_id)
 
     def sync(self, thumbnails: bool = True) -> None:

@@ -54,6 +54,7 @@ class Session:
         from trafilatura3d.paint.materials import Materials
         self.material_library = Materials()
         self.log_lines: list[str] = []  # what the stack could not do (missing materials…), for the Log
+        self.warnings: list[str] = []  # what the mesh's import found (`_check_tiles`), for the Log
         self._compilers: dict[tuple, StackCompiler] = {}
         self._bounds = None  # (objects, min, max): `bounds`
         self._planning = 0  # `planning` depth
@@ -120,6 +121,7 @@ class Session:
         s = cls(project, objects, materials, evaluator)
         s.source = str(mesh_path)
         s.fit = fit
+        s._check_tiles()
         for path in baked_maps:
             s.import_baked_map(path)
         return s
@@ -164,7 +166,18 @@ class Session:
         self._maps, self._computed = {}, {}
         self.uv_masks.clear()
         self._brush = None
+        self._check_tiles()
         return added
+
+    def _check_tiles(self) -> None:
+        """With the UV Tile workflow, the meshes whose triangles cross a tile's border, for the Log: those triangles
+        show only the texture of the tile of their center (`bake.spanning_triangles`)."""
+        if not self.project.uv_tiles:
+            return
+        from trafilatura3d.bake import spanning_triangles
+        for name, count, tiles in spanning_triangles(self.objects):
+            self.warnings.append(f"Mesh {name}: {count} triangle(s) span several UV tiles "
+                                 f"({', '.join(map(str, tiles))}); each shows only the tile of its center")
 
     def mesh_in_file_space(self) -> list:
         """The project's meshes in their file's coordinates (the viewport fit undone)."""

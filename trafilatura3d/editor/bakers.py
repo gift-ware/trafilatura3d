@@ -210,7 +210,7 @@ class BakerDialog(QDialog):
                 def store(v, n=name):
                     setattr(self.settings, n, v)
                     if n in CONDITIONS:
-                        QTimer.singleShot(0, lambda: self._show(self.list.currentRow()))
+                        QTimer.singleShot(0, self, lambda: self._show(self.list.currentRow()))
                 w = editor_widget(getattr(self.settings, name), editor, lambda v, s=store: (s(v), self._changed()),
                                   self._pick)
                 if name in TIPS:

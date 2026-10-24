@@ -261,7 +261,7 @@ class FunctionPanel(QWidget):
         self.crumb.setText(target.title())
         self.scene.clear()
         self.sync()
-        QTimer.singleShot(0, self.view.focus)
+        QTimer.singleShot(0, self.view, self.view.focus)
 
     def data(self) -> dict:
         return self.target.get()

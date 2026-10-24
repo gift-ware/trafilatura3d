@@ -95,7 +95,7 @@ def baker_rows(form, baker: str, values: dict, names, store, refresh, pick=None)
         def set_(v, name=name):
             store(name, v)
             if name in depends:
-                QTimer.singleShot(0, refresh)
+                QTimer.singleShot(0, form, refresh)  # dropped if the form is gone by then
         form.addRow(p.label, editor_widget(values.get(name, p.default), spec_of(p), set_, pick))
         added += 1
     return added

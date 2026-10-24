@@ -244,6 +244,19 @@ class TextureSetSettings(QScrollArea):
     def doc(self):
         return self.ws.doc
 
+    def signature(self):
+        """What the panel shows (made again when it changes): the document, the Texture Set's settings (its layers
+        aside), the project's, the project's images (the mesh maps' previews), the tile and lock shown."""
+        import dataclasses
+        doc = self.doc
+        if doc is None or doc.ts is None:
+            return id(doc)
+        ts, p = doc.ts, doc.project
+        return (id(doc), doc.ts_name, self.tile, self.lock, self.ws.template().shader,
+                repr([getattr(ts, f.name) for f in dataclasses.fields(ts) if f.name != "layers"]),
+                repr([getattr(p, f.name) for f in dataclasses.fields(p) if f.name != "texture_sets"]),
+                doc.session.resources.signature())
+
     def _set_body(self, body):
         """The panel's new content; the old one is deleted later: a rebuild often comes from a signal of one of its
         controls (setWidget would delete it at once, under the signal: a crash)."""

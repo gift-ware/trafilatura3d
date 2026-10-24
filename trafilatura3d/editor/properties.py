@@ -502,11 +502,12 @@ class PropertiesPanel(QScrollArea):
 
         def switch():
             self._levels_sliders = not self._levels_sliders
-            QTimer.singleShot(0, self.rebuild)  # the rebuild deletes the button: not from inside its signal
+            QTimer.singleShot(0, self, self.rebuild)  # the rebuild deletes the button: not from inside its signal
 
         def action(label, fn):
             self._edit(label, fn, True, "levels")
-            QTimer.singleShot(0, self.rebuild)  # `_edit` keeps the panel (a drag's widgets stay): show the new values
+            # `_edit` keeps the panel (a drag's widgets stay): show the new values
+            QTimer.singleShot(0, self, self.rebuild)
 
         buttons = []
         for name, tip, fn in (("invert", "Invert", lambda: action("Invert", invert)),
@@ -548,7 +549,7 @@ class PropertiesPanel(QScrollArea):
 
         def channel(i):
             self._levels_channel[key] = i
-            QTimer.singleShot(0, self.rebuild)  # not from inside the selector's signal: the rebuild deletes it
+            QTimer.singleShot(0, self, self.rebuild)  # not from inside the selector's signal: the rebuild deletes it
         editor.edited.connect(edited)
         editor.channel_changed.connect(channel)
         rollout.add("Levels Histogram", editor)
@@ -697,7 +698,8 @@ class PropertiesPanel(QScrollArea):
 
         def set_mode(name, mode):
             setter(name)(self._convert_mode(name, current[name], mode))
-            QTimer.singleShot(0, self.rebuild)  # `_edit` keeps the panel: the row shows its new mode (not from the menu)
+            # `_edit` keeps the panel: the row shows its new mode (not from the menu)
+            QTimer.singleShot(0, self, self.rebuild)
 
         def mode_tool(name):
             b = tool_button("inherit", f"Inheritance: {MODE_LABELS[current[name]['mode']]}")
@@ -899,7 +901,7 @@ class PropertiesPanel(QScrollArea):
         more.setCheckable(True)
         more.setChecked(expanded)
         more.toggled.connect(lambda on: (self._expanded.add(pid) if on else self._expanded.discard(pid),
-                                         QTimer.singleShot(0, self.rebuild)))  # not inside the button's own signal
+                                         QTimer.singleShot(0, self, self.rebuild)))  # not inside the button's own signal
         tools.append(more)
         copy = tool_button("copy", "Copy this input")
         copy.clicked.connect(lambda: self._copy_inputs(g, [pid]))

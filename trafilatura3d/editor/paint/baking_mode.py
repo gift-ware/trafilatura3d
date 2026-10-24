@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import copy
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QFrame, QHBoxLayout,
                                QLabel, QLineEdit, QListWidget, QListWidgetItem, QMenu, QPlainTextEdit, QPushButton,
-                               QScrollArea, QSpinBox, QToolButton, QVBoxLayout, QWidget)
+                               QScrollArea, QSpinBox, QStyle, QStyleOptionViewItem, QToolButton, QVBoxLayout, QWidget)
 
 from trafilatura3d.editor import theme
 from trafilatura3d.bake import ANTIALIASING, MATCH, SIZES
@@ -19,6 +19,24 @@ from trafilatura3d.editor.bake_form import baker_rows
 from trafilatura3d.editor.paint.icons import picon
 from trafilatura3d.meshio import MESH_FILTER
 from trafilatura3d.paint import baking
+
+
+class _BakerList(QListWidget):
+    """The Mesh map bakers list: a press on a row's icon asks to visualize that map (`visualize(slot)`)."""
+    visualize = Signal(str)
+
+    def mousePressEvent(self, e):
+        pos = e.position().toPoint()
+        it = self.itemAt(pos)
+        if it is not None and e.button() == Qt.LeftButton:
+            opt = QStyleOptionViewItem()
+            self.initViewItemOption(opt)  # the view's icon size, which the item's own options lack
+            self.itemDelegate().initStyleOption(opt, self.indexFromItem(it))
+            opt.rect = self.visualItemRect(it)
+            if self.style().subElementRect(QStyle.SE_ItemViewItemDecoration, opt, self).contains(pos):
+                self.visualize.emit(it.data(Qt.UserRole))
+                return
+        super().mousePressEvent(e)
 
 
 class BakingPanels:
@@ -56,7 +74,8 @@ class BakingPanels:
         menu_btn.setPopupMode(QToolButton.InstantPopup)
         top.addWidget(menu_btn)
         lay.addWidget(top_bar)
-        self.list = QListWidget()
+        self.list = _BakerList()
+        self.list.visualize.connect(self._visualize)
         self.list.itemChanged.connect(self._item_changed)
         self.list.currentRowChanged.connect(self._row)
         lay.addWidget(self.list, 1)
@@ -94,12 +113,24 @@ class BakingPanels:
             it.setFlags(it.flags() | Qt.ItemIsUserCheckable)
             it.setCheckState(Qt.Checked if cfg["bakers"][slot]["enabled"] else Qt.Unchecked)
             it.setData(Qt.UserRole, slot)
+            # visualize: the eye open on the map shown in the viewport; a map not baked yet has none to show
+            baked = slot in self.doc.ts.mesh_maps
+            it.setIcon(picon("eye" if self.ws.display == f"mesh:{slot}" else "eye_off"))
+            it.setToolTip("Show this map in the viewport" if baked else "Not baked yet")
             self.list.addItem(it)
             if slot == self.selected:
                 self.list.setCurrentItem(it)
         self.list.blockSignals(False)
         self._common(cfg)
         self._settings(cfg)
+
+    def _visualize(self, slot):
+        """A map's visualize icon: that mesh map in the viewport, again: back to the neutral material."""
+        if slot not in self.doc.ts.mesh_maps:
+            return
+        key = f"mesh:{slot}"
+        self.ws.set_display("material" if self.ws.display == key else key)
+        self.rebuild()
 
     def _item_changed(self, it):
         slot, on = it.data(Qt.UserRole), it.checkState() == Qt.Checked
@@ -280,9 +311,10 @@ class BakingPanels:
 class BakingVisualization(QFrame):
     """The Baking visualization settings at the top left of the viewport in the Baking mode (Baking
     visualization settings page), what the viewport's renderer can show: Hide baking meshes, Mesh (HP), Matching
-    error (high poly areas outside the cage, in red), Cage surface and its opacity, Project mesh. The colors,
-    the separate cage wireframe, the missing seams, the neutral material and the skew vectors are not offered;
-    the meshes shown are always the selected Texture Set's."""
+    error (high poly areas outside the cage, in red), Cage surface and its opacity, Project mesh, the Neutral
+    material's Roughness, Metallic and AO intensity (the project mesh shaded with its baked normal and AO). The
+    colors, the separate cage wireframe, the missing seams, the neutral material's Quality and Bent normal and the
+    skew vectors are not offered; the meshes shown are always the selected Texture Set's."""
 
     def __init__(self, ws, parent):
         super().__init__(parent)
@@ -313,7 +345,20 @@ class BakingVisualization(QFrame):
         self.project.setChecked(True)
         self.project.toggled.connect(self._changed)
         lay.addWidget(self.project)
+        lay.addWidget(QLabel("<b>Neutral material</b>"))
+        # ours: the documentation gives no defaults (the painting viewport's missing-channel values, full AO)
+        self.roughness = PSlider("Roughness", 0.3, 0.0, 1.0, compact=True)
+        self.metallic = PSlider("Metallic", 0.0, 0.0, 1.0, compact=True)
+        self.ao_intensity = PSlider("AO intensity", 1.0, 0.0, 1.0, compact=True)
+        for s in (self.roughness, self.metallic, self.ao_intensity):
+            s.edited.connect(lambda v, _f: self.ws.live.schedule())
+            lay.addWidget(s)
         self.adjustSize()
+
+    def neutral_constants(self) -> dict:
+        """The neutral material's values for the renderer slots without a texture."""
+        r, m = self.roughness.value(), self.metallic.value()
+        return {"roughness": (r, r, r, 1.0), "metallic": (m, m, m, 1.0)}
 
     def _changed(self, *_):
         self.apply()

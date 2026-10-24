@@ -29,7 +29,7 @@ from trafilatura3d.editor.view2d import View2D
 from trafilatura3d.editor.view3d import View3D
 from trafilatura3d.package import SUFFIX, DocumentError, apply_template
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 LAYOUT_KEY = "workspace/state/2"  # bump when the default layout changes, so old saved layouts are dropped
 
 
@@ -83,7 +83,9 @@ class DockTitle(QWidget):
         if on != self.active:
             self.active = on
             line = f"2px solid {theme.ACCENT}" if on else f"1px solid {theme.BORDER}"  # the divider, or the accent
-            self.setStyleSheet(f"#dockTitle {{ border-bottom: {line}; }}")
+            # lighter than the panel's body: the panel reads as a window of its own
+            self.setStyleSheet(f"#dockTitle {{ background: {theme.BG_ROLLOUT}; border-bottom: {line}; }}"
+                               f"#dockTitle QLabel, #dockTitle QToolButton {{ background: transparent; }}")
 
 
 class MainWindow(QMainWindow):

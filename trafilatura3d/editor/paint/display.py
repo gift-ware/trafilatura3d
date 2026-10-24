@@ -1,10 +1,9 @@
 """The Display settings panel (Display settings pages), the parameters the viewport's renderer supports:
 Environment (map, opacity over the background colors, exposure, rotation, blur, shadows and their opacity), Camera
-(field of view, tone mapping function Linear / ACES) and Viewport (wireframe, grid). Not offered: environment
-alignment,
-shadow computation mode, depth of field, temporal anti-aliasing, post effects, color profiles, subsurface
-scattering, anisotropic filtering and mipmap bias, the stencil and HDR display options, wireframe and grid
-colors."""
+(field of view, tone mapping function Linear / ACES) and Viewport (wireframe and grid, each with its color and
+opacity). Not offered: environment alignment, shadow computation mode, depth of field, temporal anti-aliasing, post
+effects, color profiles, subsurface scattering, anisotropic filtering and mipmap bias, the stencil and HDR display
+options, the grid's Axis (the documentation does not list its values), automatic divisions and unit label."""
 
 from __future__ import annotations
 
@@ -14,7 +13,7 @@ from pathlib import Path
 from PySide6.QtWidgets import QCheckBox, QComboBox, QFileDialog, QFormLayout, QFrame, QScrollArea, QVBoxLayout, QWidget
 
 from trafilatura3d.editor import theme
-from trafilatura3d.editor.paint.widgets import PSlider, header
+from trafilatura3d.editor.paint.widgets import PSlider, Swatch, header
 from trafilatura3d.editor.render3d import TONEMAPS
 
 ENV_FILTER = "Environment maps (*.hdr *.exr)"
@@ -79,11 +78,18 @@ class DisplaySettings(QScrollArea):
         lay.addLayout(form2)
 
         lay.addWidget(header("Viewport"))
-        for label, attr in (("Show mesh wireframe", "wireframe"), ("Show grid", "grid")):
+        for label, attr, name in (("Show mesh wireframe", "wireframe", "Wireframe"), ("Show grid", "grid", "Grid")):
             c = QCheckBox(label)
             c.setChecked(getattr(look, attr))
             c.toggled.connect(lambda on, attr=attr: (setattr(look, attr, on), changed()))
             lay.addWidget(c)
+            form3 = QFormLayout()
+            color = Swatch(getattr(look, f"{attr}_color"), name)
+            color.edited.connect(lambda rgb, _f, attr=attr: (setattr(look, f"{attr}_color", tuple(rgb)), changed()))
+            form3.addRow(f"{name} color", color)
+            lay.addLayout(form3)
+            slider(f"{name} opacity", lambda attr=attr: getattr(look, f"{attr}_opacity"),
+                   lambda v, attr=attr: setattr(look, f"{attr}_opacity", v), 0.0, 1.0)
         lay.addStretch(1)
         self.setWidget(body)
 

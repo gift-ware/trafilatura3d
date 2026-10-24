@@ -207,5 +207,5 @@ class ExportDialog(QDialog):
             QMessageBox.warning(self, "Export outputs", str(e))
             return []
         self.written = written
-        QTimer.singleShot(0, self.accept)
+        QTimer.singleShot(0, self, self.accept)
         return written

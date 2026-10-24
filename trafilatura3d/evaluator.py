@@ -120,6 +120,7 @@ class TexturePool:
         self.device = device
         self.free: dict[tuple, list] = {}
         self.bytes = 0  # what the free textures hold
+        self._doomed: list[tuple] = []  # (Fence, textures) trimmed while the GPU may still use them (`trim`)
 
     def acquire(self, fmt, w, h):
         stack = self.free.get((fmt, w, h))
@@ -133,16 +134,36 @@ class TexturePool:
         self.free.setdefault((texture.format, texture.width, texture.height), []).append(texture)
         self.bytes += texture.width * texture.height * BYTES_PER_PIXEL[texture.format]
 
-    def trim(self, keep: int = 0):
-        """Destroys free textures until at most `keep` bytes are left."""
+    def trim(self, keep: int = 0, fence: Fence | None = None):
+        """Destroys free textures until at most `keep` bytes are left. With `fence` (the work just submitted, which
+        may still use them) they are destroyed once it is done (`reap`): destroying a texture the GPU is using
+        waits for the GPU (~60 ms for a 4096 one, on the interface thread)."""
+        self.reap()
+        doomed = []
         for key in list(self.free):
             stack = self.free[key]
             while stack and self.bytes > keep:
                 t = stack.pop()
                 self.bytes -= t.width * t.height * BYTES_PER_PIXEL[t.format]
-                t.destroy()
+                doomed.append(t)
             if not stack:
                 del self.free[key]
+        if fence is not None and doomed:
+            self._doomed.append((fence, doomed))
+            return
+        for t in doomed:
+            t.destroy()
+
+    def reap(self) -> None:
+        """The textures `trim` left to their fence, destroyed where the GPU is done with them."""
+        left = []
+        for fence, textures in self._doomed:
+            if fence.done():
+                for t in textures:
+                    t.destroy()
+            else:
+                left.append((fence, textures))
+        self._doomed = left
 
 
 @dataclass(frozen=True)
@@ -904,20 +925,22 @@ class Evaluator:
             if turns or ctx.transients or self.pool.bytes > min(self.budget // 4, POOL_MID_COOK):  # submitted, freed
                 dispatches += ctx.submit()
                 ctx = CookContext(self)
-                self.pool.trim()
                 # the GPU frees destroyed textures once their work is done: waiting for it keeps the memory bounded
                 # (without it the queue ran gigabytes ahead)
                 if turns:  # the caller's event loop runs while the GPU works: resumed once the fence is done
-                    yield self.fence()
+                    fence = self.fence()
+                    self.pool.trim(fence=fence)  # destroyed after it, not waiting for the GPU here
+                    yield fence
                     held = set().union(*self._held.values())  # a viewport may hold others now
                 else:
+                    self.pool.trim()
                     self.wait()
         dispatches += ctx.submit()
         for job in targets:
             if job.key in self.cache:
                 self.cache.move_to_end(job.key)
         self._fit_budget(used, new, lambda k: k in kept, precious)
-        self.pool.trim()
+        self.pool.trim(fence=self.fence() if turns else None)
         return CookStats([j.path for j in schedule], dispatches, time.perf_counter() - t0)
 
     def half_store_truncates(self) -> bool:
@@ -1157,6 +1180,7 @@ class Evaluator:
 
         try:
             yield from self.cook_steps([job for job, _ in items], related=related, precious=precious, each=thumbnail)
+            yield self.fence()  # read back once the GPU is done: reading earlier waits for it on this thread
         except GeneratorExit:  # abandoned: the thumbnails recorded so far back to the pool
             for t in made.values():
                 self.pool.release(t)
@@ -1251,7 +1275,7 @@ class Evaluator:
         held = set().union(*self._held.values())
         for key in [k for k, p in self._partition.items() if p == partition and k not in held]:
             self._evict(key)
-        self.pool.trim()
+        self.pool.trim(fence=self.fence())  # the viewport's last refresh may still be using them
 
 
 def one_channel(texture) -> bool:

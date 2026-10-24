@@ -20,8 +20,8 @@ import copy
 
 import numpy as np
 from PySide6.QtCore import QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QImage, QKeySequence, QPixmap, QShortcut
-from PySide6.QtWidgets import (QAbstractItemView, QComboBox, QHBoxLayout, QInputDialog, QLabel, QMenu,
+from PySide6.QtGui import QColor, QImage, QKeySequence, QPixmap, QShortcut, QStandardItem, QStandardItemModel
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QHBoxLayout, QInputDialog, QLabel, QMenu,
                                QSpinBox, QToolButton, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 from trafilatura3d.editor import theme
@@ -33,6 +33,25 @@ from trafilatura3d.paint.model import (GEOMETRY_TYPES, MASK_KEY, ChannelBlend, C
                                    new_layer, new_uid, unique_name)
 
 THUMB = 30
+_BLEND_MODELS: dict = {}
+
+
+def blend_model(normal: bool) -> QStandardItemModel:
+    """The blending modes of the rows' dropdowns (short label, mode identifier, full name as tooltip), made once and
+    shared by every row: filling ~30 items per row was most of making one. The Normal map modes only on the Normal
+    channel (`normal`)."""
+    if normal not in _BLEND_MODELS:
+        model = QStandardItemModel(QApplication.instance())
+        for m in blending.IDS:
+            if normal or m not in blending.NORMAL_ONLY:
+                item = QStandardItem(blending.SHORT[m])
+                item.setData(m, Qt.UserRole)
+                item.setToolTip(blending.LABEL[m])
+                model.appendRow(item)
+        _BLEND_MODELS[normal] = model
+    return _BLEND_MODELS[normal]
+
+
 # The Add effect menus (layer, mask, toolbar): Effects page
 ADD_EFFECTS = (("fill", "Add fill"), ("paint", "Add paint"), ("levels", "Add levels"), ("generator", "Add generator"),
                ("filter", "Add filter"), ("anchor", "Add anchor point"))
@@ -100,13 +119,14 @@ class Row(QWidget):
             f.setPixmap(picon("folder").pixmap(16, 16))
             lay.addWidget(f)
         self.thumb = QLabel()
+        self.thumb.setObjectName("layerThumb")  # its look in the theme (a style sheet per widget is slow to make)
         self.thumb.setFixedSize(THUMB, THUMB)
-        self.thumb.setStyleSheet("background: #1d1d1d; border: 1px solid #111;")
         self.thumb.mousePressEvent = self._thumb_clicked
         lay.addWidget(self.thumb)
         self.mask = None
         if layer.mask is not None:
             self.mask = QLabel()
+            self.mask.setObjectName("layerMask")
             self.mask.setFixedSize(THUMB, THUMB)
             self.mask_enabled = layer.mask.enabled
             self.show_mask_selected(doc.selected == layer.uid and doc.mask_selected)
@@ -147,9 +167,7 @@ class Row(QWidget):
         b = layer.blend_of(doc.viewmode)
         self.mode = QComboBox()  # the wheel edits it only with the focus (editor/wheel_guard.py)
         modes = [m for m in blending.IDS if doc.viewmode == "normal" or m not in blending.NORMAL_ONLY]
-        for m in modes:
-            self.mode.addItem(blending.SHORT[m], m)
-            self.mode.setItemData(self.mode.count() - 1, blending.LABEL[m], Qt.ToolTipRole)
+        self.mode.setModel(blend_model(doc.viewmode == "normal"))
         self.mode.setCurrentIndex(modes.index(b.mode))
         self.mode.setFixedWidth(64)
         self.mode.currentIndexChanged.connect(lambda i: panel.set_blend(self.uid, mode=self.mode.itemData(i)))
@@ -165,13 +183,10 @@ class Row(QWidget):
         self.opacity.valueChanged.connect(lambda v: panel.set_blend(self.uid, opacity=v / 100, merge=True))
         right.addWidget(self.opacity)
         self.opacity_slider = Slider()  # under the opacity field: drag it, the field follows (and the reverse)
+        self.opacity_slider.setObjectName("rowOpacity")  # its thin look in the theme
         self.opacity_slider.setRange(0, 100)
         self.opacity_slider.setValue(self.opacity.value())
         self.opacity_slider.setFixedSize(64, 10)
-        self.opacity_slider.setStyleSheet("QSlider::groove:horizontal { height: 2px; background: #5a5a5a; }"
-                                          "QSlider::sub-page:horizontal { background: #8a8a8a; }"
-                                          "QSlider::handle:horizontal { background: #c8c8c8; border: none; width: 6px;"
-                                          " height: 6px; margin: -2px 0; border-radius: 3px; }")
         self.opacity_slider.valueChanged.connect(self.opacity.setValue)
         self.opacity.valueChanged.connect(lambda v: (self.opacity_slider.blockSignals(True),
                                                      self.opacity_slider.setValue(v),
@@ -180,10 +195,14 @@ class Row(QWidget):
         lay.addLayout(right)
 
     def show_mask_selected(self, selected: bool):
-        """The mask thumbnail's border: light when the mask is the selection, red when the mask is off."""
+        """The mask thumbnail's border: light when the mask is the selection, red when the mask is off (the theme's
+        `state` rules; the style worked out again only when it changes)."""
         if self.mask is not None:
-            border = "#c8c8c8" if selected else ("#111" if self.mask_enabled else "#b03030")
-            self.mask.setStyleSheet(f"background: #1d1d1d; border: 1px solid {border};")
+            state = "selected" if selected else ("" if self.mask_enabled else "off")
+            if self.mask.property("state") != state:
+                self.mask.setProperty("state", state)
+                self.mask.style().unpolish(self.mask)
+                self.mask.style().polish(self.mask)
 
     def _apply_all_menu(self):
         """Right click on the blending mode: Apply to all channels (Flatten layers page)."""
@@ -242,9 +261,7 @@ class EffectRow(QWidget):
             b = effect.blend_of(key)
             self.mode = QComboBox()  # the wheel edits it only with the focus (editor/wheel_guard.py)
             modes = [m for m in blending.IDS if key == "normal" or m not in blending.NORMAL_ONLY]
-            for m in modes:
-                self.mode.addItem(blending.SHORT[m], m)
-                self.mode.setItemData(self.mode.count() - 1, blending.LABEL[m], Qt.ToolTipRole)
+            self.mode.setModel(blend_model(key == "normal"))
             self.mode.setCurrentIndex(modes.index(b.mode))
             self.mode.setFixedWidth(64)
             self.mode.currentIndexChanged.connect(
@@ -268,10 +285,8 @@ class LayerTree(QTreeWidget):
         self.setDragDropMode(QAbstractItemView.InternalMove)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)  # Ctrl/Cmd and Shift click (Managing layers)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-        # The rows' own parts (labels, icons, buttons) are transparent, so a selected row is highlighted whole (the
-        # theme paints every widget's background); its fields (blending, opacity) stay fields.
-        self.setStyleSheet("#stackRow, #stackRow QLabel, #stackRow QToolButton, #stackRow QSlider "
-                           "{ background: transparent; }")
+        # The rows' look (transparent parts, so a selected row is highlighted whole) is in the theme's style sheet:
+        # one here made every row added cost ~0.5 ms more.
 
     def drawRow(self, painter, option, index):
         """Every row (layer or effect) closed by the UI's divider line, across the whole width (the indentation
@@ -405,7 +420,9 @@ class LayerStackPanel(QWidget):
         QShortcut(QKeySequence("Alt+Down"), self.tree, activated=lambda: self.move_effect(-1),
                   context=Qt.WidgetWithChildrenShortcut)
         self._thumb_timer = QTimer(self, singleShot=True, interval=150, timeout=self.update_thumbnails)
-        self.rows, self.items, self._shown = {}, {}, {}
+        self._thumbs: dict = {}  # job key -> its thumbnail (QPixmap), for the results the rows show
+        self.rows, self.items = {}, {}
+        self._built, self._sigs = None, {}  # the tree's `_frame` and each row's signature, when made
         self._rebuilding = False
         self._eye, self._eye_drag = None, 0  # the eye press being dragged: (visible, layers done), and its count
         self._collapsed: set = set()  # uids of the rows collapsed by the user
@@ -416,21 +433,15 @@ class LayerStackPanel(QWidget):
 
     # --- building -------------------------------------------------------------------------------------
 
-    def _shown_effects(self) -> dict:
-        """Which effects every layer row shows: the mask's for the selected layer while its mask is selected, else
-        the content's (what a selection change can alter in the tree)."""
-        doc = self.doc
-        return {layer.uid: bool(doc.mask_selected and doc.layer() is layer) for layer in doc.ts.walk()}
-
     def sync_selection(self):
-        """The document's selection on the tree without rebuilding it (rows dragged or clicked stay alive: a
-        rebuild under a press ended drags and made the selection jump); a rebuild only when the effects shown
-        change (the mask's instead of the content's)."""
+        """The document's selection on the tree without making its rows again (rows dragged or clicked stay alive:
+        a rebuild under a press ended drags and made the selection jump); a layer whose mask gets (or loses) the
+        selection shows the other effects (`_update`)."""
+        self._update()
+
+    def _select(self):
+        """The document's selection on the rows: the current one, those selected, the mask selected."""
         doc = self.doc
-        if doc is None or doc.ts is None or self._shown != self._shown_effects():
-            self.rebuild()
-            return
-        self._rebuilding = True
         cur = self.items.get(doc.selected)
         if cur is not None and self.tree.currentItem() is not cur:
             self.tree.setCurrentItem(cur)
@@ -438,7 +449,6 @@ class LayerStackPanel(QWidget):
             it.setSelected(uid == doc.selected or uid in doc.multi)
         for uid, row in self.rows.items():
             row.show_mask_selected(doc.selected == uid and doc.mask_selected)
-        self._rebuilding = False
 
     def _expanded(self, it, on: bool) -> None:
         if self._rebuilding:
@@ -449,80 +459,164 @@ class LayerStackPanel(QWidget):
         else:
             self._collapsed.add(uid)
 
-    def rebuild(self):
-        """The tree made again from the document; the scroll and the rows the user collapsed stay as they were
-        (clearing the tree and making the selected row current scrolled it to the top or to that row at every edit;
-        reopening the collapsed folders moved every row below them)."""
-        scroll = self.tree.verticalScrollBar().value()
-        self._rebuilding = True
-        self.viewmode.blockSignals(True)
-        self.viewmode.clear()
-        self.tree.clear()
-        self.rows, self.items, self._shown = {}, {}, {}
+    def _frame(self):
+        """What every row depends on (the tree made again whole when it changes): the document, the Texture Set,
+        its channels, the channel shown."""
         doc = self.doc
-        if doc is None or doc.ts is None:
-            self.viewmode.blockSignals(False)
-            self._rebuilding = False
-            return
-        for c in doc.ts.channel_ids():
-            self.viewmode.addItem(CHANNELS[c].label, c)
-        self.viewmode.setCurrentIndex(max(0, doc.ts.channel_ids().index(doc.viewmode)) if doc.viewmode in doc.ts.channel_ids() else 0)
-        self.viewmode.blockSignals(False)
+        return id(doc), doc.ts_name, tuple(doc.ts.channel_ids()), doc.viewmode
 
-        def add(parent, layers):
-            for layer in reversed(layers):  # top first
-                it = QTreeWidgetItem()
-                it.setData(0, Qt.UserRole, layer.uid)
-                it.setSizeHint(0, QSize(10, THUMB + 20))
-                # Every layer row takes drops: Qt allows a drop line between two rows only when their parent row
-                # does, and a layer's effects are its children (moved between them); layers dropped onto a layer
-                # that is not a folder are refused in dropEvent.
-                it.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled)
-                if parent is None:
-                    self.tree.addTopLevelItem(it)
-                else:
-                    parent.addChild(it)
-                row = Row(self, layer)
-                self.rows[layer.uid] = row
-                self.items[layer.uid] = it
-                self.tree.setItemWidget(it, 0, row)
-                # the effects: the mask's while the mask is selected, else the content's (a folder has only its
-                # mask's, above the layers it holds)
-                in_mask = doc.mask_selected and doc.layer() is layer
-                self._shown[layer.uid] = bool(in_mask)
-                if layer.kind != "folder" or in_mask:
-                    effects = layer.mask.effects if in_mask else layer.effects
-                    key = MASK_KEY if in_mask else doc.viewmode
-                    for fx in reversed(effects):
-                        child = QTreeWidgetItem()
-                        child.setData(0, Qt.UserRole, fx.uid)
-                        child.setSizeHint(0, QSize(10, 24))
-                        child.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsDragEnabled)
-                        it.addChild(child)
-                        self.items[fx.uid] = child
-                        self.tree.setItemWidget(child, 0, EffectRow(self, fx, key))
-                        if fx.uid == doc.selected:
-                            self.tree.setCurrentItem(child)
-                if layer.kind == "folder":
-                    add(it, layer.children)
-                it.setExpanded(layer.uid not in self._collapsed)
-                if layer.uid == doc.selected:
-                    self.tree.setCurrentItem(it)
-                if layer.uid in doc.multi:
-                    it.setSelected(True)
-        add(None, doc.ts.layers)
-        self.tree.doItemsLayout()
-        self.tree.verticalScrollBar().setValue(scroll)
-        self._rebuilding = False
+    def _children(self, layer) -> list:
+        """A layer row's children, top first, as (uid, effect or layer, the effect's channel key): its effects shown
+        (the mask's while the mask is selected, else the content's; a folder has only its mask's), then the layers a
+        folder holds."""
+        doc = self.doc
+        in_mask = bool(doc.mask_selected and doc.layer() is layer)
+        out = []
+        if layer.kind != "folder" or in_mask:
+            key = MASK_KEY if in_mask else doc.viewmode
+            out += [(fx.uid, fx, key) for fx in reversed(layer.mask.effects if in_mask else layer.effects)]
+        if layer.kind == "folder":
+            out += [(x.uid, x, None) for x in reversed(layer.children)]
+        return out
+
+    def _row_signature(self, layer) -> str:
+        """What a layer's row shows (`Row`): made again when it changes."""
+        b = layer.blend_of(self.doc.viewmode)
+        mask = None if layer.mask is None else layer.mask.enabled
+        return repr((layer.kind, layer.visible, layer.name, mask, layer.geometry_type, layer.geometry_tiles,
+                     layer.geometry_excluded, b.mode, b.opacity))
+
+    def _effect_signature(self, fx, key) -> str:
+        """What an effect's row shows (`EffectRow`)."""
+        b = fx.blend_of(key) if fx.kind not in ("levels", "anchor") else None
+        channel = fx.levels.channel if fx.kind == "levels" else None
+        return repr((fx.visible, fx.kind, fx.name, fx.procedural, channel, key, b and (b.mode, b.opacity)))
+
+    def rebuild(self):
+        """The tree brought to the document (`_update`) and the thumbnails."""
+        self._update()
         self.update_thumbnails()
+
+    def _update(self):
+        """The tree brought to the document, the rows that did not change kept: in each row's children (and at the
+        top) those before and after the first difference stay, the ones between are made again; a kept row is made
+        again only if what it shows changed (its signature). Made a row at a time, an edit cost ~40 ms on 19 layers;
+        clearing the tree also scrolled it and reopened the collapsed folders. Made whole when what every row
+        depends on changes (`_frame`)."""
+        doc = self.doc
+        self._rebuilding = True
+        if doc is None or doc.ts is None or self._built != self._frame():
+            scroll = self.tree.verticalScrollBar().value()
+            self.viewmode.blockSignals(True)
+            self.viewmode.clear()
+            self.tree.clear()
+            self.rows, self.items, self._built, self._sigs = {}, {}, None, {}
+            if doc is None or doc.ts is None:
+                self.viewmode.blockSignals(False)
+                self._rebuilding = False
+                return
+            ids = doc.ts.channel_ids()
+            for c in ids:
+                self.viewmode.addItem(CHANNELS[c].label, c)
+            self.viewmode.setCurrentIndex(ids.index(doc.viewmode) if doc.viewmode in ids else 0)
+            self.viewmode.blockSignals(False)
+            self._reconcile(None, [(x.uid, x, None) for x in reversed(doc.ts.layers)])
+            self.tree.doItemsLayout()
+            self.tree.verticalScrollBar().setValue(scroll)
+            self._built = self._frame()
+        else:
+            self._reconcile(None, [(x.uid, x, None) for x in reversed(doc.ts.layers)])
+        self._select()
+        self._rebuilding = False
+
+    def _reconcile(self, parent, wanted: list) -> None:
+        """The children of `parent` (None: the top rows) made `wanted` ((uid, layer or effect, effect key), top
+        first): the rows the same before and after the first difference kept (and brought up to date), those
+        between taken away and made again (a layer added or removed: that row alone)."""
+        if parent is None:
+            have = [self.tree.topLevelItem(i) for i in range(self.tree.topLevelItemCount())]
+        else:
+            have = [parent.child(i) for i in range(parent.childCount())]
+        uids = [w[0] for w in wanted]
+        old = [it.data(0, Qt.UserRole) for it in have]
+        start = 0
+        while start < min(len(old), len(uids)) and old[start] == uids[start]:
+            start += 1
+        end = 0
+        while end < min(len(old), len(uids)) - start and old[-1 - end] == uids[-1 - end]:
+            end += 1
+        for i in reversed(range(start, len(old) - end)):
+            self._forget(parent.takeChild(i) if parent is not None else self.tree.takeTopLevelItem(i))
+        for k, (uid, obj, key) in enumerate(wanted[start:len(uids) - end]):
+            self._new_row(parent, start + k, obj, key)
+        for i in list(range(start)) + list(range(len(uids) - end, len(uids))):
+            self._refresh_row(have[i] if i < start else have[len(old) - len(uids) + i], *wanted[i][1:])
+
+    def _new_row(self, parent, index, obj, key) -> None:
+        """A row made at `index` of `parent`'s children: a layer (and its children) or an effect."""
+        it = QTreeWidgetItem()
+        it.setData(0, Qt.UserRole, obj.uid)
+        layer = key is None
+        if layer:
+            it.setSizeHint(0, QSize(10, THUMB + 20))
+            # Every layer row takes drops: Qt allows a drop line between two rows only when their parent row does,
+            # and a layer's effects are its children (moved between them); layers dropped onto a layer that is not
+            # a folder are refused in dropEvent.
+            it.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled)
+        else:
+            it.setSizeHint(0, QSize(10, 24))
+            it.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsDragEnabled)
+        if parent is None:
+            self.tree.insertTopLevelItem(index, it)
+        else:
+            parent.insertChild(index, it)
+        self.items[obj.uid] = it
+        self._set_widget(it, obj, key)
+        if layer:
+            self._reconcile(it, self._children(obj))
+            it.setExpanded(obj.uid not in self._collapsed)
+
+    def _refresh_row(self, it, obj, key) -> None:
+        """A kept row: made again if what it shows changed, its children brought up to date."""
+        sig = self._row_signature(obj) if key is None else self._effect_signature(obj, key)
+        if self._sigs.get(obj.uid) != sig:
+            self._set_widget(it, obj, key)
+        if key is None:
+            self._reconcile(it, self._children(obj))
+
+    def _set_widget(self, it, obj, key) -> None:
+        if key is None:
+            self.rows[obj.uid] = row = Row(self, obj)
+            self._sigs[obj.uid] = self._row_signature(obj)
+        else:
+            row = EffectRow(self, obj, key)
+            self._sigs[obj.uid] = self._effect_signature(obj, key)
+        self.tree.setItemWidget(it, 0, row)
+
+    def _forget(self, it) -> None:
+        """A row taken away, and its children: no longer known."""
+        for i in range(it.childCount()):
+            self._forget(it.child(i))
+        uid = it.data(0, Qt.UserRole)
+        for d in (self.items, self.rows, self._sigs):
+            d.pop(uid, None)
 
     def schedule_thumbnails(self):
         self._thumb_timer.start()
 
     def update_thumbnails(self):
+        """The rows' thumbnails now where they are known (icons, results already computed); the others are
+        computed by the viewports' refresh, its last step (`thumbnail_steps`), asked for here."""
+        if self.stale_thumbnails():
+            self.ws.live.schedule()
+
+    def stale_thumbnails(self) -> list:
+        """The rows' thumbnails set where they are known: icons (General preferences' simplified thumbnails, UV Tile
+        projects), the images of results already computed (`_thumbs`, by job key); the others returned, (layer uid,
+        "thumb" or "mask", job) for `thumbnail_steps`."""
         doc = self.doc
         if doc is None or doc.ts is None or not self.rows:
-            return
+            return []
         from trafilatura3d.editor.paint import settings as prefs
         # General preferences: icons instead of computed thumbnails. UV Tile projects: computed only for fill
         # layers (the same content on every tile), icons for the rest (paint, folders, masks differ per tile).
@@ -539,21 +633,20 @@ class LayerStackPanel(QWidget):
             if row.mask is not None and (simplified or tiled):
                 row.mask.setPixmap(picon("mask").pixmap(THUMB - 8, THUMB - 8))
         if simplified:
-            return
+            return []
         from trafilatura3d.editor.live import PREVIEW_SIZE
         # the first tile, at the preview's resolution: a thumbnail needs no more (its cache partition, not the
         # full resolution's)
         ts, sc = doc.ts, doc.session.compiler(doc.ts.tiles[0], PREVIEW_SIZE)
         ch = doc.viewmode if doc.viewmode in ts.channel_ids() else ts.channel_ids()[0]
-        items, targets = [], []
+        wanted = []
         for layer in ts.walk():
             row = self.rows.get(layer.uid)
             if row is None or (tiled and layer.kind != "fill"):
                 continue
             job = sc.content(ts, layer, ch, ts.format_of(ch)) if layer.kind != "folder" or layer.children else None
             if job is not None:
-                items.append((job, "output"))
-                targets.append(row.thumb)
+                wanted.append((layer.uid, "thumb", job))
             else:
                 row.thumb.clear()
             if row.mask is not None and not tiled:
@@ -564,17 +657,33 @@ class LayerStackPanel(QWidget):
                     saved, layer.mask = layer.mask, on
                     m = sc.mask(ts, layer)
                     layer.mask = saved
-                items.append((m, "output"))
-                targets.append(row.mask)
-        if not items:
+                wanted.append((layer.uid, "mask", m))
+        stale = []
+        for uid, part, job in wanted:
+            if job.key in self._thumbs:
+                getattr(self.rows[uid], part).setPixmap(self._thumbs[job.key])
+            else:
+                stale.append((uid, part, job))
+        self._thumbs = {job.key: self._thumbs[job.key] for _, _, job in wanted if job.key in self._thumbs}
+        return stale
+
+    def thumbnail_steps(self, stale: list, related=(), precious: frozenset = frozenset()):
+        """The thumbnails of `stale_thumbnails` computed and shown, a step per wait of their cook for the GPU (the
+        viewports' refresh runs it); `related`, `precious`: the refresh's (`LiveCook`), kept by the budget. Shown
+        on the rows there are when done (a rebuild in between made new ones)."""
+        if not stale:
             return
         try:
-            images = doc.session.ev.thumbnails(items, THUMB - 2)
+            images = yield from self.doc.session.ev.thumbnail_steps([(job, "output") for _, _, job in stale],
+                                                                    THUMB - 2, related=related, precious=precious)
         except Exception as e:  # noqa: BLE001 - thumbnails never break the panel
             self.ws.log(f"Layer thumbnails: {e}", True)
             return
-        for label, img in zip(targets, images):
-            label.setPixmap(_pixmap(img))
+        for (uid, part, job), img in zip(stale, images):
+            self._thumbs[job.key] = pix = _pixmap(img)
+            row = self.rows.get(uid)
+            if row is not None and getattr(row, part) is not None:
+                getattr(row, part).setPixmap(pix)
 
     # --- selection ------------------------------------------------------------------------------------
 

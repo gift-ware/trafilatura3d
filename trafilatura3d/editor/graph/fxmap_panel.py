@@ -118,7 +118,7 @@ class FxMapPanel(QWidget):
         self.crumb.setText(f"{graph_id}  ›  Stamp Map ({node_id})")
         self.scene.clear()
         self.sync()
-        QTimer.singleShot(0, self.view.focus)
+        QTimer.singleShot(0, self.view, self.view.focus)
 
     def data(self) -> dict:
         g = self.package.graphs[self.graph_id]

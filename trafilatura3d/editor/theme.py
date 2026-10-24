@@ -7,10 +7,10 @@ from PySide6.QtCore import QEvent, QObject, QSize, Qt
 from PySide6.QtGui import QColor, QFontDatabase, QPainter, QPalette
 from PySide6.QtWidgets import QApplication, QSizePolicy, QToolButton, QWidget
 
-BG = "#292624"  # panels, panel titles, rollout headers
+BG = "#292624"  # panels, rollout headers
 BG_DARK = "#201e1c"  # viewports, fields
 BG_HEADER = "#33302d"  # selected tabs, table headers
-BG_ROLLOUT = "#3a3633"
+BG_ROLLOUT = "#3a3633"  # panel titles, rollouts
 BG_BUTTON = "#3f3a36"
 BG_SELECTED = "#5a3a22"  # selected rows, checked tool buttons
 BORDER = "#151312"
@@ -50,10 +50,8 @@ def dropdown_arrows() -> str:
 
 STYLESHEET = f"""
 QWidget {{ background: {BG}; color: {TEXT}; font-family: "{FONT}"; font-size: 12px; }}
-QMainWindow::separator:vertical {{ width: 1px; background: {BORDER}; border-left: 2px solid {BG};
-    border-right: 2px solid {BG}; }}
-QMainWindow::separator:horizontal {{ height: 1px; background: {BORDER}; border-top: 2px solid {BG};
-    border-bottom: 2px solid {BG}; }}
+QMainWindow::separator:vertical {{ width: 4px; background: {BORDER}; }}  /* panels as separate windows: a dark gap */
+QMainWindow::separator:horizontal {{ height: 4px; background: {BORDER}; }}
 QDockWidget {{ titlebar-close-icon: none; }}
 QDockWidget > QAbstractScrollArea {{ border: none; }}  /* a panel's body draws no frame: the dividers do */
 QMenuBar {{ border-bottom: 1px solid {BORDER}; }}
@@ -113,13 +111,24 @@ QCheckBox::indicator {{ width: 14px; height: 14px; border-radius: 4px; border: 1
     background: {BG_DARK}; }}
 QCheckBox::indicator:checked {{ background: {ACCENT}; border-color: {ACCENT}; }}
 QLabel#dim {{ color: {TEXT_DIM}; }}
+/* The Paint layer stack's rows: their own parts (labels, icons, buttons) transparent, so a selected row is
+   highlighted whole; its fields (blending, opacity) stay fields. Thumbnails framed, the mask's border by its state. */
+#stackRow, #stackRow QLabel, #stackRow QToolButton, #stackRow QSlider {{ background: transparent; }}
+QLabel#layerThumb, QLabel#layerMask {{ background: #1d1d1d; border: 1px solid #111; }}
+QLabel#layerMask[state="selected"] {{ border-color: #c8c8c8; }}
+QLabel#layerMask[state="off"] {{ border-color: #b03030; }}
+QSlider#rowOpacity::groove:horizontal {{ height: 2px; background: #5a5a5a; }}
+QSlider#rowOpacity::sub-page:horizontal {{ background: #8a8a8a; }}
+QSlider#rowOpacity::handle:horizontal {{ background: #c8c8c8; border: none; width: 6px; height: 6px; margin: -2px 0;
+    border-radius: 3px; }}
 """
 
 
 def divider(widget, side: str):
     """The UI's one divider: a 1 px BORDER line on the `side` ("top", "bottom", "left", "right") of a bar where it
-    meets the content next to it (panel titles, toolbars, a panel's own bars, a viewport's header). Splitters and
-    the dock separators draw the same line centered in their 5 px grip; panels have no frame of their own."""
+    meets the content next to it (panel titles, toolbars, a panel's own bars, a viewport's header). Splitters draw
+    the same line centered in their 5 px grip, the dock separators are a 4 px BORDER gap between panels; panels have
+    no frame of their own."""
     widget.setProperty("divider", side)
     widget.setAttribute(Qt.WA_StyledBackground, True)  # a plain QWidget draws no stylesheet border without it
     # The line's pixel kept from the children (a stylesheet border takes no room from a plain widget's layout,

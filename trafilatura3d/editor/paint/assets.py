@@ -190,6 +190,12 @@ class AssetsPanel(QWidget):
     def kind(self) -> str:
         return self.kind_box.currentText()
 
+    def signature(self):
+        """What a document edit can change in the panel (made again when it changes): the document and its images;
+        the libraries on disk and the search refresh it themselves."""
+        doc = self.ws.doc
+        return id(doc), None if doc is None else doc.session.resources.signature()
+
     def set_kind(self, kind: str):
         self.kind_box.setCurrentText(kind)
 

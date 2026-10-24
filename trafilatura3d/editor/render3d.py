@@ -1196,8 +1196,12 @@ class Look:
     preview: bool = False
     # Display
     grid: bool = False
+    grid_color: tuple = (0.4, 0.4, 0.4)  # sRGB, like the opacities ours (the documentation gives no defaults)
+    grid_opacity: float = 0.35  # the lines through the origin twice as opaque
     axis: bool = False
     wireframe: bool = False
+    wireframe_color: tuple = (0.85, 0.85, 0.85)  # sRGB
+    wireframe_opacity: float = 0.55
     bounding_box: bool = False
     tangent_space: bool = False
     light_helpers: bool = True
@@ -1629,7 +1633,7 @@ class Renderer:
             r = np.arange(-5, 6, 0.5, dtype=np.float32)
             g = []
             for x in r:
-                c = (0.55, 0.55, 0.55, 0.7) if x == 0 else (0.4, 0.4, 0.4, 0.35)
+                c = (*look.grid_color, min(look.grid_opacity * (2.0 if x == 0 else 1.0), 1.0))
                 g += [(x, floor, -5, *c), (x, floor, 5, *c), (-5, floor, x, *c), (5, floor, x, *c)]
             parts.append(np.array(g, np.float32))
         if look.axis:
@@ -1696,7 +1700,7 @@ class Renderer:
             look.ao_opacity, look.shadow_opacity, look.ground_shadow, look.height_level,
             *self.ambient, 0.0,
             *lights[:8], *lights[8:],
-            0.85, 0.85, 0.85, 0.55,
+            *look.wireframe_color, look.wireframe_opacity,
             *look.background[0], look.env_opacity, *look.background[1], 0.0)
         self.device.queue.write_buffer(self.uniform, 0, data)
         visible = [] if look.hide_low and self.bake_high else [m for m in self.meshes if m.visible]

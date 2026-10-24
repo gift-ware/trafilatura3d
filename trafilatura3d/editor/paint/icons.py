@@ -135,8 +135,18 @@ def _draw(name: str, p: QPainter, c: str) -> bool:
     return True
 
 
+_ICONS: dict[tuple[str, str], QIcon] = {}
+
+
 def picon(name: str, color: str = "#cfcfcf") -> QIcon:
-    """A Paint icon, or the editor's icon of that name."""
+    """A Paint icon, or the editor's icon of that name; drawn once (the layer rows ask for theirs at every row
+    made)."""
+    if (name, color) not in _ICONS:
+        _ICONS[name, color] = _picon(name, color)
+    return _ICONS[name, color]
+
+
+def _picon(name: str, color: str) -> QIcon:
     result = QIcon()
     for scale in (1, 2):
         pm = QPixmap(16 * scale, 16 * scale)

@@ -73,12 +73,15 @@ class View:
 @dataclass
 class Target:
     """A painted entry the stroke writes: its pages (paint.Pages) and the value laid (RGB), or erase. `source`: the
-    values per texel instead (rgba32float in texture space, alpha = how much is laid), e.g. the Projection tool's."""
+    values per texel instead (rgba32float in texture space, alpha = how much is laid), e.g. the Projection tool's.
+    `color`, `hdr`: the channel's (linear blending, no clamp) when the stroke blends (`Stroke.blending`)."""
     key: tuple
     pages: object
     value: tuple = (1.0, 1.0, 1.0)
     erase: bool = False
     source: object = None
+    color: bool = False
+    hdr: bool = False
 
 
 TILING_MODES = ("No Tiling", "Horizontal Tiling", "Vertical Tiling", "H and V Tiling")  # the stencil's (Paint page)
@@ -279,8 +282,8 @@ class BrushEngine:
     def commit_pipe(self, fmt):
         """commit.wgsl for an entry storage format."""
         if fmt not in self._commit:
-            code = (WGSL / "commit.wgsl").read_text(encoding="utf-8").replace("FORMAT", fmt).replace(
-                "TWO_ENTRY", str(two(fmt)).lower())
+            code = (WGSL / "blend_lib.wgsl").read_text(encoding="utf-8") + (WGSL / "commit.wgsl").read_text(
+                encoding="utf-8").replace("FORMAT", fmt).replace("TWO_ENTRY", str(two(fmt)).lower())
             self._commit[fmt] = self.device.create_compute_pipeline(layout="auto", compute={
                 "module": self.device.create_shader_module(code=code), "entry_point": "main"})
         return self._commit[fmt]
@@ -414,11 +417,13 @@ class CameraBuffer:
     normal). The brush and the cursor read it around the pointer only: blocks of BLOCK pixels are read back the
     first time they are needed (a stroke crosses a few; reading the whole buffer took ~90 ms)."""
     BLOCK = 64
+    WHOLE_READ = 8  # `sees` needing more blocks than this reads the positions whole, once
 
     def __init__(self, device, positions, normals, uvs=None):
         self.device, self.texture, self.normals, self.uvs = device, positions, normals, uvs
         self.width, self.height = positions.width, positions.height
         self.blocks: dict = {}
+        self._positions = None  # all of them, read by `sees` for a large area
 
     def _block(self, bx, by):
         if (bx, by) not in self.blocks:
@@ -436,6 +441,38 @@ class CameraBuffer:
             return None
         pos, nrm = self._block(xi // self.BLOCK, yi // self.BLOCK)
         return pos[yi % self.BLOCK, xi % self.BLOCK], nrm[yi % self.BLOCK, xi % self.BLOCK, :3]
+
+    def sees(self, view: View, points, material: int, tol: float) -> np.ndarray:
+        """Per world point ((M, 3)): is it the visible surface of `material` under its pixel? Within `tol` plus two
+        pixels' footprint at its distance."""
+        p = np.asarray(points, np.float64)
+        out = np.zeros(len(p), bool)
+        if not len(p):
+            return out
+        clip = np.concatenate([p, np.ones((len(p), 1))], 1) @ np.asarray(view.view_proj, np.float64).T
+        w = np.where(clip[:, 3] > 1e-9, clip[:, 3], 1.0)
+        xi = np.floor((clip[:, 0] / w * 0.5 + 0.5) * self.width).astype(np.int64)
+        yi = np.floor((0.5 - clip[:, 1] / w * 0.5) * self.height).astype(np.int64)
+        idx = np.where((clip[:, 3] > 1e-9) & (xi >= 0) & (xi < self.width) & (yi >= 0) & (yi < self.height))[0]
+        B = self.BLOCK
+        block = (yi[idx] // B) * (self.width // B + 1) + xi[idx] // B
+        if self._positions is None and len(np.unique(block)) > self.WHOLE_READ:  # one read beats many blocks
+            self._positions = _read(self.device, self.texture)
+        if self._positions is not None:
+            q = self._positions[yi[idx], xi[idx]]
+        else:
+            order = np.argsort(block, kind="stable")
+            idx, block = idx[order], block[order]
+            starts = np.concatenate([[0], np.nonzero(np.diff(block))[0] + 1, [len(idx)]])
+            q = np.empty((len(idx), 4), np.float32)
+            for a, b in zip(starts[:-1], starts[1:]):  # one read per block of pixels (kept for the next ones)
+                k = idx[a:b]
+                pos, _ = self._block(int(xi[k[0]] // B), int(yi[k[0]] // B))
+                q[a:b] = pos[yi[k] % B, xi[k] % B]
+        dist = np.linalg.norm(p[idx] - np.asarray(view.eye, np.float64), axis=1)
+        foot = dist * 2 * math.tan(view.fov / 2) / max(view.height, 1)
+        out[idx] = (np.round(q[:, 3]) - 1 == material) & (np.linalg.norm(q[:, :3] - p[idx], axis=1) <= tol + 2 * foot)
+        return out
 
 
 def stamp_radius(s: BrushSettings, view: View, hit, diag: float, pressure: float = 1.0) -> tuple[float, float]:
@@ -483,8 +520,11 @@ class Stroke:
 
     def __init__(self, engine: BrushEngine, tiles: list[TileTargets], view: View, meshes: list, material: int,
                  settings: BrushSettings, bbox_diagonal: float, alpha: str = DEFAULT_ALPHA, seed: int = 0,
-                 camera=None, symmetry=None, smudge=None):
+                 camera=None, symmetry=None, smudge=None, blending: tuple[str, float] | None = None):
         self.engine, self.tiles, self.view = engine, tiles, view
+        # (blending mode identifier, opacity): the value is blended with what the entries hold in that mode, as a
+        # layer over the stack (Polygon Fill's Blending), instead of laid over it at the Stroke opacity
+        self.blending = blending
         # Smudge tool: {target key: the stack below (Passthrough) or None}; every stamp drags the content from
         # where the previous one was.
         self.smudge = smudge
@@ -860,12 +900,17 @@ class Stroke:
         size, per_row, _bits = self.blocks[i]
         x0, y0, x1, y1 = area
         base = self.base[t.key] if self.base is not None else None
+        opacity, mode, flags = self.s.stroke_opacity / 100, -1.0, 0.0
+        if self.blending is not None and not t.erase:  # blend_lib's lay with the channel's own rules
+            from trafilatura3d.paint import blending
+            mode, opacity = float(blending.INDEX[self.blending[0]]), self.blending[1]
+            flags = 1.0 * t.color + 2.0 * (not t.hdr) + 4.0 * (t.key[1] == "normal")
         ub = d.create_buffer_with_data(data=struct.pack("8f4I4f", *value[:3], 1.0 if tile.stencil is not None else 0.0,
-                                                        self.s.stroke_opacity / 100, 1.0 if t.erase else 0.0,
+                                                        opacity, 1.0 if t.erase else 0.0,
                                                         1.0 if t.source is not None else 0.0,
                                                         1.0 if tile.limit is not None else 0.0,
                                                         x0, y0, size, per_row, 1.0 if base is not None else 0.0,
-                                                        0.0, 0.0, 0.0),
+                                                        mode, flags, 0.0),
                                        usage=wgpu.BufferUsage.UNIFORM)
         saved, table = self.saved.of(t.key, t.pages)
         group = d.create_bind_group(layout=pipe.get_bind_group_layout(0), entries=[

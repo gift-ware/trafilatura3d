@@ -40,7 +40,7 @@ class ShaderSettingsPanel(QScrollArea):
     def _shader(self, name):
         """Another shader: its parameters shown (rebuilt after the combo's signal: rebuilding inside it crashes)."""
         self._edit("shader", name)
-        QTimer.singleShot(0, self.rebuild)
+        QTimer.singleShot(0, self, self.rebuild)
 
     def restore_defaults(self):
         doc = self.ws.doc

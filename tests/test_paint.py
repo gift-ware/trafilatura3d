@@ -1146,7 +1146,36 @@ def write_udim_obj(folder: Path) -> Path:
     return path
 
 
+def write_cross_obj(folder: Path) -> Path:
+    """Two quads: "Cross" with its U from 0.5 to 1.5 (across the 1001 / 1002 border), "Edge" from 0 to 1."""
+    lines = []
+    for i, (name, lo, hi) in enumerate((("Cross", 0.5, 1.5), ("Edge", 0.0, 1.0))):
+        x0 = float(i * 2)
+        lines += [f"o {name}", f"v {x0} 0 -0.5", f"v {x0 + 1} 0 -0.5", f"v {x0 + 1} 0 0.5", f"v {x0} 0 0.5",
+                  f"vt {lo} 1", f"vt {hi} 1", f"vt {hi} 0", f"vt {lo} 0", "vn 0 1 0"]
+        b = 4 * i + 1
+        lines.append(f"f {b}/{b}/{i + 1} {b + 3}/{b + 3}/{i + 1} {b + 2}/{b + 2}/{i + 1}")
+        lines.append(f"f {b}/{b}/{i + 1} {b + 2}/{b + 2}/{i + 1} {b + 1}/{b + 1}/{i + 1}")
+    path = folder / "cross.obj"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
 class TestUVTiles(unittest.TestCase):
+    def test_triangles_across_tiles_are_reported(self):
+        """With the UV Tile workflow, a mesh whose triangles cross a tile's border is named in the warnings, with
+        the count and the tiles; UVs on the border itself (0 to 1) cross nothing; without the workflow, no check."""
+        from trafilatura3d.paint.model import UV_TILE_MODES
+        with tempfile.TemporaryDirectory() as tmp:
+            mesh = write_cross_obj(Path(tmp))
+            s = Session.new(mesh, resolution=64, evaluator=ev(), uv_tiles=UV_TILE_MODES[0])
+            self.assertEqual(len(s.warnings), 1)
+            self.assertIn("Mesh Cross: 2 triangle(s) span several UV tiles (1001, 1002)", s.warnings[0])
+            self.assertEqual(Session.new(mesh, resolution=64, evaluator=ev()).warnings, [])
+            s.warnings.clear()
+            s.reimport(mesh)  # a reimport checks again
+            self.assertEqual(len(s.warnings), 1)
+
     def test_new_project_keeps_each_materials_tiles(self):
         from trafilatura3d.paint.model import UV_TILE_MODES
         with tempfile.TemporaryDirectory() as tmp:

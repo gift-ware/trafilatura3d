@@ -39,7 +39,8 @@ SEED_PARAM = Param(ParamKind.INT, 0, "Random Seed", 0, 10000, editor="Random see
 TOOL_LABEL = {"paint": "Paint", "eraser": "Eraser", "projection": "Projection", "polygon_fill": "Polygon fill",
               "smudge": "Smudge", "clone": "Clone", "material_picker": "Material picker", "path": "Path"}
 LEVELS_ATTRS = ("in_low", "in_mid", "in_high", "out_low", "out_high")  # the levels editor's values, in order
-POLYGON_MODES = ("Triangle Fill", "Polygon Fill", "Mesh Fill", "UV Chunk Fill")  # Polygon Fill page
+POLYGON_MODES = ("Triangle Fill", "Polygon Fill", "Mesh Fill", "UV Chunk Fill")  # Polygon Fill page: Fill mode
+HIT_TESTS = ("Intersection", "Contained center")
 
 
 @dataclass
@@ -72,7 +73,14 @@ class ToolState:
     projection: ProjectionSettings = field(default_factory=ProjectionSettings)
     proj_sources: dict = field(default_factory=dict)  # channel -> ChannelSource
     proj_disabled: set = field(default_factory=set)
+    # Polygon Fill: the rectangle's Fill mode and Hit-test, its Blending, its own channels (Material). Defaults
+    # ours where the page gives none.
     polygon_mode: str = "Triangle Fill"
+    polygon_hit: str = "Intersection"
+    polygon_visible: bool = True
+    polygon_blend: str = "normal"
+    polygon_opacity: float = 1.0
+    polygon_disabled: set = field(default_factory=set)
     # Stencil of the Paint tool and the Eraser (Paint page): a grayscale resource ("" none, a texture, a
     # "node:" procedural) masking the strokes from the viewport, moved like the projection (S + drag).
     stencils: dict = field(default_factory=dict)  # tool -> ChannelSource
@@ -141,11 +149,29 @@ class PropertiesPanel(QScrollArea):
         self.setWidgetResizable(True)
         self.setFrameShape(QFrame.NoFrame)
         self._subject = None  # what the panel shows (`rebuild`)
+        self._closed: set = set()  # (node type, group path) of the parameter groups collapsed (`_grouped_params`)
         self.rebuild()
 
     @property
     def doc(self):
         return self.ws.doc
+
+    def signature(self):
+        """What a document edit or a selection can change in the panel (`PaintWorkspace` makes it again when this
+        changes): the document, the selection, the tool, the display and mode, the whole layer holding the selection,
+        the Texture Set's and the project's settings, the project's images. The tools' own settings rebuild it
+        themselves."""
+        import dataclasses
+        doc = self.doc
+        if doc is None or doc.ts is None:
+            return id(doc)
+        ts, p = doc.ts, doc.project
+        owner = ts.owner_of(doc.selected)[0] if doc.selected else None
+        return (id(doc), doc.ts_name, doc.selected, doc.mask_selected, tuple(doc.multi), self.ws.tools.tool,
+                self.ws.display, self.ws.mode, repr(owner.to_dict()) if owner is not None else None,
+                repr([getattr(ts, f.name) for f in dataclasses.fields(ts) if f.name != "layers"]),
+                repr([getattr(p, f.name) for f in dataclasses.fields(p) if f.name != "texture_sets"]),
+                doc.session.resources.signature())
 
     def rebuild(self):
         doc = self.doc
@@ -203,24 +229,8 @@ class PropertiesPanel(QScrollArea):
             hint.setWordWrap(True)
             self.lay.addWidget(hint)
             return
-        if st.tool == "polygon_fill":  # Polygon Fill page: the selection mode, the value laid (no brush)
-            self.lay.addWidget(header("Polygon Fill"))
-            form = QFormLayout()
-            modes = QComboBox()
-            modes.addItems(POLYGON_MODES)
-            modes.setCurrentText(st.polygon_mode)
-            modes.currentTextChanged.connect(lambda t: setattr(st, "polygon_mode", t))
-            form.addRow("Selection mode", modes)
-            self.lay.addLayout(form)
-            if self.doc.mask_selected:
-                self.lay.addWidget(header("Grayscale"))
-                g = PSlider("Grayscale", st.mask_value, 0.0, 1.0)
-                g.edited.connect(lambda v, _f: setattr(st, "mask_value", v))
-                self.lay.addWidget(g)
-            elif "basecolor" in self.doc.ts.channel_ids():  # on a paint layer: Base color only (the page)
-                self.lay.addWidget(header("Material"))
-                self._value_row("basecolor", False, st.value("basecolor"),
-                                lambda v, _final: st.values.__setitem__("basecolor", list(v)))
+        if st.tool == "polygon_fill":  # Polygon Fill page (a rectangle dragged, or a click), no brush
+            self._polygon_fill_settings(st)
             return
         if st.tool == "projection":  # Projection page: Mode; the image moves with S + drag in the viewport
             pr = st.projection
@@ -371,6 +381,55 @@ class PropertiesPanel(QScrollArea):
                 continue
             self._value_row(c, FORMATS[ts.format_of(c)][0], st.value(c),
                             lambda v, _final, c=c: st.values.__setitem__(c, list(v)))
+
+    def _polygon_fill_settings(self, st):
+        """Polygon Fill page, in its order: Fill mode and Hit-test (of the rectangle dragged; a click takes what is
+        under it), Blending (mode and opacity, the layer stack's modes), Material (its channels and values; a
+        mask: the grayscale)."""
+        from trafilatura3d.paint import blending
+
+        def combo(label, items, current, setter, data=None):
+            box = QComboBox()
+            for i, text in enumerate(items):
+                box.addItem(text, data[i] if data else text)
+            box.setCurrentIndex(max(box.findData(current), 0))
+            box.currentIndexChanged.connect(lambda i: setter(box.itemData(i)))
+            form = QFormLayout()
+            form.addRow(label, box)
+            self.lay.addLayout(form)
+
+        self.lay.addWidget(header("Fill mode"))
+        combo("Fill mode", POLYGON_MODES, st.polygon_mode, lambda v: setattr(st, "polygon_mode", v))
+        self.lay.addWidget(header("Hit-test"))
+        combo("Hit-test", HIT_TESTS, st.polygon_hit, lambda v: setattr(st, "polygon_hit", v))
+        visible = QCheckBox("Visible polygons only")
+        visible.setChecked(st.polygon_visible)
+        visible.toggled.connect(lambda on: setattr(st, "polygon_visible", on))
+        self.lay.addWidget(visible)
+        self.lay.addWidget(header("Blending"))
+        modes = [m for m in blending.IDS if m not in ("passthrough", "disable")]  # a layer's own, not a tool's
+        combo("Blending mode", [blending.LABEL[m] for m in modes], st.polygon_blend,
+              lambda v: setattr(st, "polygon_blend", v), modes)
+        opacity = PSlider("Opacity", st.polygon_opacity * 100, 0.0, 100.0)
+        opacity.edited.connect(lambda v, _f: setattr(st, "polygon_opacity", v / 100))
+        self.lay.addWidget(opacity)
+        if self.doc.mask_selected:
+            self.lay.addWidget(header("Grayscale"))
+            g = PSlider("Grayscale", st.mask_value, 0.0, 1.0)
+            g.edited.connect(lambda v, _f: setattr(st, "mask_value", v))
+            self.lay.addWidget(g)
+            return
+        ts = self.doc.ts
+        self.lay.addWidget(header("Material"))
+        chans = [(c, CHANNELS[c].short) for c in ts.channel_ids()]
+        btns = ChannelButtons(chans, {c for c, _ in chans if c not in st.polygon_disabled})
+        btns.toggled.connect(lambda c, on: (st.polygon_disabled.discard(c) if on else st.polygon_disabled.add(c),
+                                            self.rebuild()))
+        self.lay.addWidget(btns)
+        for c in ts.channel_ids():
+            if c not in st.polygon_disabled:
+                self._value_row(c, FORMATS[ts.format_of(c)][0], st.value(c),
+                                lambda v, _final, c=c: st.values.__setitem__(c, list(v)))
 
     def _projection_image(self, st):
         """The projected image's controls (ours, besides S + drag in the viewport): rotation, scale, offset, flips,
@@ -785,8 +844,18 @@ class PropertiesPanel(QScrollArea):
                 note.setObjectName("dim")
                 note.setWordWrap(True)
                 self.lay.addWidget(note)
+        self.lay.addWidget(header("Parameters"))
+
+        def row(form, name, prm):
+            def edited(v, final):
+                def do():
+                    self._obj(uid).values = {**self._obj(uid).values, name: v}
+                doc.edit(f"{node.label} parameter", do, merge=None if final else f"{uid}.{name}", structure=False)
+            form.addRow(prm.label or name, make_editor(prm, fx.values.get(name, prm.default), edited,
+                                                       _color_field(prm.label or name)))
+        self._grouped_params(node, [(dn.SEED, SEED_PARAM), *node.params.items()], row)
         slots = dn.resource_ports(node, fx.kind)
-        if slots:  # the node's other image inputs: resources of the effect
+        if slots:  # the node's other image inputs: resources of the effect, after the parameters
             self.lay.addWidget(header("Resources"))
         for port in slots:
             src = fx.inputs.get(port) or ChannelSource([1.0, 1.0, 1.0])
@@ -800,16 +869,6 @@ class PropertiesPanel(QScrollArea):
                             stack_slot=(uid, port, True))
             if src.procedural:
                 self._procedural_params(uid, port, src, True)
-        self.lay.addWidget(header("Parameters"))
-        form = QFormLayout()
-        for name, prm in [(dn.SEED, SEED_PARAM), *node.params.items()]:
-            def edited(v, final, name=name):
-                def do():
-                    self._obj(uid).values = {**self._obj(uid).values, name: v}
-                doc.edit(f"{node.label} parameter", do, merge=None if final else f"{uid}.{name}", structure=False)
-            form.addRow(prm.label or name, make_editor(prm, fx.values.get(name, prm.default), edited,
-                                                                       _color_field(prm.label or name)))
-        self.lay.addLayout(form)
 
     def _set_procedural(self, uid, sid):
         def do():
@@ -848,7 +907,7 @@ class PropertiesPanel(QScrollArea):
         colors.addItems(LEVELS_COLORS)
         colors.setCurrentText(lv.colors)
         # its histogram; the rebuild deletes the selector: not from inside its signal
-        colors.currentTextChanged.connect(lambda t: (set_lv({"colors": t}), QTimer.singleShot(0, self.rebuild)))
+        colors.currentTextChanged.connect(lambda t: (set_lv({"colors": t}), QTimer.singleShot(0, self, self.rebuild)))
         top.addWidget(colors)
         self.lay.addLayout(top)
         editor = LevelsEditor([getattr(lv, a) for a in LEVELS_ATTRS], dark=True)
@@ -979,14 +1038,64 @@ class PropertiesPanel(QScrollArea):
         node = node_of(src.procedural)
         if node is None:
             return
-        form = QFormLayout()
-        for name, prm in [(SEED, SEED_PARAM), *node.params.items()]:
-            def edited(v, final, name=name):
+
+        def row(form, name, prm):
+            def edited(v, final):
                 def do():
                     s = self._src(uid, channel, slot)
                     s.values = {**s.values, name: v}
                 self.doc.edit(f"{node.label} parameter", do, merge=None if final else f"{uid}.{channel}.{name}",
                               structure=False)
             form.addRow(prm.label or name, make_editor(prm, src.values.get(name, prm.default), edited,
-                                                                       _color_field(prm.label or name)))
-        self.lay.addLayout(form)
+                                                       _color_field(prm.label or name)))
+        self._grouped_params(node, [(SEED, SEED_PARAM), *node.params.items()], row)
+
+    def _grouped_params(self, node, items, row):
+        """A node's parameters (`items`: [(name, Param)]): the ungrouped ones first, then each group of the node
+        (`Param.group`, "/" separating sub groups) under its own collapsible title, sub groups nested in it.
+        `row(form, name, param)` adds a parameter's row. A group collapsed stays so for that node type."""
+        from trafilatura3d.editor.params_ui import grouped
+        root = QFormLayout()
+        self.lay.addLayout(root)
+        forms = {(): root}
+        for path, (name, prm) in grouped(items, lambda it: it[1].group):
+            for depth in range(1, len(path) + 1):
+                if path[:depth] not in forms:
+                    forms[path[:depth]] = self._param_group(node.type, path[:depth], forms[path[:depth - 1]])
+            row(forms[path], name, prm)
+        # one label column for all the groups: the editors line up from a group to the next
+        labels = [f.itemAt(i, QFormLayout.LabelRole).widget() for f in forms.values() for i in range(f.rowCount())
+                  if f.itemAt(i, QFormLayout.LabelRole) is not None]
+        width = max((lb.sizeHint().width() for lb in labels), default=0)
+        for lb in labels:
+            lb.setMinimumWidth(width)
+
+    def _param_group(self, node_type, path, parent):
+        """A collapsible parameter group: its title (a section of the panel at the top level, indented below)
+        and the form of its rows; returns the form."""
+        key = (node_type, path)
+        is_open = key not in self._closed
+        title = QPushButton()
+        title.setCheckable(True)
+        title.setChecked(is_open)
+        title.setStyleSheet(f"QPushButton {{ font-weight: 600; text-align: left; border: none; border-radius: 0;"
+                            f" background: transparent; padding: 8px 0 4px {12 * (len(path) - 1)}px; }}")
+        body = QWidget()
+        form = QFormLayout(body)
+        form.setContentsMargins(0, 0, 0, 4)
+        body.setVisible(is_open)
+
+        def toggled(on):
+            body.setVisible(on)
+            title.setText(("▾  " if on else "▸  ") + path[-1])
+            (self._closed.discard if on else self._closed.add)(key)
+        title.toggled.connect(toggled)
+        title.setText(("▾  " if is_open else "▸  ") + path[-1])
+        if len(path) == 1:
+            title.setProperty("section", True)  # the panel draws the divider under it, edge to edge
+            self.lay.addWidget(title)
+            self.lay.addWidget(body)
+        else:
+            parent.addRow(title)
+            parent.addRow(body)
+        return form

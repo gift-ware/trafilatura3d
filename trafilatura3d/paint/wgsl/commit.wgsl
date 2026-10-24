@@ -10,11 +10,14 @@
 // layer in `dst` + 1 (0: no page, the Eraser over nothing). A Smudge reads what it had from `before` instead
 // (whole: the state before each stamp).
 
+// Blended (`mode.y` >= 0, Polygon Fill's Blending): the value is first combined with what the texel held in that
+// blending mode (blend_lib.wgsl, prepended: the layer stack's rules for the channel), then laid as above.
 struct Uniforms {
     value: vec4f,   // the value painted (RGB; grayscale channels repeat it), A: the stencil applies (1)
-    params: vec4f,  // stroke opacity, erase (1), per texel value (1), protected by `limit` (1)
+    params: vec4f,  // stroke opacity (blended: the blending's), erase (1), per texel value (1), protected by `limit` (1)
     area: vec4u,    // the pass's corner (x, y), page side, pages per row
-    mode: vec4f,    // x: what the pages had is in `before` (Smudge)
+    mode: vec4f,    // x: what the pages had is in `before` (Smudge); y: blending mode or -1; z: its flags (1 linear,
+                    // 2 clamped, 4 normal)
 };
 @group(0) @binding(0) var<uniform> u: Uniforms;
 @group(0) @binding(1) var before: texture_2d<f32>;
@@ -29,13 +32,18 @@ struct Uniforms {
 @group(0) @binding(8) var<storage, read> table: array<vec2u>;
 const IS_TWO = TWO_ENTRY;
 
-fn lay(b: vec4f, c: vec2i) -> vec4f {
+fn commit_value(b: vec4f, c: vec2i) -> vec4f {
     var k = min(textureLoad(stroke, c, 0).r, u.params.x);
     var value = u.value.rgb;
     if (u.params.z > 0.5) {
         let s = textureLoad(src, min(c, vec2i(textureDimensions(src)) - 1), 0);
         value = s.rgb;
         k *= s.a;
+    }
+    if (u.mode.y >= 0.0 && b.a > 1e-6) {  // over nothing painted the value goes in as it is
+        let f = u32(u.mode.z);
+        value = lay(vec4f(b.rgb, 1.0), vec4f(value, 1.0), 1.0, i32(u.mode.y), 1.0, (f & 1u) != 0u, (f & 2u) != 0u,
+                    (f & 4u) != 0u, false).rgb;
     }
     if (u.params.w > 0.5) {
         k *= 1.0 - clamp(textureLoad(limit, min(c, vec2i(textureDimensions(limit)) - 1), 0).r, 0.0, 1.0);
@@ -66,7 +74,7 @@ fn main(@builtin(global_invocation_id) id: vec3u) {
         b = textureLoad(saved, c % size, i32(page.x) - 2, 0);
         if (IS_TWO) { b = b.rrrg; }
     }
-    var o = lay(b, c);
+    var o = commit_value(b, c);
     if (IS_TWO) { o = vec4f(o.r, o.a, 0.0, 0.0); }
     textureStore(dst, c % size, i32(page.y) - 1, o);
 }
