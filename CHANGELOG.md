@@ -60,6 +60,32 @@
 - Plugins: `edit()` works on the Paint project, `save(document, path)` saves at a new path.
 - MCP: `focus(node)` shows a node to the person at the editor.
 
+### Fixed
+
+- Selecting or moving nodes stalled the interface for up to 1.4 s while a cook ran.
+- Opening a package froze the window until the whole graph was cooked.
+- Selecting a Levels node stalled while its histogram was cooked.
+- Dragging a value of a node feeding nothing shown recooked the whole graph at the preview resolution.
+- The 2D View fitted the image again (losing the zoom) at every parameter change during a drag.
+- A link could not be connected to a Dot's input, only from its output.
+- A drag inside a frame moved the frame instead of drawing a selection box; frames resized only from their
+  bottom-right corner.
+- Shift did not add nodes to the selection.
+- The view did not scroll at its border while nodes, Dots or frames were dragged.
+- A linked resource (a mesh, a bitmap) could not be removed from a package.
+- A graph's instances kept an input renamed or removed in the graph, and reported a parameter it no longer has.
+- Shadows came out grey all over a continuous heightmap; Normal To Height HQ clipped at 0 and 1.
+- Moving a project or a package broke its baking paths (high meshes, cage, output folder): they are stored relative
+  to the document.
+- The About box and the status bar showed version 0.1.1.
+
+### Breaking changes
+
+- `import_sbs` has no `base` argument: imported files are referenced by absolute paths, gathered into the package's
+  dependency folder when it is saved.
+- Saving a package now copies the files it uses from outside its folder into `dependencies/<package name>/` and
+  rewrites their paths relative to it.
+
 ## 0.2.0 — 24 October 2026
 
 - Project libraries (shaders, export presets, materials, smart materials) declared by the project file and read by
