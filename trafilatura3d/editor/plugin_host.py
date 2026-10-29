@@ -88,6 +88,9 @@ class EditorAccess(plugins.EditorAccess):
         if not saved:
             raise OSError(f"{document.path.name if document.path else 'the document'} could not be saved")
 
+    def show_scene(self, package, resource_id):
+        self.window.show_scene(package, resource_id)
+
     def remove_all(self):
         for menu, action in self.actions:
             menu.removeAction(action)

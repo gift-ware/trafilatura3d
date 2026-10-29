@@ -2331,25 +2331,35 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.assertEqual(seen, [[1.0, 1.0, 1.0, 0.4]])
 
     def test_autosave(self):
-        """Backups next to the saved project, the project's own path untouched, the oldest slot replaced, no
-        backup when nothing changed."""
+        """Backups in the .autosave folder next to the saved project (the Graph's convention: <name>_<date>_<time>),
+        the project's own path untouched, the last `files` kept (another project's left alone), no backup when nothing
+        changed."""
+        from unittest import mock
+        from trafilatura3d.editor import backups
         from trafilatura3d.editor.paint import autosave
         auto = self.ws.autosave
         autosave.set_setting("files", 2)
         self.addCleanup(lambda: [autosave.set_setting(k, v) for k, v in autosave.DEFAULTS.items()])
         path = self.dir / "proj.trafilatura3dpaint"
         self.ws.doc.save(path)
-        self.ws.layers.add_layer("fill")
-        first = auto.save_now()
-        self.assertEqual(first, self.dir / "proj_autosave_1.trafilatura3dpaint")
-        self.assertEqual(self.ws.doc.session.path, path)
-        self.assertFalse(auto._changed(self.ws.doc))
-        self.ws.layers.add_layer("fill")
-        self.assertTrue(auto._changed(self.ws.doc))
-        self.assertEqual(auto.save_now().name, "proj_autosave_2.trafilatura3dpaint")
-        import os
-        os.utime(first, (1, 1))  # the oldest
-        self.assertEqual(auto.save_now(), first)
+        folder = self.dir / ".autosave"
+        folder.mkdir()
+        (folder / "proj_x_20260101_000000.trafilatura3dpaint").write_text("{}")  # another project's: stays
+        stamps, strftime = iter(["20261030_100000", "20261030_100100", "20261030_100200"]), backups.time.strftime
+        with mock.patch.object(backups.time, "strftime",  # the autosaves' stamps only (the Log has its own)
+                               lambda fmt, *a: next(stamps) if fmt == "%Y%m%d_%H%M%S" else strftime(fmt, *a)):
+            self.ws.layers.add_layer("fill")
+            first = auto.save_now()
+            self.assertEqual(first, folder / "proj_20261030_100000.trafilatura3dpaint")
+            self.assertEqual(self.ws.doc.session.path, path)
+            self.assertFalse(auto._changed(self.ws.doc))
+            self.ws.layers.add_layer("fill")
+            self.assertTrue(auto._changed(self.ws.doc))
+            auto.save_now()
+            auto.save_now()  # a third: the oldest goes
+        self.assertEqual(sorted(p.name for p in folder.iterdir()),
+                         ["proj_20261030_100100.trafilatura3dpaint", "proj_20261030_100200.trafilatura3dpaint",
+                          "proj_x_20260101_000000.trafilatura3dpaint"])
         auto.due = 0.0  # due and nothing changed: no save, the timer restarts
         auto._tick()
         self.assertGreater(auto.due, 0.0)

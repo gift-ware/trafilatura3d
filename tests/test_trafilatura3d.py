@@ -549,7 +549,7 @@ class Diagnostics(unittest.TestCase):
             self.assertNotIn("Linked file not found", [x.message for x in package_warnings(pkg).get("", [])])
 
     def test_save_gathers_files_into_dependencies(self):
-        """Saving copies the files from elsewhere into dependencies/<package name>/ next to the package (once per
+        """Saving copies the files from elsewhere into <package name>.dependencies/ next to the package (once per
         file, another file of the same name numbered), keeps the ones already beside it, and writes every path
         relative; a missing file and a project alias stay as written. Save As somewhere else, or under another name,
         takes the files along into the new package's own folder."""
@@ -573,17 +573,17 @@ class Diagnostics(unittest.TestCase):
             pkg.resources["shared"] = Resource("bitmap", "alias://lib/stone.png")
             pkg.save(d / "pkg" / "p.trafilatura3d")
             params = [g.nodes[n].params["pkg_resource_path"] for n in (n1, n2, n3)]
-            self.assertEqual(params, ["dependencies/p/rock.png", "dependencies/p/rock_2.png", str(d / "missing.png")])
+            self.assertEqual(params, ["p.dependencies/rock.png", "p.dependencies/rock_2.png", str(d / "missing.png")])
             self.assertEqual({k: r.path for k, r in pkg.resources.items()},
-                             {"rock": "dependencies/p/rock.png", "baked": "maps/baked.png",
+                             {"rock": "p.dependencies/rock.png", "baked": "maps/baked.png",
                               "shared": "alias://lib/stone.png"})
-            self.assertEqual((d / "pkg" / "dependencies" / "p" / "rock_2.png").read_bytes(), b"b")
+            self.assertEqual((d / "pkg" / "p.dependencies" / "rock_2.png").read_bytes(), b"b")
             pkg.save(d / "pkg" / "q.trafilatura3d")  # another name beside it: its own copies, not p's
             self.assertEqual((pkg.resources["rock"].path, pkg.resources["baked"].path),
-                             ("dependencies/q/rock.png", "maps/baked.png"))
+                             ("q.dependencies/rock.png", "maps/baked.png"))
             pkg.save(d / "elsewhere" / "q.trafilatura3d")  # Save As: the relative files resolve from the old place
-            self.assertEqual(pkg.resources["baked"].path, "dependencies/q/baked.png")
-            self.assertEqual(sorted(p.name for p in (d / "elsewhere" / "dependencies" / "q").iterdir()),
+            self.assertEqual(pkg.resources["baked"].path, "q.dependencies/baked.png")
+            self.assertEqual(sorted(p.name for p in (d / "elsewhere" / "q.dependencies").iterdir()),
                              ["baked.png", "rock.png", "rock_2.png"])
 
     def test_every_instance_of_a_graph_with_warnings_says_so(self):

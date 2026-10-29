@@ -10,7 +10,7 @@ A document may be incomplete while it is edited: unconnected inputs read their d
 Everything else is always valid: loading refuses broken documents, every edit checks first.
 
 The files a saved package uses live next to it: saving copies the ones from elsewhere into its own
-folder `dependencies/<package name>/` and writes every path relative to the package.
+folder `<package name>.dependencies/` and writes every path relative to the package.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ from trafilatura3d.nodes.base import EDITORS, Input, Node, Output, Param, ParamK
 
 FORMAT_VERSION = 2
 SUFFIX = ".trafilatura3d"  # a package file
-DEPENDENCIES = "dependencies"  # next to saved packages: one folder per package (its name) with the files it uses
+DEPENDENCIES = ".dependencies"  # next to a saved package, <its name>.dependencies: the files it uses from elsewhere
 RESOURCE_NODES = {"bitmap": "pkg_resource_path", "svg": "pkg_resource_path"}  # node type -> its file parameter
 FONT_SUFFIXES = (".ttf", ".otf", ".ttc")  # a Text node's font given as a file (else a system font's name)
 INSTANCE = "graph_instance"
@@ -833,7 +833,7 @@ class Package:
         folder. Alias paths and missing files stay as written."""
         from trafilatura3d.project import alias_of
         folder = target.parent.resolve()
-        own, shared = dependency_folder(folder / target.name), folder / DEPENDENCIES
+        own = dependency_folder(folder / target.name)
         placed: dict[Path, str] = {}
         for ref in self.file_references():
             if alias_of(ref.path):
@@ -847,7 +847,9 @@ class Package:
             if not p.is_file():
                 continue
             if p not in placed:
-                kept = p.is_relative_to(folder) and (not p.is_relative_to(shared) or p.is_relative_to(own))
+                theirs = next((a for a in p.parents if a.name.endswith(DEPENDENCIES) and a.is_relative_to(folder)),
+                              None)  # the dependency folder holding it, if any
+                kept = p.is_relative_to(folder) and theirs in (None, own)  # not in another package's dependencies
                 at = p if kept else _dependency_copy(p, own)
                 placed[p] = os.path.relpath(at, folder).replace(os.sep, "/")
             if ref.path != placed[p]:
@@ -876,8 +878,9 @@ class Package:
 
 
 def dependency_folder(package_file: Path) -> Path:
-    """The folder of the files a package saved at `package_file` uses from elsewhere."""
-    return package_file.parent / DEPENDENCIES / package_file.stem
+    """The folder of the files a package saved at `package_file` uses from elsewhere: <its name>.dependencies next
+    to it."""
+    return package_file.parent / (package_file.stem + DEPENDENCIES)
 
 
 def _dependency_copy(src: Path, folder: Path) -> Path:

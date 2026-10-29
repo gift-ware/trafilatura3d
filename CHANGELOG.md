@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.0 — 30 October 2026
+
+### New
+
+- Plugins: `show_scene(package, resource_id)` shows a package's 3D scene resource in the 3D View (as a double click on
+  it in the Explorer).
+
+### Breaking changes
+
+- A package's dependency folder is `<package name>.dependencies/` next to it (it was `dependencies/<package name>/`):
+  one folder per package, beside it. Files left in an old folder stay linked where they are.
+- Paint autosaves follow the Graph's convention: `.autosave/<project>_<date>_<time>.trafilatura3dpaint` next to the
+  project (they were `<project>_autosave_<n>` beside it), the last ones kept; cleaning a document's autosaves leaves
+  those of another document whose name starts the same.
+
 ## 0.3.0 — 29 October 2026
 
 ### The interface never waits

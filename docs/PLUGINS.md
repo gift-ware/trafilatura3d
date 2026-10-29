@@ -68,6 +68,8 @@ error in a handler is reported and ignored: a plugin never stops Trafilatura 3D.
 - `save(document, path=None)`: save an open package or the Paint project (`session`) as Save does, at `path` as
   Save As does without asking (the unsaved marks cleared);
   raises `OSError` when it could not be saved. From the command line there is no editor: `package.save()`.
+- `show_scene(package, resource_id)`: a 3D scene resource of the package in the 3D View (as a double click on it in
+  the Explorer).
 
 Everything added is removed when the plugin is unloaded (disabled or reloaded in the Plugin Manager).
 The command line loads plugins too (`--no-plugins` skips them, `trafilatura3d plugins` lists them).

@@ -392,8 +392,8 @@ class ImportTest(unittest.TestCase):
         n = pkg.graphs["main"].nodes["text1"]
         self.assertEqual(Path(n.params["font"]), found[0])
         pkg.save(out / "main.trafilatura3d")
-        self.assertEqual(n.params["font"], f"dependencies/main/{found[0].name}")
-        self.assertTrue((out / "dependencies" / "main" / found[0].name).is_file())
+        self.assertEqual(n.params["font"], f"main.dependencies/{found[0].name}")
+        self.assertTrue((out / "main.dependencies" / found[0].name).is_file())
         self.assertEqual((n.params["font_size"], n.params["alignment"], n.params["position"],
                           n.params["transformation"]), (0.1, "Left", [0.1, -0.2], [2.0, 0.0, 0.0, 1.0]))
         self.assertEqual(report.params_unmapped, 0)
@@ -434,8 +434,8 @@ class ImportTest(unittest.TestCase):
         self.assertEqual(Path(n.params["pkg_resource_path"]).read_bytes(), svg)
         pkg.save(self.dir / "out" / "svg.trafilatura3d")
         self.assertEqual((n.params["pkg_resource_path"], pkg.resources["Logo"].path),
-                         ("dependencies/svg/Logo.svg", "dependencies/svg/Logo.svg"))
-        self.assertEqual((self.dir / "out" / "dependencies" / "svg" / "Logo.svg").read_bytes(), svg)
+                         ("svg.dependencies/Logo.svg", "svg.dependencies/Logo.svg"))
+        self.assertEqual((self.dir / "out" / "svg.dependencies" / "Logo.svg").read_bytes(), svg)
         self.assertEqual(pkg.resources["Logo"].kind, "svg")
 
     def test_bitmap_fxmap_pixel_processor_gradient(self):

@@ -163,8 +163,7 @@ class MainWindow(QMainWindow):
         self.view3d.title_changed.connect(lambda t: self._title("view3d", t))
         self.view3d.show_uvs.connect(lambda d: (self.view2d.set_uvs(d), self.docks["view2d"].show(),
                                                 self.docks["view2d"].raise_()))
-        self.explorer.open_scene.connect(lambda p, r: (self.view3d.load_resource(p, r), self.docks["view3d"].show(),
-                                                       self.docks["view3d"].raise_()))
+        self.explorer.open_scene.connect(self.show_scene)
         self.view3d.settings_requested.connect(lambda *a: (self.properties.show_settings(*a),
                                                            self.docks["properties"].show(),
                                                            self.docks["properties"].raise_()))
@@ -636,6 +635,12 @@ class MainWindow(QMainWindow):
             self.show_paint() if self.paint.doc is not None else self.show_home()
         return True
 
+    def show_scene(self, pkg, rid):
+        """A package's 3D scene resource in the 3D View, its dock shown (the Explorer's double click, plugins)."""
+        self.view3d.load_resource(pkg, rid)
+        self.docks["view3d"].show()
+        self.docks["view3d"].raise_()
+
     def _graph_shown(self, pkg, gid):
         from trafilatura3d.editor import preferences
         if preferences.get("outputs_3d_on_open"):
@@ -683,21 +688,16 @@ class MainWindow(QMainWindow):
 
     def _auto_backup(self):
         """Auto Backup: unsaved packages copied to an .autosave folder next to them, keeping
-        the last N versions."""
-        import time
+        the last N versions (`backups`: the Paint's autosaves follow the same convention)."""
+        from trafilatura3d.editor import backups
         from trafilatura3d.editor import preferences as prefs
         keep = prefs.get("auto_backup_versions")
         for pkg in self.doc.packages:
             if id(pkg) not in self.doc.dirty or pkg.path is None:
                 continue
-            folder = pkg.path.parent / ".autosave"
             try:
-                folder.mkdir(exist_ok=True)
-                target = folder / f"{pkg.path.stem}_{time.strftime('%Y%m%d_%H%M%S')}{SUFFIX}"
+                target = backups.backup_path(pkg.path.parent / backups.FOLDER, pkg.path.stem, SUFFIX, keep)
                 target.write_text(json.dumps(pkg.to_dict(), indent=2) + "\n", encoding="utf-8")
-                old = sorted(folder.glob(f"{pkg.path.stem}_*{SUFFIX}"))
-                for f in old[:-keep]:
-                    f.unlink()
             except OSError as e:
                 self.status(f"Auto-backup: {e}")
 

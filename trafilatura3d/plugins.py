@@ -92,6 +92,10 @@ class EditorAccess(ABC):
         shown why)."""
 
     @abstractmethod
+    def show_scene(self, package, resource_id: str) -> None:
+        """Show a package's 3D scene resource in the 3D View, as a double click on it in the Explorer does."""
+
+    @abstractmethod
     def remove_all(self) -> None:
         """Remove what this plugin added (called on unload)."""
 

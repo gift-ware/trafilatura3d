@@ -1,13 +1,13 @@
 """The Autosave plugin (Autosave plugin page): periodic copies of the open project, which itself is not saved. Plugins > Autosave > Disable / Configure; before a save, for the warning time, a progress bar and a
 Snooze button (Snooze delays the save by the snooze interval).
 
-The copies are written beside the project file; an untitled project's go to the user's Documents folder (`Trafilatura 3D/autosave`,
-ours), or to the folder of "Always save in the
-following directory". The timer does not run while a modal window is open (the configuration, the export) and
+The copies are written into the .autosave folder next to the project file, as the Graph's packages' (`backups`); an
+untitled project's go to the user's Documents folder (`Trafilatura 3D/autosave`, ours), or to the folder of "Always save
+in the following directory". The timer does not run while a modal window is open (the configuration, the export) and
 skips a save when nothing changed since the last backup (ours).
 
 Ours, the documentation gives none: the defaults (10 min, 3 files, 5 min snooze, 10 s warning) and the file
-names, `<project>_autosave_<n>.trafilatura3dpaint` (the oldest is replaced).
+names, `<project>_<date>_<time>.trafilatura3dpaint` (the oldest beyond the number kept is removed).
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDialog, QDialogButtonBo
                                QFormLayout, QHBoxLayout, QLabel, QLineEdit, QProgressBar, QPushButton, QSpinBox,
                                QToolButton, QWidget)
 
+from trafilatura3d.editor import backups
 from trafilatura3d.paint.session import PROJECT_SUFFIX
 
 KEY = "paint/autosave/"
@@ -44,18 +45,17 @@ def documents_folder() -> Path:
 
 
 def backup_folder(project_path) -> Path:
+    """The .autosave folder next to the project (`backups`, as the Graph's packages); the directory of "Always save
+    in the following directory", or the Documents one for an untitled project: folders of their own."""
     if setting("always") and setting("directory"):
         return Path(setting("directory"))
-    return Path(project_path).parent if project_path else documents_folder()
+    return Path(project_path).parent / backups.FOLDER if project_path else documents_folder()
 
 
 def backup_path(project_path, mesh: str) -> Path:
-    """The file the next backup goes to: a free slot, else the oldest of the `files` slots."""
+    """The file the next backup goes to (`backups.backup_path`: the last `files` kept)."""
     stem = Path(project_path).stem if project_path else (Path(mesh).stem or "untitled")
-    folder = backup_folder(project_path)
-    slots = [folder / f"{stem}_autosave_{k}{PROJECT_SUFFIX}" for k in range(1, max(setting("files"), 1) + 1)]
-    free = [p for p in slots if not p.exists()]
-    return free[0] if free else min(slots, key=lambda p: p.stat().st_mtime)
+    return backups.backup_path(backup_folder(project_path), stem, PROJECT_SUFFIX, setting("files"))
 
 
 class Autosave(QWidget):
@@ -128,7 +128,6 @@ class Autosave(QWidget):
         path = backup_path(s.path, doc.project.mesh)
         keep = s.path
         try:
-            path.parent.mkdir(parents=True, exist_ok=True)
             s.save(path)
         except OSError as e:
             self.ws.log(f"Autosave failed: {e}", error=True)
