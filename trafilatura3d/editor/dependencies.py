@@ -89,6 +89,7 @@ class DependencyManager(QDialog):
         if not path:
             return
         self.doc.edit(self.pkg, "Relocate dependency", lambda: relocate(self.pkg, d.path, path))
+        self.doc.check(self.pkg)  # the files it found: their warnings gone
         self.fill()
 
     def _reload(self):
@@ -115,6 +116,7 @@ def reload_package(document, package, parent=None):
     package._external.clear()
     document.dirty.discard(id(package))
     document.undo.clear()
+    document.check(package)  # loaded again: what is wrong in it, as when it opens
     document.changed.emit(package)
     document.packages_changed.emit()
 

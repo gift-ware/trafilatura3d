@@ -5,16 +5,19 @@ Results are kept up to a memory budget, least recently used first out."""
 
 from __future__ import annotations
 
-import queue
-import threading
+import itertools
 import time
+from abc import ABC, abstractmethod
 from collections import OrderedDict
+from concurrent.futures import Future
+from concurrent.futures import wait as futures_wait
 from types import GeneratorType
 from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
 import wgpu
+from wgpu.backends.wgpu_native._api import ffi, lib, libf, new_struct
 from wgpu.backends.wgpu_native.extras import write_timestamp
 
 from trafilatura3d.nodes.base import LUT_SIZE, WORKGROUP, Node, ParamKind, PortType, Variant, two_channels
@@ -54,6 +57,7 @@ def storage_formats(features) -> dict[str, str]:
 
 HALO = 8  # texels computed around a region (recook_region): what the pointwise nodes read around a texel, and more
 POOL_MID_COOK = 512 << 20  # the free textures a cook keeps for its next jobs before giving them back
+HISTOGRAMS_KEPT = 16  # the histograms remembered (`histogram_steps`)
 PREVIEW = "preview"
 PARTITION_SHARE = {"": 1.0, PREVIEW: 0.25}  # each partition's budget, of `Evaluator.budget`
 
@@ -523,34 +527,69 @@ def _chains(schedule: list[Job], wanted: set) -> dict:
     return {k: c for k, c in chains.items() if len(c) > 1}
 
 
-class Fence:
-    """The GPU work submitted before it, asked whether done without waiting (`Evaluator.fence`): a helper thread waits
-    for the mapping of a 4 byte buffer copied after that work, then sets `_event`."""
+_FENCES: dict[int, Fence] = {}  # the fences whose work the GPU has not reported done yet, by id (`_work_done`)
+_FENCE_IDS = itertools.count(1)
 
-    def __init__(self, buffer, event: threading.Event):
-        self._buffer, self._event = buffer, event
+
+@ffi.callback("void(WGPUQueueWorkDoneStatus, WGPUStringView, void *, void *)")
+def _work_done(status, message, fence_id, _unused):
+    """The GPU's report that the work submitted before a fence is done, on the thread that polled the device (a
+    failure too: a lost device has no work left to wait for)."""
+    fence = _FENCES.pop(int(ffi.cast("uintptr_t", fence_id)), None)
+    if fence is not None:
+        fence._done = True
+
+
+class Wait(ABC):
+    """What a cook in steps waits for (`Evaluator.cook_steps` yields it): its caller lets the event loop run, asks
+    `done()` without waiting and resumes the cook then; `run` waits for it."""
+
+    @abstractmethod
+    def done(self) -> bool: ...
+
+    @abstractmethod
+    def wait(self) -> None: ...
+
+
+class Pending(Wait):
+    """A node's CPU work done in another process (a `concurrent.futures.Future`: resvg holds Python's lock for its
+    whole render, the interface stopped meanwhile)."""
+
+    def __init__(self, future: Future):
+        self._future = future
 
     def done(self) -> bool:
-        if not self._event.is_set():
-            return False
-        if self._buffer is not None:
-            self._buffer.destroy()
-            self._buffer = None
-        return True
+        return self._future.done()
 
     def wait(self) -> None:
-        self._event.wait()
-        self.done()
+        futures_wait([self._future])
 
 
-def _waiter(waits: queue.Queue) -> None:
-    """The fences' helper thread: each mapping waited for, its event set (`Fence`)."""
-    while True:
-        promise, event = waits.get()
-        try:
-            promise.sync_wait()
-        finally:
-            event.set()
+class Fence(Wait):
+    """The GPU work submitted before it, asked whether done without waiting (`Evaluator.fence`): the queue reports
+    that work done (a callback, `_work_done`) when the device is polled, here without waiting.
+
+    Not a wgpu promise (a mapping, `on_submitted_work_done_async`): wgpu's poll thread waits for a pending one holding
+    the device, and every submit, texture or destroy of the interface thread waited behind it for the whole GPU work
+    (a 3D View frame, a selection's histogram: up to 1.4 s each while a cook ran). Not "the queue is empty" either: a
+    fence then stays open while later work keeps the queue busy, and cooks in steps waited for each other."""
+
+    def __init__(self, device):
+        self._device, self._done = device, False
+        fence_id = next(_FENCE_IDS)
+        _FENCES[fence_id] = self
+        libf.wgpuQueueOnSubmittedWorkDone(device.queue._internal, new_struct(
+            "WGPUQueueWorkDoneCallbackInfo", mode=lib.WGPUCallbackMode_AllowProcessEvents, callback=_work_done,
+            userdata1=ffi.cast("void *", fence_id)))
+
+    def done(self) -> bool:
+        if not self._done:
+            libf.wgpuDevicePoll(self._device._internal, False, ffi.NULL)  # reports the work done since
+        return self._done
+
+    def wait(self) -> None:
+        while not self._done:
+            libf.wgpuDevicePoll(self._device._internal, True, ffi.NULL)
 
 
 def _sources(job: Job) -> list[Job]:
@@ -559,14 +598,14 @@ def _sources(job: Job) -> list[Job]:
 
 
 def run(steps):
-    """A generator of steps (`Evaluator.cook_steps`) run to its end, now (each fence it gives waited for): its return
+    """A generator of steps (`Evaluator.cook_steps`) run to its end, now (each `Wait` it gives waited for): its return
     value."""
     while True:
         try:
             step = next(steps)
         except StopIteration as done:
             return done.value
-        if isinstance(step, Fence):
+        if isinstance(step, Wait):
             step.wait()
 
 
@@ -631,9 +670,8 @@ class Evaluator:
         self._held: dict[str, set[str]] = {}  # owner -> keys whose textures it uses outside the cooks (`hold`)
         self._counted: set[str] = set()  # the owners whose held results count in the budget
         self._fence = None  # a texel read to wait for the GPU (`wait`)
+        self._histograms: OrderedDict = OrderedDict()  # (job key, output) -> histogram (`histogram_steps`)
         self._inflight = None  # the cook `cook_steps` is running, between two of its steps
-        self._waits: queue.Queue | None = None  # the fences' helper thread's queue (`fence`)
-        self._fence_src = None
         # Per-node timings: with `timing` on, the time of each job cooked goes in `timings` (job key -> milliseconds,
         # its last cook). GPU timestamps around its work where they work (some devices report them and give zeros),
         # else the job is submitted alone and waited for, less the wait of an idle GPU: much slower cooks.
@@ -765,6 +803,10 @@ class Evaluator:
                 self._uploads.clear()
             self._uploads[key] = t
         return self._uploads[key]
+
+    def uploaded(self, key: str) -> bool:
+        """Whether `upload` has the texture of `key` (its image need not be made again)."""
+        return key in self._uploads
 
     def texture(self, job: Job, output: str):
         """The texture of a job's output (allocated when the job is being cooked)."""
@@ -908,7 +950,7 @@ class Evaluator:
                 job.node.encode_fused(ctx, chains[job.key])
             else:
                 work = job.node.encode(ctx, job)
-                if isinstance(work, GeneratorType):  # a node waiting for its own GPU work (a read back): its fences
+                if isinstance(work, GeneratorType):  # a node waiting for its own work (a read back, a process)
                     if turns:
                         yield from work
                     else:
@@ -978,20 +1020,10 @@ class Evaluator:
                                        (1, 1, 1))
 
     def fence(self) -> Fence:
-        """The work submitted so far, asked whether done without waiting (`Fence`): a 4 byte copy after it into a
-        buffer whose mapping a helper thread waits for. What lets a cook in steps give the event loop the time the GPU
-        works (waiting for it on the interface thread stalled it for tens to hundreds of milliseconds a job)."""
-        if self._waits is None:
-            self._waits = queue.Queue()
-            threading.Thread(target=_waiter, args=(self._waits,), daemon=True).start()
-            self._fence_src = self.device.create_buffer(size=4, usage=wgpu.BufferUsage.COPY_SRC)
-        buffer = self.device.create_buffer(size=4, usage=wgpu.BufferUsage.MAP_READ | wgpu.BufferUsage.COPY_DST)
-        encoder = self.device.create_command_encoder()
-        encoder.copy_buffer_to_buffer(self._fence_src, 0, buffer, 0, 4)
-        self.device.queue.submit([encoder.finish()])
-        event = threading.Event()
-        self._waits.put((buffer.map_async("READ"), event))
-        return Fence(buffer, event)
+        """The work submitted so far, asked whether done without waiting (`Fence`). What lets a cook in steps give the
+        event loop the time the GPU works (waiting for it on the interface thread stalled it for tens to hundreds of
+        milliseconds a job)."""
+        return Fence(self.device)
 
     def timestamps_work(self) -> bool:
         """Whether this device's GPU timestamps measure anything, probed once on a small busy pass (some report the
@@ -1198,8 +1230,24 @@ class Evaluator:
     def histogram(self, job: Job, output: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """A job output's histogram on the GPU, over every texel, cooked if needed: (counts (BINS, 4) per channel of
         the values in 0-1, those outside in the end bins; minimum (4,); maximum (4,)). A grayscale output is read as
-        (v, v, v, 1)."""
+        (v, v, v, 1). Waits for the GPU: the interface uses `histogram_steps`."""
+        return run(self.histogram_steps(job, output))
+
+    def histogram_known(self, job: Job, output: str):
+        """The histogram of a job output computed before (`histogram_steps`), or None."""
+        stats = self._histograms.get((job.key, output))
+        if stats is not None:
+            self._histograms.move_to_end((job.key, output))
+        return stats
+
+    def histogram_steps(self, job: Job, output: str):
+        """`histogram` as a generator, a step per wait for the GPU (its cook's, `cook_steps`, then the result's), read
+        back once the GPU is done: nothing waits. The last HISTOGRAMS_KEPT are remembered (a panel rebuilt after each
+        edit asks again for the same image)."""
         from trafilatura3d.nodes.histogram import BINS, GROUPS, HISTOGRAM
+        known = self.histogram_known(job, output)
+        if known is not None:
+            return known
         rows = min(GROUPS, job.size[1])
         made = {}
 
@@ -1208,15 +1256,23 @@ class Evaluator:
             ctx.dispatch(HISTOGRAM, target, {}, srcs={"image": (self.texture(target, output), target.is_gray(output))},
                          dsts={"output": t}, size=(WORKGROUP * rows, WORKGROUP))
 
-        self.cook([job], each=histogram)
-        t = made["t"]
-        row = (t.width * 16 + 255) // 256 * 256
-        data = self.device.queue.read_texture({"texture": t, "origin": (0, 0, 0)}, {"bytes_per_row": row},
-                                              (t.width, t.height, 1))
-        self.pool.release(t)
+        try:
+            yield from self.cook_steps([job], each=histogram)
+            yield self.fence()  # read back once the GPU is done: reading earlier waits for it on this thread
+            t = made["t"]
+            row = (t.width * 16 + 255) // 256 * 256
+            data = self.device.queue.read_texture({"texture": t, "origin": (0, 0, 0)}, {"bytes_per_row": row},
+                                                  (t.width, t.height, 1))
+        finally:  # also when abandoned at a step
+            if "t" in made:
+                self.pool.release(made.pop("t"))
         texels = np.frombuffer(data, np.float32).reshape(t.height, row // 4)[:, :t.width * 4].reshape(
             t.height, t.width, 4)
-        return texels[:, :BINS].sum(axis=0), texels[:, BINS].min(axis=0), texels[:, BINS + 1].max(axis=0)
+        stats = texels[:, :BINS].sum(axis=0), texels[:, BINS].min(axis=0), texels[:, BINS + 1].max(axis=0)
+        self._histograms[job.key, output] = stats
+        while len(self._histograms) > HISTOGRAMS_KEPT:
+            self._histograms.popitem(last=False)
+        return stats
 
     # --- cache --------------------------------------------------------------------------------
 

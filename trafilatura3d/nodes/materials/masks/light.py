@@ -4,8 +4,9 @@ from trafilatura3d.nodes.materials.masks._common import WSN, MaskNode
 
 class Light(MaskNode):
     """Fake lighting from the World Space Normal map: a directional light (Horizontal Angle in
-    turns around the up axis, Vertical Angle from the horizon at 0 to the zenith at 1), Lambert
-    shading plus a highlight whose spread is Highlight Glossiness."""
+    turns around the up axis, from -X at 0 through +Z at 0.25; Vertical Angle in turns around the
+    horizontal, horizon at 0, zenith at 0.25, opposite horizon at 0.5), a half-Lambert term
+    windowed by Highlight Glossiness (start) and Highlight Level (how close the end comes)."""
 
     type = "light"
     label = "Light"

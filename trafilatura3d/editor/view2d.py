@@ -221,7 +221,16 @@ class Viewport(Canvas):
             w, h = self.get_physical_size()
             uw, uh = self.unit()
             ext = self.extent()
-            if self.zoom is None or self._fitted != ext:
+            old = self._fitted
+            kx = (ext[2] - ext[0]) / (old[2] - old[0]) if old else 0.0
+            ky = (ext[3] - ext[1]) / (old[3] - old[1]) if old else 0.0
+            if self.zoom is not None and old and old != ext and kx > 0 and abs(kx - ky) < 1e-6 * kx:
+                # the same image at another resolution (a dragged value's preview, its full size back): the same part
+                # of it stays on view at the same place (fitting it again lost the zoom of every tweak)
+                self.zoom /= kx
+                self.center = (ext[0] + (self.center[0] - old[0]) * kx, ext[1] + (self.center[1] - old[1]) * kx)
+                self._fitted = ext
+            elif self.zoom is None or old != ext:
                 self.zoom = min(w / (ext[2] - ext[0]), h / (ext[3] - ext[1])) * 0.9
                 self.center = ((ext[0] + ext[2]) / 2, (ext[1] + ext[3]) / 2)
                 self._fitted = ext
@@ -580,11 +589,16 @@ class View2D(QWidget):
 
     def copy_image(self):
         job, out = self.source()
-        if job is None:
+        if job is None or self.doc.live is None:
             return
-        img = self.doc.ev.thumbnails([(job, out)], max(job.size))[0]
-        q = QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * 4, QImage.Format_RGBA8888).copy()
-        QApplication.clipboard().setImage(q)
+
+        def copy(images):  # computed as a side cook (`LiveCook.side`): nothing waits for the GPU
+            if images:
+                img = images[0]
+                QApplication.clipboard().setImage(
+                    QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * 4, QImage.Format_RGBA8888).copy())
+        ev = self.doc.ev
+        self.doc.live.side("view 2d copy", lambda: ev.thumbnail_steps([(job, out)], max(job.size)), copy)
 
     def _toggle_info(self, on):
         self.info_label.setVisible(on)
@@ -599,16 +613,29 @@ class View2D(QWidget):
         if not (0 <= x < w and 0 <= y < h):
             self.info_label.setText("")
             return
-        t = self.doc.ev.result(job, out)
-        bpp = BYTES_PER_PIXEL[t.format]
-        data = self.doc.ev.device.queue.read_texture({"texture": t, "origin": (int(x), int(y), 0)},
-                                                     {"bytes_per_row": bpp}, (1, 1, 1))
-        dtype, n = NUMPY[t.format]
-        v = np.frombuffer(data, dtype)[:n].astype(np.float64)
-        if np.dtype(dtype).kind == "u":  # normalized integers (8 or 16 bit)
-            v = v / float(np.iinfo(dtype).max)
-        vals = "  ".join(f"{c}: {x:.4f}" for c, x in zip("RGBA" if n == 4 else "L", v))
-        self.info_label.setText(f"  X: {int(x)}  Y: {int(y)}    {vals}")
+        ev = self.doc.ev
+        if job.key not in ev.cache or self.doc.live is None:  # never cooked for a hover: shown once it is
+            return
+
+        def read():  # read back once the GPU is done with it: a side cook, nothing waits (`LiveCook.side`)
+            yield ev.fence()
+            if job.key not in ev.cache:
+                return None
+            t = ev.texture(job, out)
+            data = ev.device.queue.read_texture({"texture": t, "origin": (int(x), int(y), 0)},
+                                                {"bytes_per_row": BYTES_PER_PIXEL[t.format]}, (1, 1, 1))
+            return t.format, data
+
+        def show(got):
+            if got is None:
+                return
+            dtype, n = NUMPY[got[0]]
+            v = np.frombuffer(got[1], dtype)[:n].astype(np.float64)
+            if np.dtype(dtype).kind == "u":  # normalized integers (8 or 16 bit)
+                v = v / float(np.iinfo(dtype).max)
+            vals = "  ".join(f"{c}: {a:.4f}" for c, a in zip("RGBA" if n == 4 else "L", v))
+            self.info_label.setText(f"  X: {int(x)}  Y: {int(y)}    {vals}")
+        self.doc.live.side("view 2d pixel", read, show)
 
     def _toggle_hist(self, on):
         self.hist_label.setVisible(on)
@@ -616,11 +643,18 @@ class View2D(QWidget):
             self._histogram()
 
     def _histogram(self):
+        """Display Histogram: the luminance of the image shown, from its thumbnail computed as a side cook of the
+        refresh (`LiveCook.side`: nothing waits for the GPU), drawn once it is there."""
         job, out = self.source()
-        if job is None:
+        if job is None or self.doc.live is None:
             return
-        img = self.doc.ev.thumbnails([(job, out)], 256)[0].astype(np.float64)
-        lum = img[..., 0] if job.is_gray(out) else img[..., :3] @ np.array([0.299, 0.587, 0.114])
+        ev = self.doc.ev
+        self.doc.live.side("view 2d histogram", lambda: ev.thumbnail_steps([(job, out)], 256),
+                           lambda images: images and self._draw_histogram(job.is_gray(out), images[0]))
+
+    def _draw_histogram(self, gray: bool, img) -> None:
+        img = img.astype(np.float64)
+        lum = img[..., 0] if gray else img[..., :3] @ np.array([0.299, 0.587, 0.114])
         hist, _ = np.histogram(lum, bins=128, range=(0, 255))
         w, h = 256, 80
         canvas = np.full((h, w, 4), 35, np.uint8)

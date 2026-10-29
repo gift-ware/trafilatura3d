@@ -644,6 +644,48 @@
    },
    "type": "worley_noise_3d"
   },
+  "HCL.sbsar#HCL": {
+   "inputs": {
+    "input": "input"
+   },
+   "outputs": {
+    "output": "output"
+   },
+   "params": {
+    "HueDegrees": {
+     "key": "hue_degrees"
+    },
+    "HueTurns": {
+     "key": "hue_turns"
+    },
+    "Hue_Mode": {
+     "key": "hue_mode",
+     "values": {
+      "0": "Turns",
+      "1": "Degrees"
+     }
+    },
+    "Chrominance": {
+     "key": "chrominance"
+    },
+    "Luminance": {
+     "key": "luminance"
+    },
+    "ChrominancePhotoshop": {
+     "key": "proportional_chrominance"
+    },
+    "LuminancePhotoshop": {
+     "key": "proportional_luminance"
+    },
+    "PhotoshopMode": {
+     "key": "proportional"
+    },
+    "ClampChroma": {
+     "key": "clamp_chroma"
+    }
+   },
+   "type": "hcl"
+  },
   "alveolus.sbs#alveolus": {
    "defaults": {
     "interstice_width": 0.0

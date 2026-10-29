@@ -26,6 +26,7 @@ DEFAULTS = {
     "tab_node_menu": True, "drag_connector_menu": True, "outputs_3d_on_open": True, "auto_thumbnails": True,
     "output_2d_on_open": True, "display_new_node": True, "auto_conversion": False,
     "environment_hidden": True,
+    "live_warnings": False,  # Tools > Live warnings: every edit checks its whole package again (slow)
     "shortcuts": "{}",  # JSON: node type -> key sequence
 }
 SAVE_PATHS = ("Last path", "Package path")

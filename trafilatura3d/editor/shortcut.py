@@ -19,6 +19,7 @@ from pathlib import Path
 
 NAME = "Trafilatura 3D"
 BUNDLE_ID = "io.github.gift-ware.trafilatura3d"
+SCRIPTS_KEY = "Trafilatura3DScripts"  # macOS Info.plist: the folder of the installation's commands
 
 
 def documents() -> list[tuple[str, str, str]]:
@@ -125,6 +126,8 @@ def _macos(where: Path, exe: Path) -> Path:
               "LSItemContentTypes": [t["UTTypeIdentifier"]]} for t in types]
     with open(contents / "Info.plist", "wb") as f:
         plistlib.dump({"CFBundleName": NAME, "CFBundleDisplayName": NAME, "CFBundleIdentifier": BUNDLE_ID,
+                       SCRIPTS_KEY: str(exe.parent),  # where the commands are (the editor, trafilatura3d): for tools
+                       # that drive this installation (a pipeline creating Paint projects with `new-paint`)
                        "CFBundleExecutable": "trafilatura3d", "CFBundleIconFile": "trafilatura3d",
                        "CFBundlePackageType": "APPL", "CFBundleInfoDictionaryVersion": "6.0",
                        "NSHighResolutionCapable": True, "UTExportedTypeDeclarations": types,

@@ -21,6 +21,7 @@ from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QIcon, QImage, QPixmap
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QFrame, QHBoxLayout, QLabel, QPushButton,
                                QScrollArea, QSpinBox, QVBoxLayout, QWidget)
+from shiboken6 import isValid
 
 from trafilatura3d.editor import theme
 from trafilatura3d.editor.paint.widgets import ChannelButtons, PressureButton, PSlider, Swatch, header
@@ -911,11 +912,13 @@ class PropertiesPanel(QScrollArea):
         top.addWidget(colors)
         self.lay.addLayout(top)
         editor = LevelsEditor([getattr(lv, a) for a in LEVELS_ATTRS], dark=True)
-        stats = self._levels_histogram(fx)
         gray = in_mask or is_gray(lv.channel, doc.ts.format_of(lv.channel))
         comps = (0,) if gray else {"Red": (0,), "Green": (1,), "Blue": (2,)}.get(lv.colors, (0, 1, 2))
-        if stats is not None:
-            editor.set_histogram([(stats[0][:, c], HISTOGRAM_GRAY if gray else HISTOGRAM_RGB[c]) for c in comps])
+
+        def histogram(stats):  # now, or once computed (the panel may have been rebuilt meanwhile)
+            if isValid(editor):
+                editor.set_histogram([(stats[0][:, c], HISTOGRAM_GRAY if gray else HISTOGRAM_RGB[c]) for c in comps])
+        self._levels_histogram(fx, histogram)
         def edited(values, final):  # a handle or a field: one value, its own History step
             now = self._obj(uid).levels
             changes = {a: v for a, v in zip(LEVELS_ATTRS, values) if getattr(now, a) != v}
@@ -928,11 +931,14 @@ class PropertiesPanel(QScrollArea):
             editor.set_levels([getattr(self._obj(uid).levels, a) for a in LEVELS_ATTRS])
 
         def auto():
-            if stats is not None:
+            def apply(stats):
+                if not isValid(editor):  # the panel rebuilt (another layer) while it was computed
+                    return
                 _, lo, hi = stats
                 low, high = float(min(lo[c] for c in comps)), float(max(hi[c] for c in comps))
                 if high > low:
                     action({"in_low": low, "in_high": high})
+            self._levels_histogram(fx, apply)
         bottom = QHBoxLayout()
         bottom.addStretch(1)
         def invert():
@@ -950,14 +956,16 @@ class PropertiesPanel(QScrollArea):
         bottom.addWidget(clamp)
         self.lay.addLayout(bottom)
 
-    def _levels_histogram(self, fx):
-        """`Evaluator.histogram` (counts, minimum, maximum) of what the Levels effect `fx` receives in the Texture
-        Set's first tile, or None (nothing below it)."""
+    def _levels_histogram(self, fx, then) -> None:
+        """`then((counts, minimum, maximum))`, the histogram of what the Levels effect `fx` receives in the Texture
+        Set's first tile, now or once computed (`LiveCook.histogram`: nothing waits for the GPU); never with nothing
+        below it."""
         doc = self.doc
         ts = doc.ts
         in_mask = ts.owner_of(fx.uid)[2]
         job = doc.session.compiler(ts.tiles[0]).reaching(ts, fx.uid, MASK_KEY if in_mask else fx.levels.channel)
-        return None if job is None else self.ws.ev.histogram(job, "output")
+        if job is not None:
+            self.ws.live.histogram("levels", job, "output", then)
 
     def _src(self, uid, channel, slot=False):
         """The ChannelSource of a fill's channel, or (`slot`) of a filter's / generator's resource slot (made

@@ -56,8 +56,9 @@ class ExplorerPanel(QWidget):
         self.tree.currentItemChanged.connect(self._current)
         lay.addWidget(self.tree)
         self.doc.packages_changed.connect(self.refresh)
-        # not while a value is dragged: every package's warnings computed again at each step (its release refreshes)
+        # graphs added, removed or renamed (not while a value is dragged: its release refreshes)
         self.doc.changed.connect(lambda _: None if self.doc.dragging else self.refresh())
+        self.doc.warnings_changed.connect(lambda _: self.refresh())
         self.doc.dirty_changed.connect(self.names)
 
     def names(self):
@@ -70,12 +71,9 @@ class ExplorerPanel(QWidget):
         expanded = {self.tree.topLevelItem(i).text(0).rstrip("*") for i in range(self.tree.topLevelItemCount())
                     if self.tree.topLevelItem(i).isExpanded()}
         self.tree.clear()
-        from trafilatura3d.diagnostics import package_warnings
         for index, pkg in enumerate(self.doc.packages):
-            try:
-                warns = package_warnings(pkg)
-            except Exception:  # noqa: BLE001 - diagnostics must never break the Explorer
-                warns = {}
+            # as last found (`Document.check`, `check_nodes`): never computed here, at each edit
+            warns = {gid: w for gid in ("", *pkg.graphs) if (w := self.doc.graph_warnings(pkg, gid))}
             top = QTreeWidgetItem([self.doc.name(pkg)])
             top.setIcon(0, icon("package"))
             f = QFont()
@@ -164,6 +162,8 @@ class ExplorerPanel(QWidget):
                     if pkg.resources[rid].path.startswith("primitive:"):
                         bake.setEnabled(False)
                         bake.setToolTip("Bakers read a mesh file: link one with Link 3D scene…")
+                menu.addSeparator()
+                menu.addAction("Remove", lambda: self.remove_resource(pkg, rid))
             elif gid is not None:
                 menu.addAction("Open", lambda: self.open_graph.emit(pkg, gid))
                 menu.addAction("Rename…", lambda: self.rename_graph(pkg, gid))
@@ -219,6 +219,19 @@ class ExplorerPanel(QWidget):
             QMessageBox.warning(self, "Remove graph", f"{gid} is used by: {', '.join(sorted(set(users)))}")
             return
         self.doc.edit(pkg, "Remove graph", lambda: pkg.remove_graph(gid))
+
+    def remove_resource(self, pkg, rid):
+        """A linked resource out of the package (one undo step); refused while nodes name its file. Its file stays on
+        disk."""
+        users = sorted({f"{ref.user[0]}.{ref.user[1]}" for ref in pkg.file_references()
+                        if ref.user and ref.resource == rid})
+        if users:
+            QMessageBox.warning(self, "Remove resource", f"{rid} is used by: {', '.join(users)}")
+            return
+        view3d = self.window.view3d
+        if view3d.bake_resource == (pkg, rid):  # the scene on view: no longer a resource (its bakes, its settings)
+            view3d.bake_resource = view3d.baked_preview = None
+        self.doc.edit(pkg, "Remove resource", lambda: pkg.resources.pop(rid))
 
     def link_bitmap(self, pkg):
         if pkg.path is None:

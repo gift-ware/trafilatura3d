@@ -160,6 +160,15 @@ class PackageRules(unittest.TestCase):
         # levels follows its input: feeding it color would make soften1.input1 receive color
         self.assertRefused("expects grayscale", self.g.connect, "gradient_map1", "output", lv, "input")
 
+    def test_instances_follow_removed_and_renamed_inputs(self):
+        soften = self.pkg.graphs["soften"]
+        self.g.set_param("soften1", "amount", 2.0)
+        soften.rename_parameter("amount", "strength")
+        self.assertEqual(self.g.nodes["soften1"].params, {"strength": 2.0})
+        soften.unexpose("strength")
+        self.assertEqual(self.g.nodes["soften1"].params, {})
+        self.assertEqual(self.g.problems(), [])
+
     def test_cycles_are_refused(self):
         b = self.g.add_node("blur")
         self.g.connect("soften1", "output1", b, "input")
@@ -538,6 +547,44 @@ class Diagnostics(unittest.TestCase):
             img.write_bytes(b"png")  # relocation only needs the file to exist
             self.assertEqual(relocate(pkg, "missing.png", str(img)), 2)
             self.assertNotIn("Linked file not found", [x.message for x in package_warnings(pkg).get("", [])])
+
+    def test_save_gathers_files_into_dependencies(self):
+        """Saving copies the files from elsewhere into dependencies/<package name>/ next to the package (once per
+        file, another file of the same name numbered), keeps the ones already beside it, and writes every path
+        relative; a missing file and a project alias stay as written. Save As somewhere else, or under another name,
+        takes the files along into the new package's own folder."""
+        from trafilatura3d.package import Resource
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            (d / "a").mkdir()
+            (d / "b").mkdir()
+            (d / "a" / "rock.png").write_bytes(b"a")
+            (d / "b" / "rock.png").write_bytes(b"b")
+            (d / "pkg" / "maps").mkdir(parents=True)
+            (d / "pkg" / "maps" / "baked.png").write_bytes(b"c")
+            pkg = Package()
+            g = pkg.new_graph("g", 6)
+            n1, n2, n3 = (g.add_node("bitmap") for _ in range(3))
+            g.set_param(n1, "pkg_resource_path", str(d / "a" / "rock.png"))
+            g.set_param(n2, "pkg_resource_path", str(d / "b" / "rock.png"))
+            g.set_param(n3, "pkg_resource_path", str(d / "missing.png"))
+            pkg.resources["rock"] = Resource("bitmap", str(d / "a" / "rock.png"))
+            pkg.resources["baked"] = Resource("bitmap", str(d / "pkg" / "maps" / "baked.png"))
+            pkg.resources["shared"] = Resource("bitmap", "alias://lib/stone.png")
+            pkg.save(d / "pkg" / "p.trafilatura3d")
+            params = [g.nodes[n].params["pkg_resource_path"] for n in (n1, n2, n3)]
+            self.assertEqual(params, ["dependencies/p/rock.png", "dependencies/p/rock_2.png", str(d / "missing.png")])
+            self.assertEqual({k: r.path for k, r in pkg.resources.items()},
+                             {"rock": "dependencies/p/rock.png", "baked": "maps/baked.png",
+                              "shared": "alias://lib/stone.png"})
+            self.assertEqual((d / "pkg" / "dependencies" / "p" / "rock_2.png").read_bytes(), b"b")
+            pkg.save(d / "pkg" / "q.trafilatura3d")  # another name beside it: its own copies, not p's
+            self.assertEqual((pkg.resources["rock"].path, pkg.resources["baked"].path),
+                             ("dependencies/q/rock.png", "maps/baked.png"))
+            pkg.save(d / "elsewhere" / "q.trafilatura3d")  # Save As: the relative files resolve from the old place
+            self.assertEqual(pkg.resources["baked"].path, "dependencies/q/baked.png")
+            self.assertEqual(sorted(p.name for p in (d / "elsewhere" / "dependencies" / "q").iterdir()),
+                             ["baked.png", "rock.png", "rock_2.png"])
 
     def test_every_instance_of_a_graph_with_warnings_says_so(self):
         """Two instances of a graph with warnings: each gets the warning (and its link to that node)."""

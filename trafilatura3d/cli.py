@@ -6,6 +6,9 @@
 - `trafilatura3d import file.sbs [--out file.trafilatura3d] [--search dir]` (a .sbs package converted, with the import
   report);
 - `trafilatura3d bake low.obj --out dir --baker normal_map_from_mesh --high high.obj ...` (sbsbaker);
+- `trafilatura3d new-paint mesh.fbx --out project.trafilatura3dpaint [--resolution 2048] [--template name]
+  [--high high.fbx --match "By Mesh Name" --low-suffix _low --high-suffix _high]`: a Paint project on a mesh, as New
+  Project makes it (one Texture Set per material), with the baking's high definition meshes already set;
 - `trafilatura3d shortcut [--dir folder]`: a Desktop shortcut that starts the editor (editor/shortcut.py).
 `--config file.trafilatura3dconfig` loads a project configuration (aliases, color management), as in the editor;
 plugins load as in the editor, without its additions (`--no-plugins` skips them, `trafilatura3d plugins` lists them)."""
@@ -59,6 +62,17 @@ def main(argv=None) -> int:
                      help="a folder (with its subfolders) where a dependency not found at its written path is looked "
                           "for by file name (repeatable)")
 
+    npaint = commands.add_parser("new-paint", help="create a Paint project on a mesh, as New Project does")
+    npaint.add_argument("mesh", help="the mesh to paint (FBX, OBJ, glTF, PLY, STL, USD)")
+    npaint.add_argument("--out", required=True, help="the .trafilatura3dpaint file to write")
+    npaint.add_argument("--resolution", type=int, default=2048, help="the Texture Sets' size")
+    npaint.add_argument("--template", help="the template (shader): default the New Project's")
+    npaint.add_argument("--high", action="append", default=[], help="high definition mesh for the baking of every "
+                                                                    "Texture Set; repeatable")
+    npaint.add_argument("--match", choices=bake.MATCH, default="Always")
+    npaint.add_argument("--low-suffix", default="_low")
+    npaint.add_argument("--high-suffix", default="_high")
+
     bk = commands.add_parser("bake", help="bake model information from meshes into textures")
     bk.add_argument("low", help="low poly mesh (FBX, OBJ, glTF, PLY, STL, USD)")
     bk.add_argument("--out", required=True, help="folder for the baked maps")
@@ -101,9 +115,12 @@ def main(argv=None) -> int:
             return _import(args)
         if args.command == "bake":
             return _bake(args, bake)
+        if args.command == "new-paint":
+            return _new_paint(args)
         return _cook(args)
     except (DocumentError, OSError, ValueError) as e:
-        print(f"trafilatura3d: {getattr(args, 'package', None) or args.low}: {e}", file=sys.stderr)
+        source = getattr(args, "package", None) or getattr(args, "low", None) or getattr(args, "mesh", "")
+        print(f"trafilatura3d: {source}: {e}", file=sys.stderr)
         return 1
 
 
@@ -203,8 +220,7 @@ def _import(args) -> int:
         return _import_spp(args)
     from trafilatura3d.sbs import import_sbs
     out = Path(args.out) if args.out else Path(args.package).with_suffix(SUFFIX)
-    package, report = import_sbs(args.package, base=out.resolve().parent, search=tuple(args.search))
-    out.resolve().parent.mkdir(parents=True, exist_ok=True)
+    package, report = import_sbs(args.package, search=tuple(args.search))
     package.save(out)
     print("\n".join(report.lines()))
     print(f"wrote {package.path}", file=sys.stderr)
@@ -221,6 +237,34 @@ def _import_spp(args) -> int:
     out.resolve().parent.mkdir(parents=True, exist_ok=True)
     session.save(out)
     print("\n".join(session.load_warnings))
+    print(f"wrote {session.path}", file=sys.stderr)
+    return 0
+
+
+def _new_paint(args) -> int:
+    from pathlib import Path
+
+    from trafilatura3d import shaders
+    from trafilatura3d.paint.model import PROJECT_SUFFIX
+    from trafilatura3d.paint.session import Session
+    out = Path(args.out)
+    if out.suffix != PROJECT_SUFFIX:
+        raise ValueError(f"--out {out}: a {PROJECT_SUFFIX} file")
+    if out.exists():
+        raise ValueError(f"{out} already exists")
+    template = args.template or shaders.DEFAULT_TEMPLATE
+    if template not in shaders.TEMPLATES:
+        raise ValueError(f"template {template!r} (templates: {', '.join(shaders.TEMPLATES)})")
+    session = Session.new(args.mesh, resolution=args.resolution, template=template)
+    if args.high:
+        from trafilatura3d.paint import baking
+        for ts in session.project.texture_sets:              # as Baking mode's High definition meshes stores them
+            cfg = baking.config(ts)
+            cfg["common"].update(high_meshes=[str(Path(h).resolve()) for h in args.high], match=args.match,
+                                 low_suffix=args.low_suffix, high_suffix=args.high_suffix)
+            baking.set_config(ts, cfg)
+    out.resolve().parent.mkdir(parents=True, exist_ok=True)
+    session.save(out)
     print(f"wrote {session.path}", file=sys.stderr)
     return 0
 

@@ -8,9 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from trafilatura3d.package import INSTANCE, DocumentError, Package
-
-RESOURCE_NODES = {"bitmap": "pkg_resource_path", "svg": "pkg_resource_path"}
+from trafilatura3d.package import FONT_SUFFIXES, INSTANCE, RESOURCE_NODES, DocumentError, Package
 
 
 @dataclass
@@ -56,27 +54,20 @@ def dependencies(pkg: Package) -> list[Dependency]:
             deps[key] = Dependency(kind, name, path, str(r), r.exists(), [], resource)
         if users:
             deps[key].users.append(users)
-    for rid, res in pkg.resources.items():
-        if res.kind == "scene" and res.path.startswith("primitive:"):
-            continue
-        add({"bitmap": "Bitmap", "scene": "3D scene"}.get(res.kind, res.kind.capitalize()), rid, res.path, resource=rid)
+    for ref in pkg.file_references():
+        add(ref.kind, ref.name, ref.path, ref.user, ref.resource)
     for gid, g in pkg.graphs.items():
         for n in g.nodes.values():
             if n.type == INSTANCE and "#" in n.ref:
                 add("Package", n.ref.rsplit("#", 1)[0], n.ref.rsplit("#", 1)[0], (gid, n.id))
-            elif n.type in RESOURCE_NODES and n.params.get(RESOURCE_NODES[n.type]):
-                path = n.params[RESOURCE_NODES[n.type]]
-                rid = next((k for k, r in pkg.resources.items() if r.path == path), None)
-                add("Bitmap" if n.type == "bitmap" else "SVG", rid or n.id, path, (gid, n.id), rid)
-            elif n.type == "text" and str(n.params.get("font", "")).lower().endswith((".ttf", ".otf", ".ttc")):
-                add("Font", n.id, n.params["font"], (gid, n.id))
     return sorted(deps.values(), key=lambda d: (d.kind, d.name))
 
 
 def graph_warnings(pkg: Package, gid: str, _seen=None) -> list[GraphWarning]:
     """The warnings of one graph (content warnings plus our structural checks). Every instance of a graph that has
-    warnings gets one (the graph is checked once; one being checked up the chain counts as without: a cycle)."""
-    from trafilatura3d.functions import FunctionError, FunctionGraph, set_variables
+    warnings gets one (the graph is checked once; one being checked up the chain counts as without: a cycle). Slow
+    (every node, the graphs it instances, a compile of its outputs): the editor checks a whole graph only when its
+    package opens, or after each edit with Tools > Live warnings (`Document.check`)."""
     from trafilatura3d.visibility import check
     seen = _seen if _seen is not None else {}  # (package, graph) -> has warnings (None while being checked)
     seen[(id(pkg), gid)] = None
@@ -84,43 +75,11 @@ def graph_warnings(pkg: Package, gid: str, _seen=None) -> list[GraphWarning]:
     out = []
     if not g.output_nodes():
         out.append(GraphWarning("No output node defined"))
-    for problem in g.problems():
-        out.append(GraphWarning(problem))
+    for problem in g.problems():  # "<graph>.<node>[.<port>]: ..." about a node: its badge
+        head = problem.split(":", 1)[0].split(".")
+        out.append(GraphWarning(problem, head[1] if len(head) > 1 and head[1] in g.nodes else None))
     for n in g.nodes.values():
-        if n.type == INSTANCE:
-            try:
-                ref_pkg, ref_graph = pkg.resolve(n.ref)
-            except (DocumentError, OSError, ValueError) as e:
-                out.append(GraphWarning("Reference resource not found", n.id, str(e)))
-                continue
-            key = (id(ref_pkg), ref_graph.id)
-            if key not in seen:
-                seen[key] = bool(graph_warnings(ref_pkg, ref_graph.id, seen))
-            if seen[key]:
-                out.append(GraphWarning("The referenced data has some warnings", n.id, ref_graph.id))
-        elif n.type in RESOURCE_NODES:
-            path = n.params.get(RESOURCE_NODES[n.type], "")
-            if path and not _resolve(pkg, path).exists():
-                out.append(GraphWarning("Reference resource not found", n.id, path))
-        elif n.type == "text":
-            font = str(n.params.get("font", ""))
-            if font.lower().endswith((".ttf", ".otf", ".ttc")) and not _font_ok(_resolve(pkg, font)):
-                out.append(GraphWarning("Text node uses invalid font", n.id, font))
-        try:
-            d = pkg.definition(n)
-        except DocumentError:
-            continue
-        if n.type == "output" and n.params.get("color_space"):
-            from trafilatura3d import colormanagement as cm
-            if cm.active() and not cm.known(n.params["color_space"]):
-                out.append(GraphWarning("Color space not found", n.id, n.params["color_space"]))
-        node_sets = set_variables(n.function_graphs())
-        for name, function in n.functions.items():
-            try:
-                FunctionGraph(function, g.function_variables(), node_sets)
-            except (FunctionError, KeyError, TypeError) as e:
-                label = d.params[name].label if name in d.params else name
-                out.append(GraphWarning(f"The {d.label}[{label}] parameter's function has some warnings", n.id, str(e)))
+        out += _node_checks(pkg, g, n, seen)
     values = {pid: p.param.default for pid, p in g.parameters.items()}
     for pid, p in g.parameters.items():
         msg = check(p.param.visible_if, values)
@@ -128,6 +87,64 @@ def graph_warnings(pkg: Package, gid: str, _seen=None) -> list[GraphWarning]:
             out.append(GraphWarning(f"{p.param.label or pid}: {msg}"))
     out += [GraphWarning(n.message, n.node if n.node in g.nodes else None) for n in pkg.notes if n.graph == gid]
     out += output_size_warnings(pkg, gid)
+    return out
+
+
+def node_warnings(pkg: Package, gid: str, node_ids) -> list[GraphWarning]:
+    """The warnings of the nodes being worked on (selected, just connected): their own checks and the types of their
+    links, not the chain (an instanced graph's own warnings are its package's check)."""
+    g = pkg.graphs[gid]
+    out = []
+    for nid in node_ids:
+        if nid not in g.nodes:
+            continue
+        try:
+            g._check_types([nid])
+        except (DocumentError, OSError, ValueError) as e:
+            out.append(GraphWarning(str(e), nid))
+        out += _node_checks(pkg, g, g.nodes[nid], None)
+    return out
+
+
+def _node_checks(pkg: Package, g, n, seen) -> list[GraphWarning]:
+    """One node's checks: its reference or file found, its font, its color space, its parameters' functions; with
+    `seen` (a whole graph's check) also whether the graph it instances has warnings."""
+    from trafilatura3d.functions import FunctionError, FunctionGraph, set_variables
+    out = []
+    if n.type == INSTANCE:
+        try:
+            ref_pkg, ref_graph = pkg.resolve(n.ref)
+        except (DocumentError, OSError, ValueError) as e:
+            return [GraphWarning("Reference resource not found", n.id, str(e))]
+        if seen is not None:
+            key = (id(ref_pkg), ref_graph.id)
+            if key not in seen:
+                seen[key] = bool(graph_warnings(ref_pkg, ref_graph.id, seen))
+            if seen[key]:
+                out.append(GraphWarning("The referenced data has some warnings", n.id, ref_graph.id))
+    elif n.type in RESOURCE_NODES:
+        path = n.params.get(RESOURCE_NODES[n.type], "")
+        if path and not _resolve(pkg, path).exists():
+            out.append(GraphWarning("Reference resource not found", n.id, path))
+    elif n.type == "text":
+        font = str(n.params.get("font", ""))
+        if font.lower().endswith(FONT_SUFFIXES) and not _font_ok(_resolve(pkg, font)):
+            out.append(GraphWarning("Text node uses invalid font", n.id, font))
+    try:
+        d = pkg.definition(n)
+    except DocumentError:
+        return out
+    if n.type == "output" and n.params.get("color_space"):
+        from trafilatura3d import colormanagement as cm
+        if cm.active() and not cm.known(n.params["color_space"]):
+            out.append(GraphWarning("Color space not found", n.id, n.params["color_space"]))
+    node_sets = set_variables(n.function_graphs())
+    for name, function in n.functions.items():
+        try:
+            FunctionGraph(function, g.function_variables(), node_sets)
+        except (FunctionError, KeyError, TypeError) as e:
+            label = d.params[name].label if name in d.params else name
+            out.append(GraphWarning(f"The {d.label}[{label}] parameter's function has some warnings", n.id, str(e)))
     return out
 
 
@@ -221,19 +238,13 @@ def relocate(pkg: Package, old_path: str, new_file: str) -> int:
         except ValueError:
             pass
     count = 0
-    for res in pkg.resources.values():
-        if res.path == old_path:
-            res.path = new
+    for ref in pkg.file_references():
+        if ref.path == old_path:
+            ref.set(new)
             count += 1
     for g in pkg.graphs.values():
         for n in g.nodes.values():
-            if n.type in RESOURCE_NODES and n.params.get(RESOURCE_NODES[n.type]) == old_path:
-                n.params[RESOURCE_NODES[n.type]] = new
-                count += 1
-            elif n.type == "text" and n.params.get("font") == old_path:
-                n.params["font"] = new
-                count += 1
-            elif n.type == INSTANCE and "#" in n.ref and n.ref.rsplit("#", 1)[0] == old_path:
+            if n.type == INSTANCE and "#" in n.ref and n.ref.rsplit("#", 1)[0] == old_path:
                 n.ref = new + "#" + n.ref.rsplit("#", 1)[1]
                 count += 1
     pkg._external.clear()

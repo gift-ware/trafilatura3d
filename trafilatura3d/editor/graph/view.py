@@ -1,12 +1,12 @@
 """Graph view navigation: wheel or Alt+right drag zooms, middle drag or Ctrl+right
 drag pans (two-finger swipe on a trackpad pans, pinch zooms), F frames the selection (or all),
-Z resets the zoom to 1:1, a drag on empty space draws a selection box. Dragging a link near or past the
-view's border scrolls the view that way."""
+Z resets the zoom to 1:1, a drag on empty space (inside a frame too) draws a selection box, Shift adds to the
+selection. Dragging a link, nodes or a selection box near or past the view's border scrolls the view that way."""
 
 from __future__ import annotations
 
 from PySide6.QtCore import QEvent, QPointF, Qt, QTimer
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QMouseEvent, QPainter
 from PySide6.QtWidgets import QApplication, QGraphicsView
 
 ZOOM_MIN, ZOOM_MAX = 0.05, 4.0
@@ -29,14 +29,20 @@ class GraphView(QGraphicsView):
         self._zoom_drag = None
         self.resized = None  # callback after a resize (overlays placed on the view)
         self.cursor_scene_pos = QPointF()
-        self._edge_pos = None  # the mouse in the viewport while a link is dragged
+        self._edge_pos = None  # the mouse in the viewport during a left drag (`_edge_scroll`)
+        self._shift_select = False  # a left press with Shift away from connectors: Shift taken as Control
         self._edge_timer = QTimer(self, interval=16, timeout=self._edge_scroll)
 
-    def _edge_scroll(self) -> None:
-        """While a link is dragged with the mouse near or past a border, scroll that way and keep the link's end
-        under the mouse."""
+    def _left_drag(self) -> bool:
+        """A left drag that follows the mouse across the scene: a link, nodes or frames moved, a selection box."""
         scene = self.scene()
-        if self._edge_pos is None or not scene.dragging_link() or not QApplication.mouseButtons() & Qt.LeftButton:
+        return bool(QApplication.mouseButtons() & Qt.LeftButton) and (
+            scene.dragging_link() or scene.mouseGrabberItem() is not None or not self.rubberBandRect().isNull())
+
+    def _edge_scroll(self) -> None:
+        """While a left drag (`_left_drag`) has the mouse near or past a border, scroll that way; the drag follows (a
+        mouse move where the mouse is: the link's end, the moved items, the selection box stay under it)."""
+        if self._edge_pos is None or not self._left_drag():
             self._edge_timer.stop()
             return
         p, r = self._edge_pos, self.viewport().rect()
@@ -48,7 +54,14 @@ class GraphView(QGraphicsView):
         if dx or dy:
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + dx)
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() + dy)
-            scene.drag_link_to(self.mapToScene(p.toPoint()))
+            QApplication.sendEvent(self.viewport(), QMouseEvent(
+                QEvent.MouseMove, p, self.viewport().mapToGlobal(p), Qt.NoButton, QApplication.mouseButtons(),
+                QApplication.keyboardModifiers()))
+
+    def _shift_as_control(self, e) -> QMouseEvent:
+        """Shift adds to the selection (a click on nodes or frames, a selection box): what Qt does with Control."""
+        mods = (e.modifiers() & ~Qt.ShiftModifier) | Qt.ControlModifier
+        return QMouseEvent(e.type(), e.position(), e.globalPosition(), e.button(), e.buttons(), mods)
 
 
     def resizeEvent(self, e):
@@ -99,7 +112,10 @@ class GraphView(QGraphicsView):
         if b == Qt.RightButton and m & Qt.AltModifier:
             self._zoom_drag = (e.position(), e.position())
             return
-        super().mousePressEvent(e)
+        # Shift on a connector moves its links (the scene's); elsewhere it adds to the selection
+        self._shift_select = b == Qt.LeftButton and bool(m & Qt.ShiftModifier) and \
+            self.scene()._port_at(self.mapToScene(e.position().toPoint())) is None
+        super().mousePressEvent(self._shift_as_control(e) if self._shift_select else e)
 
     def mouseMoveEvent(self, e):
         self.cursor_scene_pos = self.mapToScene(e.position().toPoint())
@@ -115,18 +131,20 @@ class GraphView(QGraphicsView):
             self._zoom_drag = (start, e.position())
             self.zoom_by(1.01 ** dx, start.toPoint())
             return
-        if self.scene().dragging_link():
+        if self._left_drag():
             self._edge_pos = e.position()
             if not self._edge_timer.isActive():
                 self._edge_timer.start()
-        super().mouseMoveEvent(e)
+        super().mouseMoveEvent(self._shift_as_control(e) if self._shift_select and e.modifiers() & Qt.ShiftModifier
+                               else e)
 
     def mouseReleaseEvent(self, e):
         if self._pan is not None or self._zoom_drag is not None:
             self._pan = self._zoom_drag = None
             self.unsetCursor()
             return
-        super().mouseReleaseEvent(e)
+        shift, self._shift_select = self._shift_select, False
+        super().mouseReleaseEvent(self._shift_as_control(e) if shift else e)
 
     def contextMenuEvent(self, e):
         if e.modifiers() & (Qt.ControlModifier | Qt.AltModifier):

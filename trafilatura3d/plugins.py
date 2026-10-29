@@ -65,8 +65,9 @@ class EditorAccess(ABC):
         """The Paint project open (its session), or None."""
 
     @abstractmethod
-    def edit(self, package, label: str, fn: Callable[[], object]) -> None:
-        """Change an open package with `fn()` as one undoable step (marked unsaved, the views refreshed)."""
+    def edit(self, document, label: str, fn: Callable[[], object]) -> None:
+        """Change an open package or the Paint project (its session) with `fn()` as one undoable step (marked
+        unsaved, the views refreshed)."""
 
     @abstractmethod
     def open(self, path) -> None:
@@ -85,9 +86,10 @@ class EditorAccess(ABC):
         """(package, graph id) shown in the Graph view, or (None, "")."""
 
     @abstractmethod
-    def save(self, document) -> None:
-        """Save an open package or the Paint project (its session) as the editor's Save does, its unsaved marks
-        cleared; raises OSError when it could not be saved (the editor has shown why)."""
+    def save(self, document, path=None) -> None:
+        """Save an open package or the Paint project (its session) as the editor's Save does (at `path`: as Save As
+        does, without asking), its unsaved marks cleared; raises OSError when it could not be saved (the editor has
+        shown why)."""
 
     @abstractmethod
     def remove_all(self) -> None:

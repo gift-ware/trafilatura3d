@@ -105,30 +105,34 @@ def walk(data: dict, graph_vars: dict, graph_types: dict, size: tuple[int, int],
     if root is None or root not in nodes:
         return []
     variables_types = {**BUILTINS, **FX_VARIABLES, **graph_types}
-    compiled: dict[tuple, FunctionGraph] = {}
+    plans: dict[str, list] = {}  # node id -> its parameters (`plan`)
     draws: list[Draw] = []
     node_vars = node_vars or {}
     outer = frozenset(node_vars) | set_variables(f for n in nodes.values() for f in n.get("functions", {}).values())
     env = {**(system or {}), "$size": [float(size[0]), float(size[1])],
            "$sizelog2": [math.log2(size[0]), math.log2(size[1])], "$time": 0.0, **graph_vars, **node_vars}
 
+    def plan(node):
+        """A node's parameters as (name, value, its function compiled or None, Param), worked out once a walk."""
+        out = []
+        for name, p in FX_PARAMS[node["type"]].items():
+            f = node.get("functions", {}).get(name)
+            fg = None
+            if f is not None and p.kind in PARAM_TYPES:
+                try:
+                    fg = FunctionGraph(f, variables_types, outer)
+                except FunctionError as e:
+                    raise FxMapError(f"{node['id']}.{name}: {e}") from None
+            out.append((name, node.get("params", {}).get(name, p.default), fg, p))
+        return out
+
     def params(node, env, node_seed):
         """The node's parameters, functions evaluated top to bottom in one shared environment."""
-        kind = node["type"]
-        values = {}
-        for name, p in FX_PARAMS[kind].items():
-            value = node.get("params", {}).get(name, p.default)
-            f = node.get("functions", {}).get(name)
-            if f is not None and p.kind in PARAM_TYPES:
-                key = (node["id"], name)
-                if key not in compiled:
-                    try:
-                        compiled[key] = FunctionGraph(f, variables_types, outer)
-                    except FunctionError as e:
-                        raise FxMapError(f"{node['id']}.{name}: {e}") from None
-                value = to_param(evaluate(compiled[key], env, seed=node_seed, shared=True), p)
-            values[name] = value
-        return values
+        steps = plans.get(node["id"])
+        if steps is None:
+            steps = plans[node["id"]] = plan(node)
+        return {name: value if fg is None else to_param(evaluate(fg, env, seed=node_seed, shared=True), p)
+                for name, value, fg, p in steps}
 
     def visit(node_id, depth, origin, cell, offset, number, inherited_seed, path):
         if node_id not in nodes or depth > MAX_DEPTH or len(draws) >= MAX_DRAWS:

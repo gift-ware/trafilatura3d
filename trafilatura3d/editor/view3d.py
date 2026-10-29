@@ -271,6 +271,7 @@ class View3D(QWidget):
         self.bake_resource = None
         self.baked_preview: str | None = None  # a baker whose map is shown alone and unlit
         self._shown: dict = {}  # (material, slot) -> (job key, output) the renderer shows (`show_ready`)
+        self._asked: frozenset | None = None  # the channels missing the refresh was asked for (`refresh`: once)
         self._bake_meshes = {}  # (path, mtime) -> meshes in their own units
         self._overlay_key = None
         self.udim_tiles = [(0, 0)]  # the UDIM tiles of the meshes on view (_render_objects)
@@ -1674,15 +1675,21 @@ class View3D(QWidget):
             self.doc.error.emit(f"3D view: baked maps: {e}")
             baked, preview = [{} for _ in tiles], [None for _ in tiles]
         materials, self.view.look.preview = self._materials()
-        self._shown = {(m, slot): (job.key, out) for m, (_, assigned) in enumerate(materials)
-                       for slot, (job, out) in assigned.items()}
-        try:  # every material's channels cooked together: one by one, a cook could give back the ones before
-            textures = iter(self.doc.ev.results([src for _, assigned in materials for src in assigned.values()]))
-            for spec, assigned in materials:
-                for slot, (job, out) in assigned.items():
-                    spec[slot] = (next(textures), job.is_gray(out))
-        except Exception as e:  # noqa: BLE001 - shown in the status bar
-            self.doc.error.emit(f"3D view: {e}")
+        # Never cooked here (a graph opened waited for all of it, a minute and more): the channels cooked are shown,
+        # the others come from the refresh's steps, each as soon as it is cooked (`show_ready`, then this again).
+        ev, self._shown, missing = self.doc.ev, {}, set()
+        for m, (spec, assigned) in enumerate(materials):
+            for slot, (job, out) in assigned.items():
+                if job.key in ev.cache:
+                    spec[slot] = (ev.texture(job, out), job.is_gray(out))
+                    self._shown[m, slot] = (job.key, out)
+                else:
+                    missing.add(job.key)
+        if not missing:
+            self._asked = None
+        elif self.doc.live is not None and self._asked != frozenset(missing):
+            self._asked = frozenset(missing)  # once: every call asking again restarted the refresh before it was done
+            self.doc.live.schedule()
         specs = []
         for spec, _ in materials:
             for t in range(len(tiles)):  # renderer material m * tiles + t (_render_objects)

@@ -919,6 +919,14 @@ class PaintWorkspaceTest(unittest.TestCase):
 
         def levels():  # read again each time: the History restores the project
             return doc.ts.owner_of(uid)[1].levels
+
+        def settle():  # the histogram asked for computed (a side cook, a step per turn of the event loop)
+            import time
+            t0 = time.perf_counter()
+            self.app.processEvents()
+            while (ws.live.busy or ws.live.side_busy) and time.perf_counter() - t0 < 30:
+                self.app.processEvents()
+        settle()
         ed = ws.properties.findChild(LevelsEditor)
         self.assertEqual(len(ed.series), 3)  # Base color, RGB
         self.assertEqual(ed.series[0][0].sum(), 128 * 128)
@@ -936,7 +944,11 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.assertEqual((levels().out_low, levels().out_high), (1.0, 0.1))
         self.assertEqual(ed.values[3:], [1.0, 0.1])
         buttons["Auto"].click()
-        _, lo, hi = ws.properties._levels_histogram(doc.ts.owner_of(uid)[1])  # the darkest and brightest of RGB
+        settle()
+        got = []
+        ws.properties._levels_histogram(doc.ts.owner_of(uid)[1], got.append)  # the darkest and brightest of RGB
+        settle()
+        _, lo, hi = got[0]
         self.assertEqual((levels().in_low, levels().in_high), (float(lo[:3].min()), float(hi[:3].max())))
         self.assertLess(levels().in_low, levels().in_high)
         buttons["Reset"].click()
@@ -946,11 +958,12 @@ class PaintWorkspaceTest(unittest.TestCase):
         self.assertEqual(levels().in_mid, 0.4)
         colors = next(c for c in ws.properties.findChildren(QComboBox) if c.toolTip() == "Colors")
         colors.setCurrentText("Red")
-        self.app.processEvents()
+        settle()
         self.assertEqual(len(ws.properties.findChild(LevelsEditor).series), 1)
         doc.select(layer)
         lp.add_mask(1.0)  # a Levels in the mask: the mask's histogram, gray
         lp.add_effect("levels")
+        settle()
         self.assertTrue(doc.ts.owner_of(doc.effect().uid)[2])
         ed = ws.properties.findChild(LevelsEditor)
         self.assertEqual(len(ed.series), 1)

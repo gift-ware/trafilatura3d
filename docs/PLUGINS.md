@@ -61,11 +61,12 @@ error in a handler is reported and ignored: a plugin never stops Trafilatura 3D.
 - `add_menu_action(menu, text, callback, shortcut="", workspaces=("graph", "paint"))`: in that menu of each
   workspace's menu bar, created when missing; `add_menu_separator(menu, workspaces=…)`.
 - `workspace()` → "home", "graph" or "paint"; `current_paint()` → the open Paint project's session, or None.
-- `edit(package, label, fn)`: change an open package with `fn()` as one undoable step; `open(path)`: open a package
-  or a Paint project as File > Open does.
+- `edit(document, label, fn)`: change an open package or the Paint project (`current_paint()`) with `fn()` as one
+  undoable step; `open(path)`: open a package or a Paint project as File > Open does.
 - `add_dock(title, widget)`: a dock in the workspace.
 - `main_window()`, `current()` → (package, graph id) in the Graph view.
-- `save(document)`: save an open package or the Paint project (`session`) as Save does (the unsaved marks cleared);
+- `save(document, path=None)`: save an open package or the Paint project (`session`) as Save does, at `path` as
+  Save As does without asking (the unsaved marks cleared);
   raises `OSError` when it could not be saved. From the command line there is no editor: `package.save()`.
 
 Everything added is removed when the plugin is unloaded (disabled or reloaded in the Plugin Manager).

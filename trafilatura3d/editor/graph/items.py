@@ -341,6 +341,9 @@ class GraphItem(QGraphicsItem):
     that lie in it), a comment (text) or a navigation pin."""
 
     HANDLE = 12
+    TITLE = 22  # a frame's title bar
+    EDGE = 6  # the band along a frame's or comment's border that resizes it (sides and corners)
+    MIN_SIZE = (80.0, 40.0)
 
     def __init__(self, data: dict):
         super().__init__()
@@ -350,7 +353,8 @@ class GraphItem(QGraphicsItem):
                       | QGraphicsItem.ItemSendsGeometryChanges)
         w, h = data.get("size", (0.0, 0.0))
         self.setZValue(-5 - w * h * 1e-9 if self.kind == "frame" else 3)  # a frame in a frame: drawn over it
-        self._resizing = None
+        self._resizing = None  # (mouse at the press, (x, y, w, h) then, the sides moved: left, top, right, bottom)
+        self.setAcceptHoverEvents(self.kind != "pin")  # the resize cursor along the border
         self.carried = []  # nodes moved with a frame during a drag
         self.carried_items = []  # frames, comments and pins moved with it
         self.setPos(*data["position"])
@@ -364,6 +368,47 @@ class GraphItem(QGraphicsItem):
         w, h = self.size()
         return QRectF(-2, -2, w + 4, h + 4)
 
+    def shape(self):
+        """A frame answers by its title bar and its border (resizing it): a drag inside it draws a selection box (and
+        a click there selects nothing); comments and pins by all of them."""
+        w, h = self.size()
+        path = QPainterPath()
+        path.setFillRule(Qt.WindingFill)  # the bands overlap at the corners: odd-even would leave them out
+        if self.kind == "frame":
+            e = self.EDGE
+            path.addRect(QRectF(0, 0, w, self.TITLE))
+            for r in (QRectF(0, 0, e, h), QRectF(w - e, 0, e, h), QRectF(0, h - e, w, e),
+                      QRectF(w - self.HANDLE, h - self.HANDLE, self.HANDLE, self.HANDLE)):
+                path.addRect(r)
+        else:
+            path.addRect(QRectF(0, 0, w, h))
+        return path
+
+    def _sides(self, pos: QPointF) -> tuple[bool, bool, bool, bool]:
+        """The sides a press at `pos` (item coordinates) resizes: (left, top, right, bottom); none for a pin. The
+        bottom right corner keeps its larger handle."""
+        if self.kind == "pin":
+            return False, False, False, False
+        w, h, e = *self.size(), self.EDGE
+        corner = pos.x() > w - self.HANDLE and pos.y() > h - self.HANDLE
+        return pos.x() < e, pos.y() < e, corner or pos.x() > w - e, corner or pos.y() > h - e
+
+    def hoverMoveEvent(self, e):
+        left, top, right, bottom = self._sides(e.pos())
+        if (left or right) and (top or bottom):
+            self.setCursor(Qt.SizeFDiagCursor if (left and top) or (right and bottom) else Qt.SizeBDiagCursor)
+        elif left or right:
+            self.setCursor(Qt.SizeHorCursor)
+        elif top or bottom:
+            self.setCursor(Qt.SizeVerCursor)
+        else:
+            self.unsetCursor()
+        super().hoverMoveEvent(e)
+
+    def hoverLeaveEvent(self, e):
+        self.unsetCursor()
+        super().hoverLeaveEvent(e)
+
     def paint(self, p: QPainter, option, widget=None):
         w, h = self.size()
         sel = self.isSelected()
@@ -376,12 +421,12 @@ class GraphItem(QGraphicsItem):
             bar.setAlpha(min(255, c.alpha() + 90))
             p.setBrush(bar)
             p.setPen(Qt.NoPen)
-            p.drawRoundedRect(QRectF(0, 0, w, 22), 4, 4)
+            p.drawRoundedRect(QRectF(0, 0, w, self.TITLE), 4, 4)
             f = QFont()
             f.setBold(True)
             p.setFont(f)
             p.setPen(QColor("#f4f4f4"))
-            p.drawText(QRectF(8, 0, w - 16, 22), Qt.AlignVCenter, self.data.get("title", ""))
+            p.drawText(QRectF(8, 0, w - 16, self.TITLE), Qt.AlignVCenter, self.data.get("title", ""))
             if self.data.get("text"):
                 p.setPen(QColor("#dddddd"))
                 p.drawText(QRectF(8, 26, w - 16, h - 30), Qt.TextWordWrap, self.data["text"])
@@ -406,8 +451,9 @@ class GraphItem(QGraphicsItem):
 
     def mousePressEvent(self, e):
         w, h = self.size()
-        if self.kind != "pin" and e.pos().x() > w - self.HANDLE and e.pos().y() > h - self.HANDLE:
-            self._resizing = (e.scenePos(), (w, h))
+        sides = self._sides(e.pos())
+        if any(sides):
+            self._resizing = (e.scenePos(), (self.pos().x(), self.pos().y(), w, h), sides)
             e.accept()
             return
         if self.kind == "frame" and self.scene() is not None:
@@ -419,11 +465,19 @@ class GraphItem(QGraphicsItem):
         super().mousePressEvent(e)
 
     def mouseMoveEvent(self, e):
-        if self._resizing is not None:
-            start, (w, h) = self._resizing
+        if self._resizing is not None:  # the sides grabbed follow the mouse, the others stay
+            start, (x, y, w, h), (left, top, right, bottom) = self._resizing
             d = e.scenePos() - start
+            min_w, min_h = self.MIN_SIZE
+            x0, x1 = x + (d.x() if left else 0.0), x + w + (d.x() if right else 0.0)
+            y0, y1 = y + (d.y() if top else 0.0), y + h + (d.y() if bottom else 0.0)
+            if x1 - x0 < min_w:
+                x0, x1 = (x1 - min_w, x1) if left else (x0, x0 + min_w)
+            if y1 - y0 < min_h:
+                y0, y1 = (y1 - min_h, y1) if top else (y0, y0 + min_h)
             self.prepareGeometryChange()
-            self.data["size"] = [max(80.0, w + d.x()), max(40.0, h + d.y())]
+            self.data["size"] = [x1 - x0, y1 - y0]
+            self.setPos(x0, y0)
             self.update()
             return
         super().mouseMoveEvent(e)

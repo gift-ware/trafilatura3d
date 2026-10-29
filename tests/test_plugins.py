@@ -217,6 +217,9 @@ class PluginTest(unittest.TestCase):
             w.doc.dirty.add(id(pkg))  # an unsaved edit
             self.m.plugins["sample"].host.editor.save(pkg)  # saved as Save does: no unsaved mark left
             self.assertNotIn(id(pkg), w.doc.dirty)
+            self.m.plugins["sample"].host.editor.save(pkg, self.dir / "moved.trafilatura3d")  # as Save As, no dialog
+            self.assertEqual(pkg.path, (self.dir / "moved.trafilatura3d").resolve())
+            self.assertTrue(pkg.path.exists())
             self.m.unload("sample")
             app.processEvents()
             self.assertNotIn("Studio", [a.text() for a in w.menuBar().actions()])  # removed with it

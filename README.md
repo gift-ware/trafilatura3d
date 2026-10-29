@@ -5,12 +5,14 @@
 An editor and engine for node-based procedural textures and for painting textures on 3D meshes, cooked on the
 GPU through [wgpu](https://github.com/pygfx/wgpu-py) (Metal, Vulkan, D3D12). It reads `.sbs` files and `.spp`
 projects (one way: they are imported into its own format) and follows the workflow familiar to users of node-based
-texturing tools. It is a work in progress: what is still missing is listed in [docs/STATUS.md](docs/STATUS.md).
+texturing tools. It is a work in progress: what is still missing is listed in [docs/STATUS.md](docs/STATUS.md),
+what each version changed in [CHANGELOG.md](CHANGELOG.md).
 Two workspaces share one engine:
 
 - **Graph**: packages (`.trafilatura3d`, JSON) hold graphs of atomic and library nodes, graph instances, exposed
   parameters, parameter functions, Pixel/Value processors and Stamp Maps; a 3D View with a rasterizer and a GPU
-  path tracer, bakers from high poly meshes.
+  path tracer, bakers from high poly meshes. Saving a package copies the files it uses from elsewhere (bitmaps,
+  SVGs, fonts, meshes) into `dependencies/<package name>/` next to it, linked relative to the package.
 - **Paint**: projects (`.trafilatura3dpaint`) hold Texture Sets with layer stacks (paint, fill, folders, masks,
   effects, the library's filters and generators), brush, path and projection tools, baking and export.
 

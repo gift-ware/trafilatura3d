@@ -12,6 +12,7 @@ from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QActionGroup
 from PySide6.QtWidgets import (QComboBox, QFileDialog, QFrame, QHBoxLayout, QInputDialog, QLabel, QLineEdit, QMenu,
                                QPlainTextEdit, QPushButton, QScrollArea, QToolButton, QVBoxLayout, QWidget)
+from shiboken6 import isValid
 
 from trafilatura3d import evaluator
 from trafilatura3d.compiler import (ABSOLUTE, BASE_PARAMS, DEPTHS, NODE_DEFAULTS, PARENT_DEFAULTS, PIXEL_RATIOS,
@@ -462,16 +463,13 @@ class PropertiesPanel(QScrollArea):
         compiled = self.doc.compiled(self.package, self.graph_id) if src else None
         return compiled.nodes.get(src[0], {}).get(src[1]) if compiled else None
 
-    def _levels_histogram(self, g, node, d):
-        """(counts, minimum, maximum, depth) of the image entering the node (`Evaluator.histogram`), or None."""
+    def _levels_histogram(self, g, node, d, then) -> None:
+        """`then((counts, minimum, maximum, depth))` with the histogram of the image entering the node, now or once
+        computed (`LiveCook.histogram`: nothing waits for the GPU); never without an image."""
         source = self._levels_input(g, node, d)
-        if source is None:
-            return None
-        job, out = source
-        try:
-            return (*self.doc.ev.histogram(job, out), job.depths[out])
-        except Exception:  # noqa: BLE001 - a failing node upstream must not stop the editor (as the thumbnails)
-            return None
+        if source is not None:
+            job, out = source
+            self.doc.live.histogram("levels", job, out, lambda stats: then((*stats, job.depths[out])))
 
     def _levels_channels(self, g, node, d):
         return LEVELS_GRAY if g.output_type(node.id, next(iter(d.outputs))) is PortType.GRAY else LEVELS_COLOR
@@ -487,9 +485,8 @@ class PropertiesPanel(QScrollArea):
             g.set_param(node.id, "level_out_low", v["level_out_high"])
             g.set_param(node.id, "level_out_high", v["level_out_low"])
 
-        def auto_level():
-            stats = self._levels_histogram(g, node, d)
-            if stats is None:
+        def auto_level(stats):
+            if node.id not in g.nodes:  # deleted while its histogram was computed
                 return
             _, lo, hi, _ = stats
             v = d.values(g.nodes[node.id])
@@ -511,7 +508,8 @@ class PropertiesPanel(QScrollArea):
 
         buttons = []
         for name, tip, fn in (("invert", "Invert", lambda: action("Invert", invert)),
-                              ("auto_level", "Auto level", lambda: action("Auto level", auto_level)),
+                              ("auto_level", "Auto level", lambda: self._levels_histogram(
+                                  g, node, d, lambda stats: action("Auto level", lambda: auto_level(stats)))),
                               ("histogram" if histogram else "renderer", "Switch interfaces", switch)):
             b = QToolButton()
             b.setIcon(icon(name, LEVELS_ACTIVE if fn is switch else "#cfcfcf"))
@@ -531,13 +529,16 @@ class PropertiesPanel(QScrollArea):
         comps = channels[index][1]
         values = d.values(node)
         editor = LevelsEditor([values[k][comps[0]] for k in LEVELS_PARAMS], [c for c, _ in channels], index)
-        stats = self._levels_histogram(g, node, d)
-        if stats is not None:
+
+        def histogram(stats):  # now, or once computed (the panel may have been rebuilt meanwhile)
+            if not isValid(editor):
+                return
             counts, _, _, depth = stats
             top = evaluator.DEPTHS[depth][0]  # the depth's largest value; float ones: 1
             shown = [(counts[:, c], HISTOGRAM_GRAY if channels is LEVELS_GRAY or c == 3 else HISTOGRAM_RGB[c])
                      for c in (comps if channels is LEVELS_COLOR else comps[:1])]
             editor.set_histogram(shown, ("0", f"{top:g}" if top else "1"))
+        self._levels_histogram(g, node, d, histogram)
 
         def edited(levels, final):
             def do():

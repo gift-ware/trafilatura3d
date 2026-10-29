@@ -104,6 +104,7 @@ ATOMIC = {
                                  "highlightcolor": _p("highlight_color"), "shadowcolor": _p("shadow_color")},
                       {"input1": "input", "inputgradient": "intensity_input"}),
     "bitmap": NodeMap("bitmap", {"colorswitch": _p("color_mode", COLOR_MODE), "bitmapresourcepath": _p("pkg_resource_path")}),
+    "svg": NodeMap("svg", {"colorswitch": _p("color_mode", COLOR_MODE), "vectorresourcepath": _p("pkg_resource_path")}),
     "text": NodeMap("text", {"text": _p("text"), "colorswitch": _p("color_mode", COLOR_MODE), "fontdata": _p("font"),
                              "fontsize": _p("font_size"), "position": _p("position"),
                              "matrix22": _p("transformation"),

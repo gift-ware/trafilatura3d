@@ -8,6 +8,9 @@ its Output nodes, its parameters the ones it exposes.
 
 A document may be incomplete while it is edited: unconnected inputs read their default value.
 Everything else is always valid: loading refuses broken documents, every edit checks first.
+
+The files a saved package uses live next to it: saving copies the ones from elsewhere into its own
+folder `dependencies/<package name>/` and writes every path relative to the package.
 """
 
 from __future__ import annotations
@@ -15,17 +18,25 @@ from __future__ import annotations
 import copy
 import re
 import dataclasses
+import filecmp
 import json
+import os
+import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from trafilatura3d import shaders
+from trafilatura3d.bake_params import absolute_file, map_param_files, map_setting_files, relative_file
 from trafilatura3d.nodes import NODES
 from trafilatura3d.nodes.base import EDITORS, Input, Node, Output, Param, ParamKind, PortType
 
 FORMAT_VERSION = 2
 SUFFIX = ".trafilatura3d"  # a package file
+DEPENDENCIES = "dependencies"  # next to saved packages: one folder per package (its name) with the files it uses
+RESOURCE_NODES = {"bitmap": "pkg_resource_path", "svg": "pkg_resource_path"}  # node type -> its file parameter
+FONT_SUFFIXES = (".ttf", ".otf", ".ttc")  # a Text node's font given as a file (else a system font's name)
 INSTANCE = "graph_instance"
 INPUT_TYPES = {"input_color": PortType.COLOR, "input_grayscale": PortType.GRAY, "input_value": PortType.VALUE}
 # The graph attributes besides Identifier, Label and Description.
@@ -474,6 +485,15 @@ class Graph:
         for n in self.nodes.values():
             if n.params.get("visible_if"):
                 n.params["visible_if"] = sub(n.params["visible_if"])
+        for n in self.instances():
+            for values in (n.params, n.links, n.functions):
+                if old in values:
+                    values[new] = values.pop(old)
+
+    def instances(self) -> list[NodeInstance]:
+        """This graph's instances in its own package: they follow its inputs (removed, renamed)."""
+        return [n for g in self.package.graphs.values() for n in g.nodes.values()
+                if n.type == INSTANCE and n.ref == self.id]
 
     def move_parameter(self, pid: str, delta: int) -> None:
         """Reorder the graph's inputs (their order on instances)."""
@@ -508,6 +528,9 @@ class Graph:
         for n in self.nodes.values():
             for name in [k for k, v in n.links.items() if v == id]:
                 del n.links[name]
+        for n in self.instances():
+            for values in (n.params, n.links, n.functions):
+                values.pop(id, None)
 
     # --- validation ---------------------------------------------------------------------------
 
@@ -638,10 +661,24 @@ class Note:
 
 @dataclass
 class Resource:
-    kind: str  # "bitmap" or "scene" (a 3D scene of the 3D View)
+    kind: str  # "bitmap", "svg", "font" or "scene" (a 3D scene of the 3D View)
     path: str  # relative to the package ("primitive:<name>" for a scene on a primitive)
     state: dict | None = None  # a scene's 3D View state (camera, lights, materials, renderer)
     baking: dict | None = None  # a scene's baking configuration (Bake model information)
+
+
+@dataclass
+class FileReference:
+    """A place of a package naming a file: the path as written there and how to write another."""
+    kind: str  # "Bitmap", "SVG", "Font", "3D scene"
+    name: str  # the resource id, else the node id
+    path: str
+    user: tuple[str, str] | None  # (graph id, node id) of a node naming it
+    resource: str | None  # the resource id of a package resource (or of the one a node names)
+    set: Callable[[str], None]
+
+
+_RESOURCE_KINDS = {"bitmap": "Bitmap", "svg": "SVG", "font": "Font", "scene": "3D scene"}
 
 
 class Package:
@@ -767,10 +804,61 @@ class Package:
                 m = o.nodes[nid]
                 n.position, n.params, n.base, n.functions = m.position, m.params, m.base, m.functions
 
+    def file_references(self) -> list[FileReference]:
+        """Every place naming a file: the linked resources (not the primitives of 3D scenes), the files of the
+        Bitmap and SVG nodes, the font files of the Text nodes."""
+        out = []
+        for rid, res in self.resources.items():
+            if res.kind == "scene" and res.path.startswith("primitive:"):
+                continue
+            out.append(FileReference(_RESOURCE_KINDS.get(res.kind, res.kind.capitalize()), rid, res.path, None, rid,
+                                     lambda p, r=res: setattr(r, "path", p)))
+        for gid, g in self.graphs.items():
+            for n in g.nodes.values():
+                if n.type in RESOURCE_NODES and n.params.get(RESOURCE_NODES[n.type]):
+                    key = RESOURCE_NODES[n.type]
+                    rid = next((k for k, r in self.resources.items() if r.path == n.params[key]), None)
+                    kind = "Bitmap" if n.type == "bitmap" else "SVG"
+                elif n.type == "text" and str(n.params.get("font", "")).lower().endswith(FONT_SUFFIXES):
+                    key, rid, kind = "font", None, "Font"
+                else:
+                    continue
+                out.append(FileReference(kind, rid or n.id, n.params[key], (gid, n.id), rid,
+                                         lambda p, params=n.params, k=key: params.__setitem__(k, p)))
+        return out
+
+    def _gather_files(self, target: Path) -> None:
+        """The files named by the package kept with it, saved at `target`: one outside its folder, or in another
+        package's dependencies there, copied into its own dependency folder; every path written relative to the
+        folder. Alias paths and missing files stay as written."""
+        from trafilatura3d.project import alias_of
+        folder = target.parent.resolve()
+        own, shared = dependency_folder(folder / target.name), folder / DEPENDENCIES
+        placed: dict[Path, str] = {}
+        for ref in self.file_references():
+            if alias_of(ref.path):
+                continue
+            p = Path(ref.path)
+            if not p.is_absolute():
+                if self.path is None:
+                    continue
+                p = self.path.parent / p
+            p = p.resolve()
+            if not p.is_file():
+                continue
+            if p not in placed:
+                kept = p.is_relative_to(folder) and (not p.is_relative_to(shared) or p.is_relative_to(own))
+                at = p if kept else _dependency_copy(p, own)
+                placed[p] = os.path.relpath(at, folder).replace(os.sep, "/")
+            if ref.path != placed[p]:
+                ref.set(placed[p])
+
     @classmethod
     def load(cls, path: str | Path) -> Package:
         path = Path(path).resolve()
-        return cls.from_dict(json.loads(path.read_text(encoding="utf-8")), path)
+        data = json.loads(path.read_text(encoding="utf-8"))
+        _baking_files(data, lambda p: absolute_file(p, path.parent))
+        return cls.from_dict(data, path)
 
     def save(self, path: str | Path | None = None) -> None:
         """Write the package, creating the folders missing on the way; plugins hear before_save (and may refuse it
@@ -779,9 +867,45 @@ class Package:
         target = Path(path).resolve() if path is not None else self.path
         plugins.emit("before_save", package=self, path=target)
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(json.dumps(self.to_dict(), indent=2) + "\n", encoding="utf-8")
+        self._gather_files(target)
+        data = self.to_dict()
+        _baking_files(data, lambda p: relative_file(p, target.parent))
+        target.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         self.path = target
         plugins.emit("package_saved", package=self, path=self.path)
+
+
+def dependency_folder(package_file: Path) -> Path:
+    """The folder of the files a package saved at `package_file` uses from elsewhere."""
+    return package_file.parent / DEPENDENCIES / package_file.stem
+
+
+def _dependency_copy(src: Path, folder: Path) -> Path:
+    """`src` in `folder`: the file there when it is the same, else a copy under its name (numbered when another file
+    has it)."""
+    folder.mkdir(parents=True, exist_ok=True)
+    at, i = folder / src.name, 1
+    while at.exists() and not filecmp.cmp(src, at, shallow=False):
+        i += 1
+        at = folder / f"{src.stem}_{i}{src.suffix}"
+    if not at.exists():
+        shutil.copyfile(src, at)  # the content only: not the flags of a system file, nor a read-only checkout
+    return at
+
+
+def _baking_files(data: dict, change) -> None:
+    """The files of the scenes' baking configurations in a package's data (to_dict) through `change`: the high
+    definition meshes, the cage, the output folder, the bakers' file parameters. On a copy: the data shares the
+    configurations with the package."""
+    for r in data.get("resources", {}).values():
+        if not r.get("baking"):
+            continue
+        cfg = r["baking"] = copy.deepcopy(r["baking"])
+        map_setting_files(cfg.get("settings") or {}, change)
+        if cfg.get("folder"):
+            cfg["folder"] = change(cfg["folder"])
+        for b in cfg.get("bakers", []):
+            map_param_files(b.get("id", ""), b.get("params") or {}, change)
 
 
 def _driven_by(input_id: str, value: list, driven: list[bool]) -> dict:

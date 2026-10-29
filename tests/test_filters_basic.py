@@ -54,6 +54,24 @@ class Adjustments(unittest.TestCase):
                                    [0.8, 0.6, 0.4, 0.5], atol=1e-5)
         self.assertAlmostEqual(px(t.read(t.node("invert", {"input": t.gray(0.2)}, invert=False)))[0], 0.2, places=5)
 
+    def test_hcl_measured_responses(self):
+        # Measured on the reference: luma kept while the hexagonal hue turns (red at 90 degrees clips to green),
+        # chroma added along the hue (a gray turns red), percentages towards the limits, chroma below 0 flipping
+        # the hue only without Clamp Chroma, alpha passed through.
+        t = Graph()
+        cases = [((1, 0, 0), dict(hue_degrees=90), (0.0, 0.392, 0.0)),
+                 ((1, 0, 0), dict(hue_turns=0.25, hue_mode="Turns"), (0.0, 0.392, 0.0)),
+                 ((1 / 3, 1 / 3, 1 / 3), dict(chrominance=0.2), (0.491, 0.291, 0.291)),
+                 ((1, 0, 0), dict(hue_degrees=5.11, chrominance=-0.08, luminance=-0.14), (0.741, 0.0, 0.0)),
+                 ((1 / 3, 1 / 3, 1 / 3), dict(proportional=True, proportional_luminance=20), (0.467, 0.467, 0.467)),
+                 ((1, 0, 0), dict(proportional=True, proportional_chrominance=-50), (0.606, 0.106, 0.106)),
+                 ((0.6, 0.4, 0.4), dict(chrominance=-0.5), (0.443, 0.443, 0.443)),
+                 ((0.6, 0.4, 0.4), dict(chrominance=-0.5, clamp_chroma=False), (0.206, 0.506, 0.506))]
+        for rgb, params, want in cases:
+            with self.subTest(rgb=rgb, **params):
+                out = px(t.read(t.node("hcl", {"input": t.color((*rgb, 0.5))}, **params)))
+                np.testing.assert_allclose(out, [*want, 0.5], atol=0.004)
+
     def test_threshold_is_binary(self):
         t = Graph()
         a = t.read(t.node("threshold", {"input": t.pattern()}, threshold=0.4))

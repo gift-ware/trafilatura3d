@@ -4,8 +4,10 @@ lists the conditions for a parameter to apply ("if X is ..."):
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
-from typing import Any
+from pathlib import Path
+from typing import Any, Callable
 
 BAKERS = {
     "ambient_occlusion": "Ambient Occlusion", "ambient_occlusion_from_mesh": "Ambient Occlusion from Mesh",
@@ -180,3 +182,33 @@ def names_match(low: str, high: str, low_suffix: str = "_low", high_suffix: str 
     Leg_high; not body_top_high, nor Head_high for head_low)."""
     key = low.replace(low_suffix, high_suffix, 1) if low_suffix and low_suffix in low else low + high_suffix
     return high == key or high.startswith(key + "_") or key.startswith(high + "_")
+
+
+# Files named by a bake's configuration: absolute in memory, relative to the document in its file, so a document
+# and its meshes move together (a Paint project, a package).
+def relative_file(path: str, folder: Path) -> str:
+    if not path or not Path(path).is_absolute():
+        return path
+    try:
+        return os.path.relpath(path, folder).replace(os.sep, "/")
+    except ValueError:  # another drive (Windows): kept absolute
+        return path
+
+
+def absolute_file(path: str, folder: Path) -> str:
+    return path if not path or Path(path).is_absolute() else str((folder / path).resolve())
+
+
+def map_setting_files(settings: dict, change: Callable[[str], str]) -> None:
+    """The mesh files of common settings (Settings as a dict: high definition meshes, cage) through `change`."""
+    if "high_meshes" in settings:
+        settings["high_meshes"] = [change(p) for p in settings["high_meshes"]]
+    if "cage_file" in settings:
+        settings["cage_file"] = change(settings["cage_file"])
+
+
+def map_param_files(baker: str, params: dict, change: Callable[[str], str]) -> None:
+    """A baker's file parameters (an input normal map, a texture...) through `change`."""
+    for name, p in BAKER_PARAMS.get(baker, {}).items():
+        if p.kind == "file" and params.get(name):
+            params[name] = change(params[name])

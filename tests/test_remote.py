@@ -544,6 +544,12 @@ class RemoteEditorTest(unittest.TestCase):
         self.assertEqual(nodes(), before | {"soft"})
         call("layout")
         self.assertEqual(w.doc.undo.count(), steps + 2)
+        self.assertEqual(call("focus", node="soft"), {"graph": MATERIAL_GRAPH, "node": "soft"})
+        self.assertEqual(w.graph.scene.selected_ids(), ["soft"])
+        self.assertEqual((w.view2d.graph_id, w.view2d.node_id), (MATERIAL_GRAPH, "soft"))
+        self.assertEqual(w.doc.undo.count(), steps + 2)  # not an edit
+        with self.assertRaises(channel.ChannelError):
+            call("focus", node="nothing")
         out_x = {pkg.graphs[MATERIAL_GRAPH].nodes[k].position[0] for k in nodes() if k.startswith("output")}
         self.assertEqual(len(out_x), 1)
         self.assertEqual(w.graph.scene.nodes["soft"].pos().x(), pkg.graphs[MATERIAL_GRAPH].nodes["soft"].position[0])
@@ -635,7 +641,7 @@ class RemoteEditorTest(unittest.TestCase):
                 bad = await client.call_tool("preview", {"node": "nothing"})
                 return names, graph, shot, bad
         names, graph, shot, bad = pump(app, lambda: asyncio.run(session()))
-        self.assertTrue({"status", "edit", "layout", "preview", "view3d", "timings"} <= names)
+        self.assertTrue({"status", "edit", "layout", "focus", "preview", "view3d", "timings"} <= names)
         self.assertIn("soft", graph.content[0].text)
         self.assertEqual([c.type for c in shot.content], ["text", "image"])
         self.assertTrue(bad.is_error)

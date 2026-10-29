@@ -55,8 +55,12 @@ class EditorAccess(plugins.EditorAccess):
         doc = self.window.paint.doc
         return doc.session if doc is not None else None
 
-    def edit(self, package, label, fn):
-        self.window.doc.edit(package, label, fn)
+    def edit(self, document, label, fn):
+        paint = self.window.paint.doc
+        if paint is not None and document is paint.session:  # the Paint project: its History
+            paint.edit(label, fn)
+        else:
+            self.window.doc.edit(document, label, fn)
 
     def open(self, path):
         self.window.open_path(path)
@@ -76,10 +80,11 @@ class EditorAccess(plugins.EditorAccess):
         g = self.window.graph
         return (g.package, g.graph_id) if g.package is not None else (None, "")
 
-    def save(self, document):
+    def save(self, document, path=None):
         w = self.window
         paint = w.paint.doc
-        saved = w.paint.save() if paint is not None and document is paint.session else w.save_package(document)
+        saved = (w.paint.save(path=path) if paint is not None and document is paint.session
+                 else w.save_package(document, path=path))
         if not saved:
             raise OSError(f"{document.path.name if document.path else 'the document'} could not be saved")
 

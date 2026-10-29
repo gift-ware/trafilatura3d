@@ -214,6 +214,22 @@ class RemoteServer(QObject):
         self.window.graph.view.focus()  # the whole graph framed
         return {"nodes": len(g.nodes), "dots_added": len(g.nodes) - before, **graphtools.layout_stats(g)}
 
+    def cmd_focus(self, node: str, graph: str | None = None):
+        """As picking a node from the Graph view's node list, then "View output in 2D view": the node selected and
+        framed, its parameters in Properties, its output in the 2D View."""
+        pkg, gid = self._target(graph)
+        self._show(pkg, gid)
+        panel = self.window.graph
+        if node not in panel.scene.nodes:
+            raise DocumentError(f"{node}: no such node")
+        panel.scene.clearSelection()
+        panel.scene.nodes[node].setSelected(True)  # Properties follows the selection
+        panel.view.focus()
+        panel.view_2d_node(node)
+        self.window.docks["view2d"].show()
+        self.window.docks["view2d"].raise_()
+        return {"graph": gid, "node": node}
+
     def cmd_undo(self):
         self.window.doc.undo.undo()
         return {"undo": self.window.doc.undo.undoText(), "redo": self.window.doc.undo.redoText()}

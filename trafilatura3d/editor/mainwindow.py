@@ -15,6 +15,7 @@ from PySide6.QtGui import QAction, QCursor, QKeySequence, QShortcut
 from PySide6.QtWidgets import (QApplication, QDockWidget, QFileDialog, QHBoxLayout, QLabel, QMainWindow,
                                QMenu, QMessageBox, QStackedWidget, QToolBar, QToolButton, QWidget)
 
+from trafilatura3d import __version__
 from trafilatura3d.editor import splash, theme
 from trafilatura3d.editor.document import Document
 from trafilatura3d.editor.explorer import ExplorerPanel
@@ -29,7 +30,7 @@ from trafilatura3d.editor.view2d import View2D
 from trafilatura3d.editor.view3d import View3D
 from trafilatura3d.package import SUFFIX, DocumentError, apply_template
 
-VERSION = "0.1.1"
+VERSION = __version__  # About, the status bar
 LAYOUT_KEY = "workspace/state/2"  # bump when the default layout changes, so old saved layouts are dropped
 
 
@@ -300,6 +301,13 @@ class MainWindow(QMainWindow):
         t = mb.addMenu("Tools")
         self._act(t, "Clear the cooked results cache", self._clear_cache)
         self._act(t, "Plugin Manager…", self.open_plugin_manager)
+        # Without it the warnings are found when a package opens, then only for the nodes being worked on
+        from trafilatura3d.editor import preferences
+        live = self._act(t, "Live warnings (slow)", lambda on: (preferences.put("live_warnings", on),
+                                                               self.doc.set_live_warnings(on)))
+        live.setCheckable(True)
+        live.setChecked(preferences.get("live_warnings"))
+        self.doc.live_warnings = live.isChecked()
         win = mb.addMenu("Windows")
         for dock in self.docks.values():
             win.addAction(dock.toggleViewAction())
@@ -597,8 +605,8 @@ class MainWindow(QMainWindow):
         self.graph.open_graph(pkg, gid)
         self.properties.show_target(pkg, gid, None)
 
-    def save_package(self, pkg, ask=False):
-        path = pkg.path
+    def save_package(self, pkg, ask=False, path=None):
+        path = path or pkg.path
         if ask or path is None:
             from trafilatura3d.editor.preferences import suggested_dir
             start = str(path) if path else str(Path(suggested_dir()) / f"untitled{SUFFIX}")

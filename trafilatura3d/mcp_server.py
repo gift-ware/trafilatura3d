@@ -114,6 +114,13 @@ def layout(graph: str | None = None, dots: bool = False) -> str:
 
 
 @server.tool(structured_output=False)
+def focus(node: str, graph: str | None = None) -> str:
+    """Show a node to the person at the editor: selected and framed in the Graph view, its parameters in
+    Properties, its output in the 2D View."""
+    return _json(_call("focus", node=node, graph=graph))
+
+
+@server.tool(structured_output=False)
 def undo() -> str:
     """Undo the editor's last step (any edit, also the person's)."""
     return _json(_call("undo"))

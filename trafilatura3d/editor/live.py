@@ -14,7 +14,7 @@ from typing import Any
 
 from PySide6.QtCore import QObject, QTimer
 
-from trafilatura3d.evaluator import PREVIEW, Evaluator, Fence, Job, restart_points
+from trafilatura3d.evaluator import PREVIEW, Evaluator, Job, Wait, restart_points
 
 PREVIEW_SIZE = 1024  # the largest side a dragged value is shown at
 PREVIEW_SETTLE_MS = 500
@@ -48,8 +48,8 @@ class LiveCook(QObject):
         self.previewing = False
         self.pending: list = []  # the steps still to run of the refresh
         self._running: Generator | None = None  # the step being run, when it is a generator (`_next`)
-        self._fence: Fence | None = None  # its last part's GPU work, resumed once done
-        self._warm_fence: Fence | None = None  # the same for the cooking ahead
+        self._fence: Wait | None = None  # its last part's work (the GPU's, a process's), resumed once done
+        self._warm_fence: Wait | None = None  # the same for the cooking ahead
         self.related: list[Job] = []
         self.precious: frozenset = frozenset()  # the refresh's restart points (`restart_points`)
         self.render_timer = QTimer(self, singleShot=True, interval=0, timeout=self._refresh)
@@ -61,6 +61,13 @@ class LiveCook(QObject):
         self._warming: Generator | None = None  # the cook of `warm_queue`'s first, between its steps
         self._warm_timer = QTimer(self, singleShot=True, interval=0, timeout=self._warm_step)
         self._warm_delay = QTimer(self, singleShot=True, interval=WARM_DELAY_MS, timeout=self._warm)
+        # the cooks the interface asked for besides the views (`side`): key -> (steps, done); the one running, its
+        # generator, its last fence
+        self._sides: dict[str, tuple[Callable[[], Generator], Callable[[Any], None]]] = {}
+        self._side_key: str | None = None
+        self._side_running: Generator | None = None
+        self._side_fence: Wait | None = None
+        self._side_timer = QTimer(self, singleShot=True, interval=0, timeout=self._side_step)
 
     # --- what starts a refresh ------------------------------------------------------------------
 
@@ -130,10 +137,11 @@ class LiveCook(QObject):
 
     def _start(self):
         self.pending = []
-        for running in (self._running, self._warming):  # the refresh before, the cooking ahead: abandoned (what
-            if running is not None:                      # they computed stays cached)
-                running.close()
+        for running in (self._running, self._warming, self._side_running):  # the refresh before, the cooking ahead,
+            if running is not None:   # a side cook: abandoned (what they computed stays cached; the side cook starts
+                running.close()       # over after the refresh)
         self._running = self._warming = self._fence = self._warm_fence = None
+        self._side_key = self._side_running = self._side_fence = None
         plan = self._plan()
         if plan is None:
             return
@@ -163,13 +171,15 @@ class LiveCook(QObject):
         if self._running is not None:  # a step that is a generator: one of its parts per turn
             try:
                 part = next(self._running)
-                self._fence = part if isinstance(part, Fence) else None
+                self._fence = part if isinstance(part, Wait) else None
             except StopIteration:
                 self._running = None
         if self.busy:
             self._step_timer.start(0)
             return
         self._done()
+        if self._sides:
+            self._side_timer.start(0)
         if self.previewing:  # the full resolution once the dragged value has been still this long after it shows
             self._settle_timer.start()
         else:
@@ -213,6 +223,8 @@ class LiveCook(QObject):
             return
         self._warm_fence = None
         if self._warming is None:
+            if self._sides:  # the side cooks first (`_side_step` resumes this after them)
+                return
             while self.warm_queue and self.warm_queue[0].key in self.ev.cache:
                 self.warm_queue.pop(0)
             if not self.warm_queue:
@@ -220,8 +232,71 @@ class LiveCook(QObject):
             self._warming = self.cook_steps([self.warm_queue.pop(0)])
         try:  # a job of its cook per turn, as the refresh's steps
             part = next(self._warming)
-            self._warm_fence = part if isinstance(part, Fence) else None
+            self._warm_fence = part if isinstance(part, Wait) else None
         except StopIteration:
             self._warming = None
         if self.warm_queue or self._warming is not None:
+            self._warm_timer.start(0)
+
+    # --- side cooks -----------------------------------------------------------------------------
+
+    def side(self, key: str, steps: Callable[[], Generator], done: Callable[[Any], None]) -> None:
+        """A cook the interface asks for besides what the views show (a Levels' histogram, the 2D view's): `steps()`
+        a generator (`Evaluator.histogram_steps`) run a part per turn of the event loop as the refresh's steps, once
+        the refresh is done and before the cooking ahead; `done(its return value)` (None if it failed). One per `key`,
+        run in the order asked: a new one replaces the one of its key (a panel rebuilt asks again); a refresh puts
+        them off and starts the one it stopped over after."""
+        if key == self._side_key:
+            self._side_running.close()
+            self._side_key = self._side_running = self._side_fence = None
+        self._sides.pop(key, None)
+        self._sides[key] = (steps, done)
+        self._side_timer.start(0)
+
+    @property
+    def side_busy(self) -> bool:
+        """A side cook asked for and not done yet (`side`)."""
+        return bool(self._sides)
+
+    def histogram(self, key: str, job: Job, output: str, then: Callable[[tuple], None]) -> None:
+        """`then(histogram)` of a job output (`Evaluator.histogram`): now when it is known, else once cooked as the
+        side cook `key` (nothing waits for the GPU); never if it fails."""
+        known = self.ev.histogram_known(job, output)
+        if known is not None:
+            then(known)
+            return
+        self.side(key, lambda: self.ev.histogram_steps(job, output),
+                  lambda stats: None if stats is None else then(stats))
+
+    def _side_step(self):
+        if not self._sides or self.busy:  # after the refresh (`_next` starts it again)
+            return
+        if self._paused():  # as the refresh's steps
+            self._side_timer.start(PAUSE_POLL_MS)
+            return
+        if self._side_fence is not None and not self._side_fence.done():  # as the refresh's steps
+            self._side_timer.start(FENCE_POLL_MS)
+            return
+        self._side_fence = None
+        if self._side_running is None:
+            if self._warming is not None:  # the cooking ahead's job ends first (a cook started now completes it,
+                self._side_timer.start(FENCE_POLL_MS)  # waiting)
+                return
+            self._side_key = next(iter(self._sides))
+            self._side_running = self._sides[self._side_key][0]()
+        try:
+            part = next(self._side_running)
+            self._side_fence = part if isinstance(part, Wait) else None
+            self._side_timer.start(0)
+            return
+        except StopIteration as end:
+            value = end.value
+        except Exception:  # noqa: BLE001 - a failing node upstream must not stop the editor (as the thumbnails)
+            value = None
+        done = self._sides.pop(self._side_key)[1]
+        self._side_key = self._side_running = None
+        done(value)
+        if self._sides:
+            self._side_timer.start(0)
+        elif self.warm_queue:
             self._warm_timer.start(0)

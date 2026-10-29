@@ -52,6 +52,7 @@ class Document(QObject):
     layout_changed = Signal(object)  # a package whose arrangement only changed: nothing to recook
     packages_changed = Signal()  # a package opened, closed, saved or renamed
     dirty_changed = Signal()  # an edit, undo or redo: the unsaved marks may change
+    warnings_changed = Signal(object)  # a package whose warnings were checked again (`check`, `check_nodes`)
     error = Signal(str)
 
     def __init__(self, evaluator: Evaluator | None = None):
@@ -67,6 +68,9 @@ class Document(QObject):
         self.preview: dict[tuple, dict] = {}
         self.dragging = False  # the last edit is a value being dragged (`edit` drag): its release comes next
         self.live: LiveCook | None = None  # the Graph workspace's refresh (set by the main window)
+        # The warnings found (`check`, `check_nodes`): id(package) -> graph id ("" its dependencies) -> warnings
+        self.warnings: dict[int, dict[str, list]] = {}
+        self.live_warnings = False  # Tools > Live warnings: every edit checks its whole package again (slow)
         self.undo.indexChanged.connect(lambda _: self.dirty_changed.emit())
 
     # --- packages -----------------------------------------------------------------------------
@@ -86,6 +90,7 @@ class Document(QObject):
                 return pkg
         pkg = Package.load(path)
         self.packages.append(pkg)
+        self.check(pkg)  # opened: what is wrong in it, shown at once
         self.packages_changed.emit()
         from trafilatura3d import plugins
         plugins.emit("package_opened", package=pkg)
@@ -98,6 +103,7 @@ class Document(QObject):
         pkg, _ = import_sbs(path)
         self.packages.append(pkg)
         self.dirty.add(id(pkg))
+        self.check(pkg)  # what the import could not convert, shown at once
         self.packages_changed.emit()
         from trafilatura3d import plugins
         plugins.emit("package_opened", package=pkg)
@@ -112,6 +118,7 @@ class Document(QObject):
         self.undo.clear()  # snapshots refer to the closed package (first: its signals reach views still showing it)
         self.packages.remove(pkg)
         self.dirty.discard(id(pkg))
+        self.warnings.pop(id(pkg), None)
         self.packages_changed.emit()
 
     def set_preview(self, pkg: Package, graph_id: str, values: dict | None) -> None:
@@ -121,6 +128,53 @@ class Document(QObject):
         else:
             self.preview[(id(pkg), graph_id)] = dict(values)
         self.changed.emit(pkg)
+
+    # --- warnings -------------------------------------------------------------------------------
+
+    def check(self, pkg: Package) -> None:
+        """Every warning of a package (`diagnostics.package_warnings`: every graph, every dependency, slow): when it
+        opens, and after each edit with Tools > Live warnings."""
+        from trafilatura3d.diagnostics import package_warnings
+        try:
+            self.warnings[id(pkg)] = package_warnings(pkg)
+        except Exception:  # noqa: BLE001 - diagnostics must never break the editor
+            self.warnings[id(pkg)] = {}
+        self.warnings_changed.emit(pkg)
+
+    def check_nodes(self, pkg: Package, graph_id: str, node_ids) -> None:
+        """The warnings of the nodes being worked on (selected, just connected) checked again
+        (`diagnostics.node_warnings`), the others kept as last found: the work's own nodes, not the chain."""
+        from trafilatura3d.diagnostics import node_warnings
+        if graph_id not in pkg.graphs:
+            return
+        ids = set(node_ids)
+        try:
+            fresh = node_warnings(pkg, graph_id, ids)
+        except Exception:  # noqa: BLE001 - diagnostics must never break the editor
+            fresh = []
+        found = self.warnings.setdefault(id(pkg), {})
+        before = found.get(graph_id, [])
+        now = [w for w in before if w.node not in ids] + fresh
+        if now == before:
+            return
+        if now:
+            found[graph_id] = now
+        else:
+            found.pop(graph_id, None)
+        self.warnings_changed.emit(pkg)
+
+    def graph_warnings(self, pkg: Package, graph_id: str) -> list:
+        """A graph's warnings as last found, without the nodes deleted since ("" the package's dependencies')."""
+        g = pkg.graphs.get(graph_id)
+        return [w for w in self.warnings.get(id(pkg), {}).get(graph_id, [])
+                if w.node is None or g is None or w.node in g.nodes]
+
+    def set_live_warnings(self, on: bool) -> None:
+        """Tools > Live warnings: every edit checks its whole package again (slow); on, every package now."""
+        self.live_warnings = on
+        if on:
+            for pkg in self.packages:
+                self.check(pkg)
 
     def name(self, pkg: Package) -> str:
         return (pkg.path.stem if pkg.path else "Unsaved Package") + ("*" if id(pkg) in self.dirty else "")
@@ -164,6 +218,8 @@ class Document(QObject):
             self.layout_changed.emit(pkg)
             return
         self._revision[id(pkg)] = self._revision.get(id(pkg), 0) + 1
+        if self.live_warnings and not self.dragging:  # at a dragged value's release, not at each step
+            self.check(pkg)
         self.changed.emit(pkg)
 
     # --- compilation --------------------------------------------------------------------------
@@ -184,11 +240,24 @@ class Document(QObject):
         return self._compiled[key]
 
     def shown(self, pkg: Package, graph_id: str) -> Compiled | None:
-        """What the viewports show of a graph: compiled at most PREVIEW_SIZE on a side while a value is dragged
-        (`live` previewing), else at its resolution."""
+        """What the viewports show of a graph: at its resolution, or while a value is dragged (`live` previewing)
+        compiled at most PREVIEW_SIZE on a side where the drag changes it. A node output whose full resolution result
+        is cached is not changed by the drag (a job's key is its content): it stays at full resolution (a node linked
+        to nothing, dragged, recooked the whole graph at the preview resolution)."""
         full = self.compiled(pkg, graph_id)
         if full is None or self.live is None or not self.live.previewing:
             return full
         largest = max((max(j.size) for j in full.jobs.values()), default=1)
         shift = max(0, largest.bit_length() - PREVIEW_SIZE.bit_length())
-        return self.compiled(pkg, graph_id, shift) if shift else full
+        preview = self.compiled(pkg, graph_id, shift) if shift else full
+        if preview is None or preview is full:
+            return full
+        cache = self.ev.cache
+
+        def pick(src, low):
+            return src if src[0].key in cache or low is None else low
+        return Compiled(preview.jobs,
+                        {nid: {out: pick(src, preview.nodes.get(nid, {}).get(out)) for out, src in outs.items()}
+                         for nid, outs in full.nodes.items()},
+                        {ident: pick(src, preview.outputs.get(ident)) for ident, src in full.outputs.items()},
+                        preview.graph)

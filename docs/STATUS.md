@@ -30,7 +30,11 @@ listed in the import report (the Log panel). Known gaps:
 - Library graphs without a counterpart in our library become broken instances, listed in the import report; the
   graph still opens and cooks with them disconnected.
 - Our nodes follow the documented parameters and are tuned on the visible output, so imported materials look close
-  to, not identical with, the original. Known larger differences: Leaks, Mask Builder, Sun Bleach.
+  to, not identical with, the original. Known larger differences: Leaks, Mask Builder, Sun Bleach; Normal To Height
+  HQ integrates the slopes (clean broad forms) where the original weighs every scale alike up to a cut-off, so a
+  height made by it carries more of the broad forms, and Relief Balance at its ends keeps less of the other band.
+- Resources embedded in a `.sbs` (SVGs) are extracted to a temporary folder, and copied into the package's
+  dependency folder when it is saved.
 
 ## Graph workspace
 

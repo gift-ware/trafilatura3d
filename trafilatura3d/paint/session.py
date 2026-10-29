@@ -385,6 +385,8 @@ class Session:
         tmp = path.with_suffix(path.suffix + ".tmp")
         with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
             data = self.project.to_dict()
+            from trafilatura3d.paint.baking import files_for_save
+            files_for_save(data, path.resolve().parent)
             data["source"] = self.source
             z.writestr("project.json", json.dumps(data, indent=1))
             z.writestr("mesh.npz", _mesh_bytes(self.objects, self.materials, self.fit))
@@ -413,6 +415,8 @@ class Session:
             data = json.loads(z.read("project.json"))
             warnings = drop_unknown_nodes(data)  # nodes gone from the library: emptied, reported
             warnings += drop_unknown_shader(data)
+            from trafilatura3d.paint.baking import files_from_load
+            files_from_load(data, path.resolve().parent)
             project = Project.from_dict(data)
             objects, materials, fit = _mesh_from(z.read("mesh.npz"))
             s = cls(project, objects, materials, evaluator)

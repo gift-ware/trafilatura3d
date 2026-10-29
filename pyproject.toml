@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trafilatura3d"
-version = "0.2.0"
+dynamic = ["version"]  # trafilatura3d.__version__, the one place it is written
 description = "Node-based procedural texture graphs cooked on the GPU (wgpu)."
 readme = "README.md"
 authors = [{name = "gift-ware"}]
@@ -41,6 +41,9 @@ trafilatura3d-mcp = "trafilatura3d.mcp_server:main"
 
 [project.gui-scripts]
 trafilatura3d-editor = "trafilatura3d.editor.app:main"  # Windows: started without a console
+
+[tool.setuptools.dynamic]
+version = {attr = "trafilatura3d.__version__"}
 
 [tool.setuptools.packages.find]
 include = ["trafilatura3d*"]

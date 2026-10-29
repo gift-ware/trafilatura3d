@@ -794,10 +794,10 @@ class PaintWorkspace(QMainWindow):
             QApplication.processEvents()
         return import_spp(path, evaluator=self.ev, progress=progress)
 
-    def save(self, ask=False) -> bool:
+    def save(self, ask=False, path=None) -> bool:
         if self.doc is None:
             return False
-        path = self.doc.session.path
+        path = path or self.doc.session.path
         if ask or path is None:
             from trafilatura3d.editor.preferences import suggested_dir
             start = str(path) if path else str(Path(suggested_dir()) / f"{Path(self.doc.project.mesh).stem}{PROJECT_SUFFIX}")

@@ -3,6 +3,7 @@ node, handles and fields that edit one channel of the five FLOAT4 values, a drag
 (Invert, Auto level, Switch interfaces)."""
 
 import os
+import time
 import unittest
 
 
@@ -52,6 +53,8 @@ class LevelsHistogramTest(unittest.TestCase):
         g.connect(noise, "output", tint, "input")
         self.color = g.add_node("levels")
         g.connect(tint, "output", self.color, "input")
+        from trafilatura3d.editor.live import LiveCook
+        self.doc.live = LiveCook(None, self.doc.ev, lambda: None, lambda step: None)  # the histograms' side cooks
         self.panel = PropertiesPanel(self.doc)
         self.panel.resize(380, 900)
         self.panel.show()
@@ -62,11 +65,19 @@ class LevelsHistogramTest(unittest.TestCase):
         self.doc.undo.clear()
         self.app.processEvents()
 
+    def settle(self):
+        """The event loop run until the histogram asked for is computed (a side cook, a step per turn)."""
+        t0 = time.perf_counter()
+        self.app.processEvents()
+        while self.doc.live.side_busy and time.perf_counter() - t0 < 30:
+            self.app.processEvents()
+        self.app.processEvents()
+
     def editor(self, node):
         from trafilatura3d.editor.widgets import LevelsEditor
         if node is not None:
             self.panel.show_target(self.pkg, self.gid, node)
-        self.app.processEvents()
+        self.settle()
         return self.panel.findChild(LevelsEditor)
 
     def values(self, node):
@@ -77,7 +88,7 @@ class LevelsHistogramTest(unittest.TestCase):
         from PySide6.QtWidgets import QToolButton
         b = next(b for b in self.panel.findChildren(QToolButton) if b.toolTip() == tip)
         b.click()
-        self.app.processEvents()
+        self.settle()
         self.app.processEvents()
 
     def test_grayscale_drags_fields_and_undo(self):

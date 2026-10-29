@@ -51,10 +51,47 @@ def _read_image(path: str) -> np.ndarray:
     return out
 
 
-def _render_svg(**kwargs) -> np.ndarray:
-    """Rasterize with resvg into float32 RGBA (resvg gives PNG bytes: read back through a temp file)."""
-    import resvg_py
-    data = resvg_py.svg_to_bytes(**kwargs)
+_RASTERIZERS = None  # the threads each waiting for a resvg process (`_rasterized`)
+_RASTERIZING: dict = {}  # upload key -> the render being made (a cook started over takes it up)
+# A Python of its own with resvg alone: the options in (pickled), the PNG bytes out. Not multiprocessing: its spawn
+# runs the parent's main script again in the child (any script without a __main__ guard).
+_RESVG = ("import pickle, sys, resvg_py; "
+          "sys.stdout.buffer.write(resvg_py.svg_to_bytes(**pickle.load(sys.stdin.buffer)))")
+
+
+def _resvg(kwargs: dict) -> bytes:
+    """resvg's PNG bytes of an SVG, from a process of its own (this thread waits without Python's lock)."""
+    import pickle
+    import subprocess
+    import sys
+    done = subprocess.run([sys.executable, "-I", "-c", _RESVG], input=pickle.dumps(kwargs), capture_output=True)
+    if done.returncode:
+        raise ValueError(f"SVG: {done.stderr.decode(errors='replace').strip().splitlines()[-1:]}")
+    return done.stdout
+
+
+def _rasterized(ctx, key: str, **kwargs):
+    """The texture of an SVG rasterized by resvg (`kwargs` its options), uploaded by `key`: a generator whose step
+    waits for the render (`Pending`), its texture the return value. resvg holds Python's lock for its whole render (a
+    4096 mask: 5 s), so it renders in a process of its own: the interface answers meanwhile."""
+    from trafilatura3d.evaluator import Pending
+    global _RASTERIZERS
+    data = None
+    if not ctx.ev.uploaded(key):
+        future = _RASTERIZING.get(key)
+        if future is None:
+            if _RASTERIZERS is None:
+                from concurrent.futures import ThreadPoolExecutor
+                _RASTERIZERS = ThreadPoolExecutor(max(1, min(4, (os.cpu_count() or 2) // 2)), "resvg")
+            future = _RASTERIZING[key] = _RASTERIZERS.submit(_resvg, kwargs)
+            future.add_done_callback(lambda _: _RASTERIZING.pop(key, None))
+        yield Pending(future)
+        data = future.result()
+    return ctx.ev.upload(key, lambda: _png_image(data))
+
+
+def _png_image(data: bytes) -> np.ndarray:
+    """resvg's PNG bytes as float32 RGBA (read back through a temp file)."""
     fd, tmp = tempfile.mkstemp(suffix=".png")
     try:
         with os.fdopen(fd, "wb") as f:
@@ -149,8 +186,8 @@ class SVG(Node):
     def encode(self, ctx, job):
         path, (w, h) = job.extra["file"], job.size
         if path and job.extra["mtime"]:
-            tex = ctx.ev.upload(f"svg:{path}:{job.extra['mtime']}:{w}x{h}",
-                                lambda: _render_svg(svg_path=path, width=w, height=h))
+            tex = yield from _rasterized(ctx, f"svg:{path}:{job.extra['mtime']}:{w}x{h}", svg_path=path, width=w,
+                                         height=h)
         else:
             tex = ctx.ev.constant((0.0, 0.0, 0.0, 0.0))
         place(ctx, job, tex, composite=True, background=job.values["background_color"])
@@ -201,8 +238,8 @@ class Text(Node):
         file = job.extra.get("font_file", {}).get("file", "")
         svg, font_files = _text_svg(v, file, job.extra.get("font_face", 0)) if file and Path(file).is_file() else \
             ('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>', None)  # no font: no text
-        tex = ctx.ev.upload(f"text:{job.key}", lambda: _render_svg(svg_string=svg, width=w, height=h,
-                                                                   font_files=font_files, skip_system_fonts=True))
+        tex = yield from _rasterized(ctx, f"text:{job.key}", svg_string=svg, width=w, height=h, font_files=font_files,
+                                     skip_system_fonts=True)
         place(ctx, job, tex, composite=True, background=v["background"], tint=v["font_color"])
 
 

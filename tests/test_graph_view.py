@@ -182,16 +182,61 @@ class WarningsTest(unittest.TestCase):
         self.addCleanup(close)
         panel = w.graph
         one, two = [GraphWarning("first", None, "")], [GraphWarning("first", None, ""), GraphWarning("second", None, "")]
-        with mock.patch("trafilatura3d.diagnostics.graph_warnings", return_value=one):
-            panel._show_warnings(panel.graph)
-            self.assertFalse(panel.warnings_label.isHidden())
-            panel._warning_link("#dismiss")
-            self.assertTrue(panel.warnings_label.isHidden())
-            panel._show_warnings(panel.graph)  # the same warnings: still closed
-            self.assertTrue(panel.warnings_label.isHidden())
-        with mock.patch("trafilatura3d.diagnostics.graph_warnings", return_value=two):
-            panel._show_warnings(panel.graph)  # a new one: shown again
-            self.assertFalse(panel.warnings_label.isHidden())
+        found = w.doc.warnings.setdefault(id(panel.package), {})  # as `Document.check` found them
+        found[panel.graph_id] = one
+        panel._show_warnings(panel.graph)
+        self.assertFalse(panel.warnings_label.isHidden())
+        panel._warning_link("#dismiss")
+        self.assertTrue(panel.warnings_label.isHidden())
+        panel._show_warnings(panel.graph)  # the same warnings: still closed
+        self.assertTrue(panel.warnings_label.isHidden())
+        found[panel.graph_id] = two
+        panel._show_warnings(panel.graph)  # a new one: shown again
+        self.assertFalse(panel.warnings_label.isHidden())
+
+    def test_warnings_found_at_open_then_for_the_nodes_worked_on(self):
+        """A package's warnings are found when it opens; an edit does not look again (Tools > Live warnings does), a
+        node selected or connected has its own checked again: a link that now fits loses its warning."""
+        from unittest import mock
+        import rendercanvas.qt as rq
+        from PySide6.QtCore import QCoreApplication, QEvent
+        init = rq.QRenderWidget.__init__
+        rq.QRenderWidget.__init__ = lambda self, *a, **k: init(self, *a, **{**k, "present_method": "bitmap"})
+        self.addCleanup(setattr, rq.QRenderWidget, "__init__", init)
+        from trafilatura3d.diagnostics import GraphWarning
+        from trafilatura3d.editor.mainwindow import MainWindow
+        from trafilatura3d.package import Package
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        pkg = Package()
+        g = pkg.new_graph("G", 7)
+        noise = g.add_node("gaussian_noise")
+        blur = g.add_node("blur")
+        path = Path(tmp.name) / "warn.trafilatura3d"
+        pkg.save(path)
+        w = MainWindow([str(path)])
+
+        def close():
+            w.doc.undo.indexChanged.disconnect()
+            w.graph.scene.selectionChanged.disconnect()
+            w.deleteLater()
+            QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+        self.addCleanup(close)
+        panel = w.graph
+        pkg, g = panel.package, panel.graph
+
+        def messages():
+            return [w.message for w in w.doc.graph_warnings(pkg, "G")]
+        self.assertIn("No output node defined", messages())  # found at the opening
+        with mock.patch("trafilatura3d.diagnostics.package_warnings") as full:
+            panel.edit("Add", lambda: g.add_node("output"))
+            full.assert_not_called()  # an edit never checks the whole package
+        self.assertIn("No output node defined", messages())  # kept as found (a graph's own check: at the opening)
+        panel.connect(noise, "output", blur, "input")
+        self.assertEqual([x.node for x in w.doc.graph_warnings(pkg, "G") if x.node], [])
+        w.doc.warnings[id(pkg)]["G"].append(GraphWarning("stale", blur))
+        panel.scene.nodes[blur].setSelected(True)  # selected: its own warnings checked again
+        self.assertNotIn("stale", messages())
 
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")

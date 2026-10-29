@@ -368,12 +368,12 @@ class ImportTest(unittest.TestCase):
                                   "--search", str(self.dir / "nothing"), "--search", str(self.dir / "lib")]), 0)
         self.assertIn("0 missing", buf.getvalue())
         from trafilatura3d.sbs.importer import _Importer
-        found = _Importer(path, None, [self.dir.resolve() / "lib"])._find(Path("H:\\x\\helper.sbs"))
+        found = _Importer(path, [self.dir.resolve() / "lib"])._find(Path("H:\\x\\helper.sbs"))
         self.assertEqual(found, newest.resolve())  # the newest of that name
 
     def test_text(self):
-        """A Text node's parameters; its system font, found by name, is copied into fonts/ next to the package; a
-        font the system doesn't have is reported (the default font draws it)."""
+        """A Text node's parameters; its system font, found by name, is copied into dependencies/ when the package
+        is saved (its own folder there); a font the system doesn't have is reported (the default font draws it)."""
         from trafilatura3d import fonts
         found = fonts.find("")
         if found is None or found[1]:
@@ -388,10 +388,12 @@ class ImportTest(unittest.TestCase):
                      output_node("11", "800", ("10", "100")), [("out", "800", "")])
         path = self.write("main.sbs", package([], main))
         out = self.dir / "out"
-        pkg, report = import_sbs(path, base=out)
+        pkg, report = import_sbs(path)
         n = pkg.graphs["main"].nodes["text1"]
-        self.assertEqual(n.params["font"], f"fonts/{found[0].name}")
-        self.assertTrue((out / "fonts" / found[0].name).is_file())
+        self.assertEqual(Path(n.params["font"]), found[0])
+        pkg.save(out / "main.trafilatura3d")
+        self.assertEqual(n.params["font"], f"dependencies/main/{found[0].name}")
+        self.assertTrue((out / "dependencies" / "main" / found[0].name).is_file())
         self.assertEqual((n.params["font_size"], n.params["alignment"], n.params["position"],
                           n.params["transformation"]), (0.1, "Left", [0.1, -0.2], [2.0, 0.0, 0.0, 1.0]))
         self.assertEqual(report.params_unmapped, 0)
@@ -411,6 +413,30 @@ class ImportTest(unittest.TestCase):
         self.assertEqual((report.missing, set(pkg.graphs)), (0, {"main", "helper"}))
         lost = self.write("pack/sub/main.sbs", package([("deps/helper/helper.sbs", "53")], main))
         self.assertEqual(import_sbs(lost)[1].missing, 1)  # pack/deps is outside pack/sub
+
+    def test_embedded_svg_goes_to_dependencies_on_save(self):
+        # An SVG kept inside the .sbs (base64 of its length and zlib data): the SVG node reads it from a temporary
+        # file, and saving the package puts it in its dependency folder under the resource's name.
+        import base64
+        import struct
+        import zlib
+        svg = b'<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="4" height="8"/></svg>'
+        data = base64.b64encode(struct.pack(">I", len(svg)) + zlib.compress(svg)).decode()
+        res = ('<group><identifier v="Resources"/><content><resource><identifier v="Logo"/><type v="svg"/>'
+               '<format v="SVG"/><filepath v="dependencies"/><source><binembedded>'
+               f'<datalength v="{len(svg)}"/><strdata v="{data}"/></binembedded></source></resource></content></group>')
+        nodes = (comp_filter("10", "svg", param("vectorresourcepath", "String", "pkg:///Resources/Logo?dependency=99") +
+                             param("colorswitch", "Bool", 0)) + output_node("11", "800", ("10", "100")))
+        path = self.write("svg.sbs", package([("?himself", "99")], graph("G", nodes, [("o", "800", "")]) + res))
+        pkg, report = import_sbs(path)
+        n = next(n for n in pkg.graphs["G"].nodes.values() if n.type == "svg")
+        self.assertEqual((report.missing, n.params["color_mode"]), (0, "Grayscale"))
+        self.assertEqual(Path(n.params["pkg_resource_path"]).read_bytes(), svg)
+        pkg.save(self.dir / "out" / "svg.trafilatura3d")
+        self.assertEqual((n.params["pkg_resource_path"], pkg.resources["Logo"].path),
+                         ("dependencies/svg/Logo.svg", "dependencies/svg/Logo.svg"))
+        self.assertEqual((self.dir / "out" / "dependencies" / "svg" / "Logo.svg").read_bytes(), svg)
+        self.assertEqual(pkg.resources["Logo"].kind, "svg")
 
     def test_bitmap_fxmap_pixel_processor_gradient(self):
         res = ('<group><identifier v="Resources"/><content><resource><identifier v="img"/><type v="bitmap"/>'
@@ -438,10 +464,11 @@ class ImportTest(unittest.TestCase):
                  comp_filter("13", "gradient", "", {"input1": ("12", "120")}, extra=grad) +
                  output_node("14", "800", ("13", "130")))
         path = self.write("fx.sbs", package([("?himself", "99")], graph("G", nodes, [("o", "800", "")]) + res))
-        pkg, report = import_sbs(path, base=self.dir)
+        pkg, report = import_sbs(path)
         by = {n.type: n for n in pkg.graphs["G"].nodes.values()}
-        self.assertEqual(by["bitmap"].params["pkg_resource_path"], "textures/img.png")
-        self.assertEqual(pkg.resources["img"].path, "textures/img.png")
+        img = str(self.dir.resolve() / "textures" / "img.png")
+        self.assertEqual(by["bitmap"].params["pkg_resource_path"], img)
+        self.assertEqual(pkg.resources["img"].path, img)
         self.assertIn("bitmap file not found", "\n".join(report.lines()))
         fxmap = by["stamp_map"].params["fxmap"]
         q = {n["id"]: n for n in fxmap["nodes"]}

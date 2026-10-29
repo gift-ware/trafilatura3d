@@ -10,16 +10,21 @@ imported: they map to our nodes (mapping.LIBRARY), and one without a counterpart
 What can't be converted is never faked nor dropped silently. A node we have no counterpart for becomes a graph
 instance whose reference can't be resolved (like a Designer node whose dependency is missing): it keeps its
 connections, so the graph stays wired, and its values; an unknown parameter, function or feature is left at our
-default. All of it is listed in the `Report`, and kept as the package's notes (shown with the graph's warnings)."""
+default. All of it is listed in the `Report`, and kept as the package's notes (shown with the graph's warnings).
+
+Files are named by absolute paths; resources embedded in a .sbs are written to a temporary folder (EMBEDDED). Saving
+the package copies them all into its dependencies/ folder."""
 
 from __future__ import annotations
 
+import base64
 import dataclasses
 import glob
-import os
+import hashlib
 import re
-import shutil
+import tempfile
 import xml.etree.ElementTree as ET
+import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -63,13 +68,11 @@ class Report:
         return [head] + [f"  {n.graph}" + (f".{n.node}" if n.node else "") + f": {n.message}" for n in self.notes]
 
 
-def import_sbs(path: str | Path, base: str | Path | None = None,
-               search: tuple[str | Path, ...] = ()) -> tuple[Package, Report]:
-    """The package of a .sbs file (not saved: its path is None). File paths are written relative to `base` (the
-    folder the .trafilatura3d will be saved in) when given, else absolute. A dependency whose written path doesn't exist
-    (an absolute path of another machine) is looked for by file name in the `search` folders and their subfolders."""
+def import_sbs(path: str | Path, search: tuple[str | Path, ...] = ()) -> tuple[Package, Report]:
+    """The package of a .sbs file (not saved: its path is None). A dependency whose written path doesn't exist (an
+    absolute path of another machine) is looked for by file name in the `search` folders and their subfolders."""
     path = Path(path).resolve()
-    imp = _Importer(path, Path(base).resolve() if base is not None else None, [Path(d).resolve() for d in search])
+    imp = _Importer(path, [Path(d).resolve() for d in search])
     root = imp.file(path)
     for g in root.iter("graph"):
         imp.report.graphs.append(imp.graph(path, text(g, "identifier")))
@@ -85,8 +88,7 @@ def _ident(s: str) -> str:
 
 
 class _Importer:
-    def __init__(self, source: Path, base: Path | None, search: list[Path]):
-        self.base = base
+    def __init__(self, source: Path, search: list[Path]):
         self.search = search
         self._found: dict[str, Path | None] = {}  # file name -> where the search folders have it
         self.pkg = Package()
@@ -105,14 +107,6 @@ class _Importer:
             except ET.ParseError as e:
                 raise DocumentError(f"{path}: not a Designer package ({e})") from None
         return self._files[path]
-
-    def _write_path(self, p: Path) -> str:
-        if self.base is None:
-            return str(p)
-        try:
-            return os.path.relpath(p, self.base).replace(os.sep, "/")
-        except ValueError:  # another drive
-            return str(p)
 
     def _dependency(self, file: Path, uid: str) -> tuple[str, Path | None]:
         """A dependency of `file` by uid: (its file name as written, its path or None when it is the file itself)."""
@@ -235,8 +229,8 @@ class _Importer:
         return {name: definition, **body.get("functions", {})}
 
     def resource(self, file: Path, url: str, graph: str, node: str, kind: str = "bitmap") -> str:
-        """The file path of a pkg:///Group/name?dependency=uid resource (a bitmap, a font), added to the package's
-        resources."""
+        """The file path of a pkg:///Group/name?dependency=uid resource (a bitmap, an SVG, a font), added to the
+        package's resources."""
         ident = url.split("?")[0].rsplit("/", 1)[-1]
         uid = url.split("dependency=")[-1] if "dependency=" in url else ""
         written_dep, owner = self._dependency(file, uid) if uid else ("", None)
@@ -249,13 +243,14 @@ class _Importer:
         if res is None:
             self.report.add(graph, node, f"{kind} resource {url} not found")
             return ""
-        p = _local(owner, text(res, "source/externalcopy/filename") or text(res, "filepath"))
+        p = _embedded(res, kind) if res.find("source/binembedded") is not None else \
+            _local(owner, text(res, "source/externalcopy/filename") or text(res, "filepath"))
         if not p.is_file():
             self.report.add(graph, node, f"{kind} file not found: {p}")
         return self._add_resource(ident, kind, p)
 
     def _add_resource(self, ident: str, kind: str, p: Path) -> str:
-        written = self._write_path(p)
+        written = str(p)
         rid = _ident(ident)
         while rid in self.pkg.resources and self.pkg.resources[rid].path != written:
             rid += "_"
@@ -274,12 +269,6 @@ class _Importer:
         p, face = found
         if face:  # a face of a collection other than the first: kept as the system font's name
             return spec
-        if self.base is not None:
-            copy = self.base / "fonts" / p.name
-            if not copy.is_file():
-                copy.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(p, copy)
-            p = copy
         return self._add_resource(p.stem, "font", p)
 
 
@@ -588,7 +577,8 @@ class _GraphImporter:
         try:
             if value.dynamic is None:
                 if param.kind is ParamKind.STRING and pm.key == "pkg_resource_path":
-                    node.params[pm.key] = self.imp.resource(self.file, str(value.constant), self.g.id, node.id)
+                    node.params[pm.key] = self.imp.resource(self.file, str(value.constant), self.g.id, node.id,
+                                                            node.type)
                 elif node.type == "text" and pm.key == "font":
                     node.params[pm.key] = self.imp.font(self.file, str(value.constant), self.g.id, node.id)
                 else:
@@ -740,6 +730,21 @@ class _GraphImporter:
 _ZERO = {ParamKind.BOOL: False, ParamKind.INT: 0, ParamKind.INT2: [0, 0], ParamKind.FLOAT: 0.0,
          ParamKind.FLOAT2: [0.0, 0.0], ParamKind.FLOAT3: [0.0, 0.0, 0.0], ParamKind.FLOAT4: [0.0, 0.0, 0.0, 0.0],
          ParamKind.STRING: ""}
+
+
+EMBEDDED = Path(tempfile.gettempdir()) / "trafilatura3d-embedded"  # resources embedded in .sbs files, by content
+
+
+def _embedded(res: ET.Element, kind: str) -> Path:
+    """The file of a resource embedded in a .sbs (base64 of a big-endian length then zlib data), written once under
+    its name in a folder named by its content."""
+    raw = base64.b64decode(text(res, "source/binembedded/strdata"))
+    data = zlib.decompress(raw[4:])
+    p = EMBEDDED / hashlib.sha1(data).hexdigest()[:16] / f"{text(res, 'identifier')}.{(text(res, 'format') or kind).lower()}"
+    if not p.is_file():
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
+    return p
 
 
 def _local(file: Path, written: str) -> Path:

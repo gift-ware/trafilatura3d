@@ -14,12 +14,13 @@ from __future__ import annotations
 
 import copy
 from dataclasses import asdict, fields
+from pathlib import Path
 
 import numpy as np
 
 from trafilatura3d import bake as bk
 from trafilatura3d import meshio
-from trafilatura3d.bake_params import BAKER_PARAMS, baker_defaults
+from trafilatura3d.bake_params import BAKER_PARAMS, absolute_file, baker_defaults, map_setting_files, relative_file
 
 # (mesh map slot, label, baker, fixed parameters)
 BAKERS = [
@@ -160,6 +161,24 @@ def _symmetric_curvature(img: np.ndarray) -> np.ndarray:
 
 def set_config(ts, cfg: dict) -> None:
     ts.baking = copy.deepcopy(cfg)
+
+
+def _map_files(data: dict, change) -> None:
+    for t in data.get("texture_sets", []):
+        common = (t.get("baking") or {}).get("common")
+        if common:
+            map_setting_files(common, change)
+
+
+def files_for_save(data: dict, folder: Path) -> None:
+    """The mesh files of the baking settings in a project's saved data (Project.to_dict) made relative to the
+    project file's `folder`, so the project and its meshes move together."""
+    _map_files(data, lambda p: relative_file(p, folder))
+
+
+def files_from_load(data: dict, folder: Path) -> None:
+    """The reverse of `files_for_save`, on the data read from a project in `folder`."""
+    _map_files(data, lambda p: absolute_file(p, folder))
 
 
 def defaults_of(slot: str) -> dict:

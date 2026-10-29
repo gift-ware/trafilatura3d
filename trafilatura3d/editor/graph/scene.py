@@ -189,6 +189,14 @@ class GraphScene(QGraphicsScene):
                 return item
         return None
 
+    def _dot_port_at(self, pos: QPointF, dragged: PortItem) -> PortItem | None:
+        """A link dragged from `dragged` and released on a Dot's disc (its connectors are 4 px at its sides): the Dot's
+        input for an output, its output for an input."""
+        dot = next((i for i in self.items(pos) if isinstance(i, NodeItem) and i.dot), None)
+        if dot is None or dot is dragged.node:
+            return None
+        return next(iter((dot.outputs if dragged.is_input else dot.inputs).values()), None)
+
     def _link_at(self, pos: QPointF) -> LinkItem | None:
         return next((i for i in self.items(pos) if isinstance(i, LinkItem)), None)
 
@@ -260,7 +268,7 @@ class GraphScene(QGraphicsScene):
         port, line, mode, moved, start = self._drag
         self._drag = None
         self.removeItem(line)
-        target = self._port_at(e.scenePos())
+        target = self._port_at(e.scenePos()) or self._dot_port_at(e.scenePos(), port)
         if target is port or (target is None and (e.scenePos() - start).manhattanLength() < 4):
             # A click on a connector: the first half of a click-click connection.
             if self._pending is not None and self._pending is not port:

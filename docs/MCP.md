@@ -27,6 +27,7 @@ user folder, a named pipe on Windows), one per user; a second editor leaves it t
 | `node_info(type)` | ports, parameters (kind: `float`, `float2`/`float3`/`float4` vectors, `color`, `int`, `enum`...; default, range, choices) and the base parameters (`set_base`: modes, values); `inherits`: the default mode, the input the size and format come from (`main_input`, else the first image input; `parent` when nothing is connected there or the node has no image input) and the node's own defaults |
 | `edit(ops, graph=None)` | `{results, warnings}`: a batch of ops, one undo step, the graph's warnings after it: `add_node`, `remove_node`, `connect`, `disconnect`, `set_param`, `set_base`, `move`, `expose`, `unexpose`, `link`, `set_output`, `set_disabled`, `set_graph`, `set_input`, `insert_dot`, `frame`, `set_item`, `remove_item`; a result per op |
 | `layout(graph=None, dots=False)` | layered layout that favours the links (below); returns overlaps, crossings, links over nodes, and with frames `frame_overlaps`, `nodes_in_other_frames` |
+| `focus(node, graph=None)` | shows a node to the person at the editor: selected and framed in the Graph view, its parameters in Properties, its output in the 2D View |
 | `undo()`, `redo()` | the editor's undo stack |
 | `preview(node, output=None, size=256)` | the cooked output as PNG |
 | `view3d(size=512, mesh?, viewpoint?, yaw?, pitch?, distance?, environment?, env_rotation?, env_intensity?, key_light?, light?)` | the 3D View (material on the mesh) as PNG; the settings change the editor's 3D View as its menus do (below) |

@@ -132,6 +132,8 @@ class GraphPanel(QWidget):
         self.scene.selectionChanged.connect(self._selection)
         self.doc.changed.connect(self._doc_changed)
         self.doc.layout_changed.connect(self._layout_changed)
+        self.doc.warnings_changed.connect(lambda pkg: pkg is self.package and self.graph is not None
+                                          and self._show_warnings(self.graph))
         self._arranging = False  # this panel's own layout edit: the scene is already arranged
         # The graph's shortcuts act on the view with the focus (it takes it when the mouse enters, see
         # GraphView.enterEvent): a text field elsewhere keeps its own Ctrl+C / Tab, and the function and
@@ -398,13 +400,8 @@ class GraphPanel(QWidget):
 
     def _show_warnings(self, g):
         """A graph's warnings are listed in the bottom-left corner of the Graph view, and its
-        nodes with warnings show a badge."""
-        from trafilatura3d.diagnostics import graph_warnings
-        try:
-            found = graph_warnings(self.package, g.id)
-        except Exception as e:  # noqa: BLE001 - diagnostics must never break the view
-            found = []
-            self.warnings_label.setText(f"⚠ warnings unavailable: {e}")
+        nodes with warnings show a badge: as last found (`Document.check`, `check_nodes`), never computed here."""
+        found = self.doc.graph_warnings(self.package, g.id)
         by_node = {}
         for w in found:
             if w.node:
@@ -598,19 +595,24 @@ class GraphPanel(QWidget):
                     (PortType.COLOR, PortType.GRAY): ("grayscale_conversion", "input")}.get((got, want))
         if conv is None:
             self.edit("Connect", lambda: g.connect(src, out, dst, port))
+            self.check_nodes([src, dst])
             return
+        made = []
 
         def do():
             a, b = g.nodes[src].position, g.nodes[dst].position
             mid = g.add_node(conv[0], ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2))
+            made.append(mid)
             g.connect(src, out, mid, conv[1])
             g.connect(mid, next(iter(g.definition(mid).outputs)), dst, port)
         self.edit("Connect with conversion", do)
+        self.check_nodes([src, dst, *made])
 
     def disconnect_port(self, node_id, port, is_input):
         g = self.graph
         if is_input:
             self.edit("Disconnect", lambda: g.disconnect(node_id, port))
+            self.check_nodes([node_id])
         else:
             links = [(n.id, p) for n in g.nodes.values() for p, (s, o) in n.inputs.items() if s == node_id and o == port]
             self.remove_links(links)
@@ -624,9 +626,11 @@ class GraphPanel(QWidget):
     def remove_links(self, links):
         g = self.graph
         self.edit("Remove links", lambda: [g.disconnect(d, p) for d, p in links])
+        self.check_nodes([d for d, _ in links])
 
     def relink(self, links, anchor, target, keep):
         g = self.graph
+        ends = {target.node.node_id} | {p.node.node_id for link in links for p in (link.src, link.dst)}
 
         def do():
             for link in links:
@@ -638,6 +642,7 @@ class GraphPanel(QWidget):
                 else:
                     g.connect(target.node.node_id, target.name, *dst)
         self.edit("Move links" if not keep else "Duplicate links", do)
+        self.check_nodes(ends)
 
     def move_nodes(self, positions: dict):
         g = self.graph
@@ -859,6 +864,7 @@ class GraphPanel(QWidget):
             return
         if pkg not in self.doc.packages:
             self.doc.packages.append(pkg)
+            self.doc.check(pkg)  # opened: what is wrong in it, as `Document.open`
             self.doc.packages_changed.emit()
         self.open_graph(pkg, graph.id)
 
@@ -922,8 +928,16 @@ class GraphPanel(QWidget):
 
     # --- toolbar actions ----------------------------------------------------------------------
 
+    def check_nodes(self, node_ids) -> None:
+        """The warnings of the nodes being worked on checked again (`Document.check_nodes`): the selection, the ends
+        of a link just made or removed."""
+        if self.package is not None and self.graph is not None:
+            self.doc.check_nodes(self.package, self.graph_id, node_ids)
+
     def _selection(self):
         ids = self.scene.selected_ids()
+        if ids:
+            self.check_nodes(ids)
         self.selection_changed.emit(self.package, self.graph_id, ids[0] if len(ids) == 1 else None)
         self._apply_flow()
 

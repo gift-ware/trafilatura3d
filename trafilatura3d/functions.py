@@ -152,6 +152,7 @@ class FunctionGraph:
         self.functions = data.get("functions", {}) if _functions is None else _functions
         self.outer, self._calling = frozenset(outer), _calling
         self._callees: dict[tuple, FunctionGraph] = {}
+        self._programs: dict[str, _Program] = {}  # call path -> the graph compiled (`evaluate`)
         for n in self.nodes.values():
             if n["type"] not in FNODES:
                 raise FunctionError(f"unknown function node {n['type']!r}")
@@ -454,125 +455,310 @@ def evaluate(fg: FunctionGraph, variables: dict[str, Any], seed: float = 0.0, sa
     """Evaluate the graph's output. `variables`: Get values (with `shared`, Set nodes write into this
     dict, so later functions of the same node see them, parameters being evaluated top to
     bottom); `sampler(index, gray, pos, filtering, addressing)` answers Sample nodes (None: they raise).
-    `_path`: the calls this graph runs in (two calls of a function draw different random numbers)."""
-    env = variables if shared else dict(variables)
+    `_path`: the calls this graph runs in (two calls of a function draw different random numbers). The graph is
+    compiled once (`_Program`): an FX-Map evaluates its functions for every pattern."""
+    program = fg._programs.get(_path)
+    if program is None:
+        program = fg._programs[_path] = _Program(fg, _path)
+    return program.run(variables if shared else dict(variables), seed, sampler)
 
-    def rand(node_id):
-        key = f"{seed}:{_path}{node_id}:{env.get('$number', 0)}:{env.get('$pos')}:{env.get('$depth')}"
-        return int.from_bytes(hashlib.sha1(key.encode()).digest()[:4], "little") / 2**32
 
-    def ev(k, memo):
-        """Node k's value; each node is computed once (`memo`), as in the WGSL: a node shared by
-        two branches doesn't run its Sets twice. Loop bodies and If...Else branches compute their nodes again."""
-        if k not in memo:
-            memo[k] = compute(k, memo)
-        return memo[k]
+class _Run:
+    """One evaluation: the variables (Gets, Sets), the seed, the sampler."""
+    __slots__ = ("env", "seed", "sampler")
 
-    def compute(k, memo):
-        n = fg.nodes[k]
-        t = n["type"]
+    def __init__(self, env, seed, sampler):
+        self.env, self.seed, self.sampler = env, seed, sampler
+
+
+def _failing(error: Exception):
+    """A node's value that raises `error` when computed (an input not connected, an unknown function: the
+    interpreter found them only there, after what was computed before)."""
+    def value(r, memo):
+        raise error
+    return value
+
+
+def _int_div(x, y):
+    return int(x / y) if y else 0
+
+
+def _float_div(x, y):
+    return x / y if y else 0.0
+
+
+def _int_mod(x, y):
+    return x % y if y else 0
+
+
+def _float_mod(x, y):
+    return math.fmod(x, y) if y else 0.0
+
+
+_ARITH_FN = {"add": (lambda x, y: x + y,) * 2, "subtraction": (lambda x, y: x - y,) * 2,
+             "multiplication": (lambda x, y: x * y,) * 2, "division": (_float_div, _int_div),
+             "modulo": (_float_mod, _int_mod)}  # type -> (float, int)
+_FLOAT_FNS = {"pow2": lambda v: 2.0 ** v, "sqrt": lambda v: math.sqrt(max(v, 0.0)), "exp": math.exp,
+              "log": lambda v: math.log(v) if v > 0 else -math.inf,
+              "log2": lambda v: math.log2(v) if v > 0 else -math.inf,
+              "abs": abs, "ceil": math.ceil, "floor": math.floor, "cos": math.cos, "sin": math.sin, "tan": math.tan}
+_COMPARE_FN = {"equal": lambda a, b: a == b, "not_equal": lambda a, b: a != b, "greater": lambda a, b: a > b,
+               "greater_or_equal": lambda a, b: a >= b, "lower": lambda a, b: a < b, "lower_or_equal": lambda a, b: a <= b}
+
+
+def _round(x):
+    return int(math.floor(x + 0.5))
+
+
+class _Program:
+    """A function graph compiled to closures, one per node (`value(run, memo)`), its parameters, types, inputs and
+    operation resolved once. The interpreter's rules: each node computed once per evaluation (`memo`: a node shared by
+    two branches doesn't run its Sets twice), If...Else branches and loop bodies computed again (a copy of the memo,
+    an empty one), inputs evaluated in the same order."""
+
+    def __init__(self, fg: FunctionGraph, path: str):
+        self.fg, self.path = fg, path
+        self._values: dict[str, Any] = {}
+        self._readers: dict[str, int] = {}  # node -> the inputs reading it (one: computed once without the memo)
+        for n in fg.nodes.values():
+            for src in n.get("inputs", {}).values():
+                self._readers[src] = self._readers.get(src, 0) + 1
+        self.output = self.value(fg.output)
+
+    def run(self, env, seed, sampler):
+        return self.output(_Run(env, seed, sampler), {})
+
+    def value(self, k: str):
+        """Node k's value, computed once per evaluation (a node one input reads only through its reader, itself
+        computed once: no memo of its own)."""
+        if k not in self._values and self._readers.get(k, 0) <= 1 and k != self.fg.output:
+            try:
+                self._values[k] = self._body(k)
+            except Exception as e:  # noqa: BLE001 - raised where the node is computed, as the interpreter did
+                self._values[k] = _failing(e)
+        if k not in self._values:
+            body = None
+
+            def value(r, memo):
+                if k in memo:
+                    return memo[k]
+                v = memo[k] = body(r, memo)
+                return v
+            self._values[k] = value
+            try:
+                body = self._body(k)
+            except Exception as e:  # noqa: BLE001 - raised where the node is computed, as the interpreter did
+                body = _failing(e)
+        return self._values[k]
+
+    def input(self, k: str, port: str):
+        """The value of what feeds a node's input (raising there when it is not connected)."""
+        try:
+            return self.value(self.fg.input(k, port))
+        except FunctionError as e:
+            return _failing(e)
+
+    def _body(self, k: str):
+        fg = self.fg
+        t = fg.nodes[k]["type"]
         p = fg.params(k)
-        inp = lambda port: ev(fg.input(k, port), memo)
-        out_t = fg.types[k]
+        out_t = fg.types.get(k)
+        inp = lambda port: self.input(k, port)
         if t.startswith("const_"):
             v = p["value"]
-            return _int3(v) if out_t in ("int3", "int4") else v
+            if out_t in ("int3", "int4"):
+                return lambda r, memo: _int3(v)
+            return lambda r, memo: v
         if t.startswith("get_"):
-            return env[p["variable"]]
+            name = p["variable"]
+            return lambda r, memo: r.env[name]
         if t.startswith("vector_"):
-            return _vec(inp("input_1")) + _vec(inp("input_2"))
+            a, b = inp("input_1"), inp("input_2")
+            return lambda r, memo: _vec(a(r, memo)) + _vec(b(r, memo))
         if t.startswith("swizzle_"):
-            v = _vec(inp("vector"))
-            r = [v["XYZW".index(p[c])] if len(v) > 1 else v[0] for c in COMPONENTS[:width(out_t)]]
-            return r[0] if len(r) == 1 else r
+            vec = inp("vector")
+            picks = ["XYZW".index(p[c]) for c in COMPONENTS[:width(out_t)]]
+
+            def swizzle(r, memo):
+                v = _vec(vec(r, memo))
+                out = [v[i] if len(v) > 1 else v[0] for i in picks]
+                return out[0] if len(out) == 1 else out
+            return swizzle
         if t.startswith("to_float"):
-            v = inp("input")
-            return [float(x) for x in v] if isinstance(v, list) else float(v)
+            a = inp("input")
+
+            def to_float(r, memo):
+                v = a(r, memo)
+                return [float(x) for x in v] if isinstance(v, list) else float(v)
+            return to_float
         if t.startswith("to_integer"):
-            v = inp("input")
-            rnd = lambda x: int(math.floor(x + 0.5))
-            return [rnd(x) for x in v] if isinstance(v, list) else rnd(v)
+            a = inp("input")
+
+            def to_integer(r, memo):
+                v = a(r, memo)
+                return [_round(x) for x in v] if isinstance(v, list) else _round(v)
+            return to_integer
         if t == "set":
-            v = inp("input")
-            env[p["variable"]] = v
-            return v
+            name, a = p["variable"], inp("input")
+
+            def set_(r, memo):
+                v = a(r, memo)
+                r.env[name] = v
+                return v
+            return set_
         if t == "is_defined":
-            return p["variable"] in env
+            name = p["variable"]
+            return lambda r, memo: name in r.env
         if t in ("sample_gray", "sample_color"):
-            if sampler is None:
-                raise FunctionError("samplers are not available here")
-            return sampler(p["input_image"], t == "sample_gray", inp("position"), p["filtering_mode"],
-                           p["addressing_mode"])
+            pos, gray = inp("position"), t == "sample_gray"
+            image, filtering, addressing = p["input_image"], p["filtering_mode"], p["addressing_mode"]
+
+            def sample(r, memo):
+                if r.sampler is None:
+                    raise FunctionError("samplers are not available here")
+                return r.sampler(image, gray, pos(r, memo), filtering, addressing)
+            return sample
         if t in _ARITH:
-            a, b = (inp(port) if fg.connected(k, port) else zero(out_t) for port in ("a", "b"))
-            integer = base(out_t) == "int"
-            f = {"add": lambda x, y: x + y, "subtraction": lambda x, y: x - y, "multiplication": lambda x, y: x * y,
-                 "division": (lambda x, y: int(x / y) if y else 0) if integer else (lambda x, y: x / y if y else 0.0),
-                 "modulo": (lambda x, y: x % y if y else 0) if integer else (lambda x, y: math.fmod(x, y) if y else 0.0)}[t]
-            return _op(f, a, b)
+            f = _ARITH_FN[t][base(out_t) == "int"]
+            a, b = ((inp(port) if fg.connected(k, port) else (lambda r, memo: zero(out_t))) for port in ("a", "b"))
+
+            def arith(r, memo):
+                x, y = a(r, memo), b(r, memo)
+                return [f(u, v) for u, v in zip(x, y)] if isinstance(x, (list, tuple)) else f(x, y)
+            return arith
         if t == "scalar_multiplication":
             a, s = inp("a"), inp("scalar")
-            return [x * s for x in a] if isinstance(a, list) else a * s
+
+            def scale(r, memo):
+                x, k_ = a(r, memo), s(r, memo)
+                return [u * k_ for u in x] if isinstance(x, list) else x * k_
+            return scale
         if t == "negation":
             a = inp("a")
-            return [-x for x in a] if isinstance(a, list) else -a
+
+            def negate(r, memo):
+                x = a(r, memo)
+                return [-u for u in x] if isinstance(x, list) else -x
+            return negate
         if t == "dot_product":
-            return float(sum(x * y for x, y in zip(_vec(inp("a")), _vec(inp("b")))))
-        if t == "and":
-            return bool(inp("a")) and bool(inp("b"))
-        if t == "or":
-            return bool(inp("a")) or bool(inp("b"))
-        if t == "not":
-            return not inp("a")
-        if t in _COMPARE:
             a, b = inp("a"), inp("b")
-            return {"equal": a == b, "not_equal": a != b, "greater": a > b, "greater_or_equal": a >= b,
-                    "lower": a < b, "lower_or_equal": a <= b}[t]
+            return lambda r, memo: float(sum(x * y for x, y in zip(_vec(a(r, memo)), _vec(b(r, memo)))))
+        if t == "and":
+            a, b = inp("a"), inp("b")
+            return lambda r, memo: bool(a(r, memo)) and bool(b(r, memo))
+        if t == "or":
+            a, b = inp("a"), inp("b")
+            return lambda r, memo: bool(a(r, memo)) or bool(b(r, memo))
+        if t == "not":
+            a = inp("a")
+            return lambda r, memo: not a(r, memo)
+        if t in _COMPARE:
+            f, a, b = _COMPARE_FN[t], inp("a"), inp("b")
+
+            def compare(r, memo):
+                x = a(r, memo)
+                return f(x, b(r, memo))
+            return compare
         if t in _FLOAT_FN:
-            x = inp("x")
-            f = {"pow2": lambda v: 2.0 ** v, "sqrt": lambda v: math.sqrt(max(v, 0.0)), "exp": math.exp,
-                 "log": lambda v: math.log(v) if v > 0 else -math.inf, "log2": lambda v: math.log2(v) if v > 0 else -math.inf,
-                 "abs": abs, "ceil": math.ceil, "floor": math.floor, "cos": math.cos, "sin": math.sin, "tan": math.tan}[t]
-            return [float(f(float(v))) for v in x] if isinstance(x, list) else float(f(float(x)))
+            f, a = _FLOAT_FNS[t], inp("x")
+
+            def float_fn(r, memo):
+                x = a(r, memo)
+                return [float(f(float(v))) for v in x] if isinstance(x, list) else float(f(float(x)))
+            return float_fn
         if t == "random":
-            return rand(k) * float(inp("x"))
+            a, where = inp("x"), f"{self.path}{k}"
+
+            def random(r, memo):
+                env = r.env
+                key = f"{r.seed}:{where}:{env.get('$number', 0)}:{env.get('$pos')}:{env.get('$depth')}"
+                return int.from_bytes(hashlib.sha1(key.encode()).digest()[:4], "little") / 2**32 * float(a(r, memo))
+            return random
         if t == "pow":
-            return float(float(inp("x")) ** float(inp("y")))
+            a, b = inp("x"), inp("y")
+
+            def pow_(r, memo):
+                x = float(a(r, memo))
+                return float(x ** float(b(r, memo)))
+            return pow_
         if t == "lerp":
-            a, b, x = inp("a"), inp("b"), inp("x")
-            return _op(lambda u, v: (1 - x) * u + x * v, a, b)
+            a, b, w = inp("a"), inp("b"), inp("x")
+
+            def lerp(r, memo):
+                u, v, x = a(r, memo), b(r, memo), w(r, memo)
+                if isinstance(u, (list, tuple)):
+                    return [(1 - x) * m + x * n for m, n in zip(u, v)]
+                return (1 - x) * u + x * v
+            return lerp
         if t in ("min", "max"):
-            return _op(min if t == "min" else max, inp("a"), inp("b"))
+            f, a, b = (min if t == "min" else max), inp("a"), inp("b")
+
+            def min_max(r, memo):
+                x, y = a(r, memo), b(r, memo)
+                return [f(u, v) for u, v in zip(x, y)] if isinstance(x, (list, tuple)) else f(x, y)
+            return min_max
         if t == "atan2":
-            v = inp("vector")
-            return math.atan2(v[1], v[0])
+            a = inp("vector")
+
+            def atan2(r, memo):
+                v = a(r, memo)
+                return math.atan2(v[1], v[0])
+            return atan2
         if t == "cartesian":
-            r, a = inp("length"), inp("angle")
-            return [r * math.cos(a), r * math.sin(a)]
+            length, angle = inp("length"), inp("angle")
+
+            def cartesian(r, memo):
+                d, a_ = length(r, memo), angle(r, memo)
+                return [d * math.cos(a_), d * math.sin(a_)]
+            return cartesian
         if t == "if_else":
-            return ev(fg.input(k, "if_" if inp("condition") else "else_"), dict(memo))
+            cond, yes, no = inp("condition"), inp("if_"), inp("else_")
+            return lambda r, memo: (yes if cond(r, memo) else no)(r, dict(memo))
         if t == "sequence":
-            if fg.connected(k, "in_"):
-                inp("in_")
-            return inp("last")
+            first = inp("in_") if fg.connected(k, "in_") else None
+            last = inp("last")
+
+            def sequence(r, memo):
+                if first is not None:
+                    first(r, memo)
+                return last(r, memo)
+            return sequence
         if t == "while_loop":
-            if fg.connected(k, "init"):
-                inp("init")
-            limit = p["max_iterations"]
-            body, i = None, 0
-            exits = (lambda: ev(fg.input(k, "exit_cond"), {})) if fg.connected(k, "exit_cond") else (lambda: False)
-            while (limit < 0 or i < limit) and not exits():
-                body = ev(fg.input(k, "loop_body"), {})
-                i += 1
-            return body if body is not None else ev(fg.input(k, "loop_body"), {})
+            init = inp("init") if fg.connected(k, "init") else None
+            exit_cond = inp("exit_cond") if fg.connected(k, "exit_cond") else None
+            loop_body, limit = inp("loop_body"), p["max_iterations"]
+
+            def while_loop(r, memo):
+                if init is not None:
+                    init(r, memo)
+                body, i = None, 0
+                while (limit < 0 or i < limit) and not (exit_cond is not None and exit_cond(r, {})):
+                    body = loop_body(r, {})
+                    i += 1
+                return body if body is not None else loop_body(r, {})
+            return while_loop
         if t == "passthrough":
             return inp("input")
         if t == "call" or t in LIBRARY:
-            args = call_arguments(fg, k, inp)
-            return evaluate(fg.callee(k), _Scope(args, env), seed, sampler, True, f"{_path}{k}/")
-        raise FunctionError(f"unsupported function node {t!r}")
+            try:
+                callee = fg.callee(k)
+            except FunctionError as e:
+                return _failing(e)
+            connected = fg.nodes[k].get("inputs", {})
+            defaults = callee.data.get("defaults", {})
+            ports = [(port, inp(port) if port in connected else None, defaults.get(port), t_)
+                     for port, t_ in callee.data.get("inputs", {}).items()]
+            program, where = None, f"{self.path}{k}/"
 
-    return ev(fg.output, {})
+            def call(r, memo):
+                nonlocal program
+                args = {port: value(r, memo) if value is not None else (default if default is not None else zero(t_))
+                        for port, value, default, t_ in ports}
+                if program is None:
+                    program = callee._programs.get(where) or callee._programs.setdefault(where, _Program(callee, where))
+                return program.run(_Scope(args, r.env), r.seed, r.sampler)
+            return call
+        return _failing(FunctionError(f"unsupported function node {t!r}"))
 
 
 # --- WGSL code generation (Pixel processor) -------------------------------------------------------

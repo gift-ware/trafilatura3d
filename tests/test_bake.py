@@ -487,6 +487,33 @@ class CliTest(unittest.TestCase):
 
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
+class PackageFilesTest(unittest.TestCase):
+    def test_baking_files_are_relative_in_the_file(self):
+        """High poly, cage, output folder and file parameters: relative to the package in its file, absolute in
+        memory; saving elsewhere rewrites them, saving never touches the configuration in memory."""
+        import json
+        from trafilatura3d.package import Package, Resource
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp).resolve()
+            cfg = {"settings": {"high_meshes": [str(d / "meshes" / "high.fbx")], "cage_file": str(d / "cage.fbx")},
+                   "folder": str(d / "maps"), "name": "$(mesh)_$(bakername)",
+                   "bakers": [{"id": "ambient_occlusion", "params": {"normal_map": str(d / "maps" / "n.png")}}]}
+            pkg = Package()
+            pkg.new_graph("main", 5)
+            pkg.resources["low"] = Resource("scene", "low.fbx", baking=cfg)
+            pkg.save(d / "p.trafilatura3d")
+            stored = json.loads((d / "p.trafilatura3d").read_text())["resources"]["low"]["baking"]
+            self.assertEqual(stored["settings"], {"high_meshes": ["meshes/high.fbx"], "cage_file": "cage.fbx"})
+            self.assertEqual((stored["folder"], stored["bakers"][0]["params"]["normal_map"]), ("maps", "maps/n.png"))
+            self.assertEqual(pkg.resources["low"].baking["folder"], str(d / "maps"))  # memory untouched
+            pkg.save(d / "sub" / "q.trafilatura3d")
+            moved = json.loads((d / "sub" / "q.trafilatura3d").read_text())["resources"]["low"]["baking"]
+            self.assertEqual((moved["settings"]["high_meshes"], moved["folder"]), (["../meshes/high.fbx"], "../maps"))
+            again = Package.load(d / "sub" / "q.trafilatura3d").resources["low"].baking
+            self.assertEqual(again["settings"]["high_meshes"], [str(d / "meshes" / "high.fbx")])
+            self.assertEqual((again["folder"], again["bakers"][0]["params"]["normal_map"]), (str(d / "maps"), str(d / "maps" / "n.png")))
+
+
 class DialogTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

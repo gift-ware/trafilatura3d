@@ -2,9 +2,11 @@
 formulas, masks, folders), the brush (stamps, Stroke Opacity, Eraser, occlusion), project files and the
 texture export."""
 
+import json
 import math
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -875,6 +877,57 @@ class TestBaking(unittest.TestCase):
             self.assertEqual(t.project.texture_set("Left").baking, ts.baking)
             self.assertIn(out["normal"]["1001"], t.resources.images)
             np.testing.assert_allclose(t.fit[1], s.fit[1])
+
+
+class TestNewPaintCommand(unittest.TestCase):
+    def test_new_paint(self):
+        """`trafilatura3d new-paint`: a project on the mesh as New Project makes it; an existing file is refused."""
+        import contextlib
+        import io
+        from trafilatura3d.cli import main
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "two.trafilatura3dpaint"
+            args = ["--no-plugins", "new-paint", str(write_obj(Path(tmp))), "--out", str(out), "--resolution", "32",
+                    "--template", "Metallic roughness"]
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main(args), 0)
+                s = Session.open(out, evaluator=ev())
+                self.assertEqual(sorted(ts.name for ts in s.project.texture_sets), ["Left", "Right"])
+                self.assertEqual(s.project.texture_sets[0].size, [32, 32])
+                self.assertIn("metallic", s.project.texture_sets[0].channel_ids())
+                err = io.StringIO()
+                with contextlib.redirect_stderr(err):
+                    self.assertEqual(main(args), 1)
+                self.assertIn("already exists", err.getvalue())
+
+    def test_new_paint_with_high_meshes(self):
+        """`--high` and the matching options land in every Texture Set's baking, as Baking mode stores them."""
+        import contextlib
+        import io
+        from trafilatura3d.cli import main
+        from trafilatura3d.paint import baking
+        with tempfile.TemporaryDirectory() as tmp:
+            mesh = write_obj(Path(tmp))
+            out = Path(tmp) / "baked.trafilatura3dpaint"
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["--no-plugins", "new-paint", str(mesh), "--out", str(out), "--resolution", "32",
+                                       "--high", str(mesh), "--match", "By Mesh Name", "--low-suffix", "_lo"]), 0)
+            s = Session.open(out, evaluator=ev())
+            for ts in s.project.texture_sets:
+                common = baking.config(ts)["common"]
+                self.assertEqual(common["high_meshes"], [str(mesh.resolve())])
+                self.assertEqual((common["match"], common["low_suffix"], common["high_suffix"]), ("By Mesh Name", "_lo", "_high"))
+            # In the file the mesh is relative to the project: saved elsewhere it is rewritten, opened it is absolute.
+            def stored(path):
+                with zipfile.ZipFile(path) as z:
+                    return [ts["baking"]["common"]["high_meshes"] for ts in json.loads(z.read("project.json"))["texture_sets"]]
+            self.assertEqual(stored(out), [[mesh.name]] * len(s.project.texture_sets))
+            moved = Path(tmp) / "sub" / "moved.trafilatura3dpaint"
+            moved.parent.mkdir()
+            s.save(moved)
+            self.assertEqual(stored(moved), [["../" + mesh.name]] * len(s.project.texture_sets))
+            again = Session.open(moved, evaluator=ev())
+            self.assertEqual(baking.config(again.project.texture_sets[0])["common"]["high_meshes"], [str(mesh.resolve())])
 
 
 class TestExport(unittest.TestCase):
