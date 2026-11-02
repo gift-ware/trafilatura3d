@@ -168,6 +168,7 @@ class MainWindow(QMainWindow):
                                                            self.docks["properties"].show(),
                                                            self.docks["properties"].raise_()))
         self.graph.selection_changed.connect(self._selection)
+        self.graph.item_selected.connect(self.properties.show_item)
         # What the views show after an edit: a step per turn of the event loop, at the preview resolution while a
         # value is dragged (Document.shown); the selection is what the next edit restarts from.
         self.doc.live = LiveCook(self, self.doc.ev, self._plan_graph, self._graph_step, paused=self._navigating,

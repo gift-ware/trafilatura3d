@@ -169,6 +169,48 @@ class PackageRules(unittest.TestCase):
         self.assertEqual(self.g.nodes["soften1"].params, {})
         self.assertEqual(self.g.problems(), [])
 
+    def test_a_package_of_a_project_opens_only_with_its_aliases(self):
+        """A package instancing graphs through an alias no project in use defines is refused when opened, saying
+        which aliases and how to open it; with them defined it opens."""
+        from trafilatura3d import project
+        tmp = Path(tempfile.mkdtemp())
+        lib = Package()
+        lib.new_graph("sub").add_node("uniform_color")
+        lib.save(tmp / "lib" / "lib.trafilatura3d")
+        self.addCleanup(project.set_configuration, project.configuration())
+        config = project.Configuration()
+        config.custom.append(project.Project(None, {"aliases": {"shared": str(tmp / "lib")}}, "Pipeline"))
+        project.set_configuration(config)
+        trim = Package()
+        trim.new_graph("main").add_node("graph_instance", ref="shared://lib.trafilatura3d#sub")
+        trim.save(tmp / "trim.trafilatura3d")
+        self.assertEqual(Package.load(tmp / "trim.trafilatura3d").undefined_aliases(), [])
+        project.set_configuration(project.Configuration())  # no project defining shared://
+        with self.assertRaises(DocumentError) as e:
+            Package.load(tmp / "trim.trafilatura3d")
+        self.assertIn("shared://", str(e.exception))
+        self.assertIn("project's configuration", str(e.exception))
+
+    def test_remove_graph_refused_while_used(self):
+        self.assertEqual(self.pkg.graph_users("soften"), ["main"])
+        self.assertRefused("used by: main", self.pkg.remove_graph, "soften")
+        self.assertRefused("unknown graph", self.pkg.remove_graph, "nothing")
+        self.pkg.remove_graph("main")
+        self.pkg.remove_graph("soften")
+        self.assertEqual(self.pkg.graphs, {})
+
+    def test_remove_resource_refused_while_named(self):
+        from trafilatura3d.package import Resource
+        self.pkg.resources["brush"] = Resource("bitmap", "brush.png")
+        b = self.g.add_node("bitmap")
+        self.g.set_param(b, "pkg_resource_path", "brush.png")
+        self.assertEqual(self.pkg.resource_users("brush"), [f"main.{b}"])
+        self.assertRefused(f"used by: main.{b}", self.pkg.remove_resource, "brush")
+        self.assertRefused("unknown resource", self.pkg.remove_resource, "nothing")
+        self.g.remove_node(b)
+        self.pkg.remove_resource("brush")
+        self.assertEqual(self.pkg.resources, {})
+
     def test_cycles_are_refused(self):
         b = self.g.add_node("blur")
         self.g.connect("soften1", "output1", b, "input")
@@ -247,6 +289,50 @@ class Compilation(unittest.TestCase):
 
 
 class Cooking(unittest.TestCase):
+    def test_an_input_previews_its_image_only_shown_on_its_own(self):
+        """An input with a preview image reads it when its graph is cooked on its own; instanced, never: the
+        instance's connection, else the input's default value. The image is a file of the package (kept with it)."""
+        tmp = Path(tempfile.mkdtemp())
+        imageio.write(tmp / "id.png", np.full((8, 8, 4), [255, 0, 0, 255], np.uint8))
+        pkg = Package()
+        sub = pkg.new_graph("sub")
+        sub.base = dict(SMALL)
+        i, o = sub.add_node("input_color"), sub.add_node("output")
+        sub.set_param(i, "identifier", "id_map")
+        sub.set_param(i, "default_value", [0.0, 0.0, 1.0, 1.0])
+        sub.set_param(i, "resource", "id.png")
+        sub.set_param(o, "identifier", "color")
+        sub.connect(i, "output", o, "input")
+        main = pkg.new_graph("main")
+        main.base = dict(SMALL)
+        inst, out = main.add_node("graph_instance", ref="sub"), main.add_node("output")
+        main.connect(inst, "color", out, "input")
+        pkg.save(tmp / "p.trafilatura3d")
+        self.assertIn("id.png", [r.path for r in pkg.file_references()])
+
+        def color(gid):
+            job, port = next(iter(compile_graph(pkg, gid, evaluator=ev()).outputs.values()))
+            px = ev().read(job, port)[0, 0, :3].astype(np.float64)
+            return list(np.round(px / (255 if px.max() > 1 else 1), 2))
+        self.assertEqual(color("sub"), [1.0, 0.0, 0.0])  # shown on its own: the preview image
+        self.assertEqual(color("main"), [0.0, 0.0, 1.0])  # instanced, unconnected: the default value
+        u = main.add_node("uniform_color")
+        main.set_param(u, "output_color", [0.0, 1.0, 0.0, 1.0])
+        main.connect(u, "output", inst, "id_map")
+        self.assertEqual(color("main"), [0.0, 1.0, 0.0])  # instanced, connected: what it receives
+        # A preview image of another size than the graph's: on its own the outputs differ in size (a warning of
+        # the graph), its instances do not read it (no warning reaches them).
+        from trafilatura3d import diagnostics
+        imageio.write(tmp / "id.png", np.full((256, 256, 4), [255, 0, 0, 255], np.uint8))
+        u2, o2 = sub.add_node("uniform_color"), sub.add_node("output")
+        sub.set_param(o, "usage", "baseColor")
+        sub.set_param(o2, "identifier", "roughness")
+        sub.set_param(o2, "usage", "roughness")
+        sub.connect(u2, "output", o2, "input")
+        sizes = {g: [w.message for w in diagnostics.graph_warnings(pkg, g)] for g in ("sub", "main")}
+        self.assertIn("Output size differs from the other outputs", sizes["sub"])
+        self.assertNotIn("The referenced data has some warnings", sizes["main"])
+
     def test_edit_recooks_only_what_changed(self):
         pkg = soften_package()
         targets = lambda: [j for j, _ in compile_graph(pkg, "main").outputs.values()]

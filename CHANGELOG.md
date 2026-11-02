@@ -1,5 +1,72 @@
 # Changelog
 
+## 0.5.0 — 2 November 2026
+
+### Long steps you can follow
+
+- **Baking shows its progress.** The bake runs in a progress window: the maps tile by tile ("Normal Map from Mesh
+  tile 37/64"), the map being baked composed on the model in the 3D View as its tiles arrive, Cancel at the next tile.
+  Tiles are 1024 supersampled pixels (they were 2048: as fast, measured, and finer to follow). The Paint's bake
+  follows its maps tile by tile in its own bar.
+- **Exporting shows its progress**: compiling, cooking node by node, writing file by file, with Cancel; the Export
+  outputs dialog uses it.
+- Plugins: `EditorAccess.bake(...)` and `EditorAccess.export(...)` run a bake or an export in the same window (a
+  pipeline's own bake and export commands no longer freeze the editor). The core functions take the callbacks:
+  `Baker.bake(each_tile=...)`, `export(progress=...)`.
+
+### Files and packages kept current
+
+- **Linked files written from outside** (a bake, an image editor, a sync) reach the open packages: bitmaps, SVGs,
+  fonts, input preview images and resources are watched, and the graphs reading them recompile, without an undo step
+  and without marking the package unsaved. Files saved through a temporary file and renamed over are followed too.
+- **Referenced packages written from outside** (not open in the editor) are read again, with what they link.
+- **An open subgraph is the one its instances use**: a graph instance referring to a package open in the editor uses
+  that package, so its edits (and their undo) reach the instances at once. Open reference goes to the open package's
+  tab; it opened a second, stale copy of the same file before.
+
+### Graph inputs
+
+- **Levels inputs**: a float input can use the Editor "Levels". Five of them in one group (In low, In mid, In high,
+  Out low, Out high) show on the graph's instances as one levels editor over the histogram of the image input named
+  in "Histogram of" (what the instance receives there).
+- **Swatches**: a color input can offer the colors of an image input of the graph (an ID map's): on its instances a
+  picker lists the colors of the image connected there. The colors found leave out the blends along the edges.
+- **Input preview images**: an Input color or grayscale with a PKG resource path reads that image when its graph is
+  shown on its own (a subgraph previewed with real data); in an instance never. The image is a file of the package.
+  Warnings of an instanced graph are computed as its instances compile it, without its preview images.
+
+### MCP
+
+- New tools `new_graph`, `remove_graph`, `remove_resource`.
+- New edit ops `set_function` (drive a parameter by a function graph), `set_preset` / `remove_preset` (embedded
+  presets of a graph's inputs); `set_graph` takes `parent_size` (in pixels).
+
+### Graph view
+
+- Frames show their properties (title, description, color), comments and pins theirs.
+- Moving a selection that holds frames, then duplicating a node, no longer puts the frames back where they were.
+- A selection box selects a frame only when the frame lies fully inside it.
+- Copy and paste between packages (a graph of a library into another package): the pasted nodes keep their
+  references and files.
+- Selecting many nodes is faster (the warnings of the newly selected nodes are checked once the selection settles).
+
+### Fixed
+
+- The Baking window stays above the main window (it could fall behind it): non-modal windows of the editor are tool
+  windows of the main window (`widgets.dependent`).
+- The bakers' normal orientation defaults to the project's normal format.
+
+### Breaking changes
+
+- Plugins: one pair of save events for both workspaces. `before_save(document, path)` and `document_saved(document,
+  path)` are heard when a package or a Paint project is saved (`package_saved(package, path)` is gone, and
+  `before_save` takes `document` instead of `package`). A Paint project's save can now be refused with `Veto`.
+- Plugins: `EditorAccess` has two more methods, `bake` and `export` (an implementation of its own must add them).
+- A Paint project saved over a read-only file is refused, as a package is (it was replaced through its temporary
+  file).
+- A package that uses an alias (`name://`) no loaded project defines does not open: the message names the aliases
+  and says to open it with its project's configuration.
+
 ## 0.4.0 — 30 October 2026
 
 ### New

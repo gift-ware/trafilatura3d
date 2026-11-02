@@ -37,6 +37,7 @@ class InputColor(Node):
     catalog = "input_color"
     outputs = {"output": Output(PortType.COLOR)}
     params = {"default_value": Param(ParamKind.COLOR, [0.0, 0.0, 0.0, 1.0], "Default value"),
+              # a preview image, read when the graph is shown on its own (never in an instance: `compiler`)
               "resource": Param(ParamKind.STRING, "", "PKG resource path"), **_attributes("input")}
     unsupported = {}
 

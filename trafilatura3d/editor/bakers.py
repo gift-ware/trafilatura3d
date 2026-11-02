@@ -13,11 +13,13 @@ from pathlib import Path
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QFileDialog, QFormLayout, QHBoxLayout, QLineEdit,
-                               QListWidget, QListWidgetItem, QMenu, QMessageBox, QProgressBar, QPushButton, QScrollArea,
+                               QListWidget, QListWidgetItem, QMenu, QMessageBox, QPushButton, QScrollArea,
                                QSplitter, QVBoxLayout, QWidget)
 
 from trafilatura3d import bake
+from trafilatura3d.editor import progress
 from trafilatura3d.editor.bake_form import baker_rows, editor_widget
+from trafilatura3d.editor.widgets import dependent
 from trafilatura3d.package import Resource
 
 SIZES = [str(s) for s in bake.SIZES]
@@ -77,7 +79,7 @@ def open_baker(document, package, resource_id: str, parent=None) -> "BakerDialog
 
 class BakerDialog(QDialog):
     def __init__(self, document, package, resource_id: str, parent=None):
-        super().__init__(parent)
+        super().__init__(*dependent(parent))                # above the main window, never behind it
         self.setModal(False)
         self.doc, self.pkg, self.rid = document, package, resource_id
         self._live = QTimer(self)  # edits saved to the resource after a short pause: the 3D View follows
@@ -145,9 +147,6 @@ class BakerDialog(QDialog):
         for w in (self.format, self.width_, self.height_):
             w.currentTextChanged.connect(self._changed)
         self.link.toggled.connect(self._changed)
-        self.progress = QProgressBar()
-        self.progress.setVisible(False)
-        lay.addWidget(self.progress)
         buttons = QHBoxLayout()
         buttons.addStretch(1)
         self.start = QPushButton("Start Render")
@@ -158,7 +157,6 @@ class BakerDialog(QDialog):
         buttons.addWidget(self.start)
         buttons.addWidget(close)
         lay.addLayout(buttons)
-        self._cancel = False
         self._rebuild_list(0)
 
     # --- the list ---------------------------------------------------------------------------------------
@@ -272,30 +270,18 @@ class BakerDialog(QDialog):
                           merge=f"baking:{self.rid}")
 
     def render(self) -> list[Path]:
-        from PySide6.QtWidgets import QApplication
         config = self.configuration()
         bakers = {b["id"]: b["params"] for b in self.bakers if b.get("enabled", True)}
         if not bakers:
             QMessageBox.information(self, "Baking", "Add a baker first.")
             return []
         self._save()
-        self.start.setEnabled(False)
-        self.progress.setVisible(True)
-        self.progress.setRange(0, len(bakers))
-
-        def progress(done, total, baker):
-            self.progress.setValue(done)
-            self.progress.setFormat(f"{bake.BAKERS[baker]}  %v/%m" if baker else "%v/%m")
-            QApplication.processEvents()
-            return not self._cancel
-
-        try:
-            paths = bake.Baker().bake(self.mesh, bakers, self.settings, config["folder"], config["name"], progress)
+        try:  # modal: the bar follows the maps tile by tile, the 3D View shows the map being baked
+            paths, _canceled = progress.bake_maps(self, self.doc, self.pkg, self.rid, self.mesh, bakers, self.settings,
+                                                  config["folder"], config["name"])
         except (OSError, ValueError) as e:
             QMessageBox.warning(self, "Baking", str(e))
             return []
-        finally:
-            self.start.setEnabled(True)
         if config["link"] and self.pkg.path is not None:
             def link():
                 for p in paths:

@@ -270,6 +270,7 @@ class View3D(QWidget):
         # (high poly, cage) can be shown (Baking menu).
         self.bake_resource = None
         self.baked_preview: str | None = None  # a baker whose map is shown alone and unlit
+        self.live_bake = None  # (UDIM tile, texture) of the map being baked, shown alone and unlit (`_bake_progress`)
         self._shown: dict = {}  # (material, slot) -> (job key, output) the renderer shows (`show_ready`)
         self._asked: frozenset | None = None  # the channels missing the refresh was asked for (`refresh`: once)
         self._bake_meshes = {}  # (path, mtime) -> meshes in their own units
@@ -310,6 +311,7 @@ class View3D(QWidget):
         self._menus()
         self._scene_toolbar(side)
         self.doc.changed.connect(self._doc_changed)
+        self.doc.bake_progress.connect(self._bake_progress)
         self.set_primitive("Rounded Cube")
         self._apply_default_state()
         self.fill_color_spaces()
@@ -1406,6 +1408,10 @@ class View3D(QWidget):
         """The graph shown is refreshed by the Graph workspace's `LiveCook` (its steps call `refresh`)."""
         if self.bake_resource is None or pkg is not self.bake_resource[0]:
             return
+        if self.bake_resource[1] not in pkg.resources:  # removed: no longer a resource (its bakes, its settings)
+            self.bake_resource = self.baked_preview = None
+            self.refresh()
+            return
         if pkg is not self.package:
             self.refresh()  # baking settings or a new bake: maps and overlay follow
             return
@@ -1414,6 +1420,22 @@ class View3D(QWidget):
         except Exception as e:  # noqa: BLE001 - shown in the status bar
             self.doc.error.emit(f"3D view: baked maps: {e}")
         self.view.refresh()
+
+    def _bake_progress(self, pkg, rid, shown):
+        """The map being baked for the resource on view, tile by tile, at 1024 at most (an upload of the whole map
+        at 4096 is 256 MB); None: the bake ended, the view shows what it showed before."""
+        if self.bake_resource != (pkg, rid):
+            return
+        self.live_bake = None  # its texture goes with the renderer's last reference (bound until set_materials)
+        if shown is not None:
+            baker, udim, img = shown
+            step = max(1, max(img.shape[:2]) // 1024)
+            small = img[::step, ::step].copy()
+            if baker in bake.GRAY:
+                small[..., 1:3] = small[..., :1]
+            small[..., 3] = 1.0
+            self.live_bake = (tuple(udim), self.doc.ev.texture_of(small))
+        self.refresh()
 
     def _bake_config(self):
         """(package, resource, settings, low mesh path) of the scene resource on view, or None."""
@@ -1697,7 +1719,10 @@ class View3D(QWidget):
                 if not self.view.look.preview:
                     for slot, value in baked[t].items():  # the bake fills what the graph leaves empty
                         tile_spec.setdefault(slot, value)
-                if preview[t] is not None:  # Baking > Show baked map: that map alone, unlit
+                if self.live_bake is not None and tuple(tiles[t]) == self.live_bake[0]:  # being baked
+                    tile_spec = {"shader": shaders.index("Unlit"), "baseColor": (self.live_bake[1], False)}
+                    self.view.look.preview = True
+                elif preview[t] is not None:  # Baking > Show baked map: that map alone, unlit
                     tile_spec = {"shader": shaders.index("Unlit"),
                                  "baseColor": (self._baked_texture(preview[t]), False)}
                     self.view.look.preview = True

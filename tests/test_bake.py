@@ -80,6 +80,20 @@ class BakeTest(unittest.TestCase):
         dx = read(self.run_bake({"normal_map_from_mesh": {}})["normal_map_from_mesh"])
         self.assertLess(self.at(dx, 0.65, 0.72)[1], 0.4)  # DirectX: green flipped
 
+    def test_normal_orientation_follows_the_project(self):
+        from trafilatura3d import project
+        before = project.configuration()
+        self.addCleanup(project.set_configuration, before)
+        opengl = project.Configuration()
+        opengl.custom.append(project.Project(None, {"general": {"normal_format": "OpenGL"}}, "Pipeline"))
+        project.set_configuration(opengl)
+        for baker in ("normal_map_from_mesh", "ambient_occlusion_from_mesh", "curvature_from_mesh"):
+            self.assertEqual(bake.baker_defaults(baker)["normal_orientation"], "OpenGL", baker)
+        self.assertEqual(bake.resolved("normal_map_from_mesh", {"map_type": "Tangent Space"})["normal_orientation"],
+                         "OpenGL")  # a saved setup without it bakes as the project wants
+        self.assertEqual(bake.resolved("normal_map_from_mesh", {"normal_orientation": "DirectX"})["normal_orientation"],
+                         "DirectX")  # a chosen one stays
+
     def test_height_position_opacity(self):
         maps = self.run_bake({"height_map_from_mesh": {}, "position": {}, "opacity_mask_from_mesh": {},
                               "world_space_normals": {}})
@@ -137,6 +151,34 @@ class BakeTest(unittest.TestCase):
             bake.TILE = old
         for a, b in zip(whole, tiled):
             np.testing.assert_allclose(a, b, atol=2e-4)  # same samples, same per pixel noise
+
+    def test_progress_tile_by_tile_and_cancel(self):
+        s = bake.Settings(size=(64, 64), high_meshes=[str(self.dir / "high.obj")], frontal=0.2, rear=0.2,
+                          antialiasing="Subsampling 2x2")
+        bakers = {"normal_map_from_mesh": {}, "opacity_mask_from_mesh": {}}
+        calls = []
+
+        def each(baker, udim, done, total, img):
+            calls.append((baker, tuple(udim), done, total, int((img[..., 3] > 0).sum())))
+        old = bake.TILE
+        bake.TILE = 32  # 16 output pixels per tile at 2x2: 16 tiles
+        try:
+            written = self.baker.bake(str(self.dir / "low.obj"), bakers, s, self.dir / "progress", each_tile=each)
+            self.assertEqual(len(written), 2)
+            normal = [c for c in calls if c[0] == "normal_map_from_mesh"]
+            self.assertEqual([c[2] for c in normal], list(range(1, 17)))
+            self.assertEqual({c[3] for c in normal} | {c[1] for c in normal}, {16, (0, 0)})
+            covered = [c[4] for c in normal]
+            self.assertEqual(covered, sorted(covered))  # the map fills in, tile by tile
+            self.assertLess(covered[0], covered[-1])
+            calls.clear()
+            stopped = self.baker.bake(str(self.dir / "low.obj"), bakers, s, self.dir / "stopped",
+                                      each_tile=lambda *a: (each(*a), a[2] < 3)[1])
+        finally:
+            bake.TILE = old
+        self.assertEqual(stopped, [])  # stopped at the third tile of the first map: nothing written
+        self.assertEqual([c[2] for c in calls], [1, 2, 3])
+        self.assertFalse((self.dir / "stopped" / "low_normal_map_from_mesh.png").exists())
 
     def test_denoise(self):
         from trafilatura3d.bake_params import BAKER_PARAMS
@@ -589,7 +631,15 @@ class DialogTest(unittest.TestCase):
                 v.load_resource(p, "low")  # no saved scene state: the mesh alone
                 self.assertEqual(Path(v.scene.source).name, "low.obj")
                 self.assertNotIn("normal", v.view.renderer.materials[0]["spec"])
+                seen = []  # during the bake the 3D View shows the map being baked, alone and unlit
+
+                def shown(_p, _rid, what):
+                    seen.append((what is not None, v.live_bake is not None, v.view.look.preview))
+                w.doc.bake_progress.connect(shown)
                 BakerDialog(w.doc, p, "low", w).render()
+                w.doc.bake_progress.disconnect(shown)
+                self.assertTrue(seen and all(s == (True, True, True) for s in seen[:-1]))
+                self.assertEqual(seen[-1][:2], (False, False))  # then the material again
                 w.doc.live.refresh_now()  # the edit's refresh, otherwise a step per turn of the event loop
                 spec = v.view.renderer.materials[0]["spec"]
                 self.assertIn("normal", spec)

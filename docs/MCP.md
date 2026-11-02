@@ -22,10 +22,13 @@ user folder, a named pipe on Windows), one per user; a second editor leaves it t
 | `status()` | open packages, the graph shown, undo/redo step names |
 | `open_package(path)`, `save(path=None)` | as in the File menu; saving creates the missing folders of the path |
 | `new_package(template="Metallic roughness", name="New_graph")` | as the New graph dialog with "New package": "Empty" or a shader template (an Output per channel fed a Uniform color, the 3D View takes the shader) |
+| `new_graph(name, template="Empty", graph=None)` | as New graph on a package in the Explorer: a graph from a template in the package of `graph` (the one shown by default), one undo step, then shown |
+| `remove_graph(graph)` | as Remove in the Explorer: one undo step, refused while graphs of its package use it; returns the graphs left |
+| `remove_resource(resource, graph=None)` | as Remove on a resource in the Explorer, in the package of `graph`: one undo step, refused while nodes name its file (the file stays on disk); returns the resources left |
 | `get_graph(graph=None)` | compact: nodes (type, position, parameters differing from the default), links `src.out -> dst.port`, graph inputs, outputs with usage, `warnings` (the Graph view's) |
 | `node_types(query="")` | categories; with a query, matching `[type, label, category]` |
 | `node_info(type)` | ports, parameters (kind: `float`, `float2`/`float3`/`float4` vectors, `color`, `int`, `enum`...; default, range, choices) and the base parameters (`set_base`: modes, values); `inherits`: the default mode, the input the size and format come from (`main_input`, else the first image input; `parent` when nothing is connected there or the node has no image input) and the node's own defaults |
-| `edit(ops, graph=None)` | `{results, warnings}`: a batch of ops, one undo step, the graph's warnings after it: `add_node`, `remove_node`, `connect`, `disconnect`, `set_param`, `set_base`, `move`, `expose`, `unexpose`, `link`, `set_output`, `set_disabled`, `set_graph`, `set_input`, `insert_dot`, `frame`, `set_item`, `remove_item`; a result per op |
+| `edit(ops, graph=None)` | `{results, warnings}`: a batch of ops, one undo step, the graph's warnings after it: `add_node`, `remove_node`, `connect`, `disconnect`, `set_param`, `set_base`, `move`, `expose`, `unexpose`, `link`, `set_output`, `set_disabled`, `set_function`, `set_graph`, `set_input`, `set_preset`, `remove_preset`, `insert_dot`, `frame`, `set_item`, `remove_item`; a result per op |
 | `layout(graph=None, dots=False)` | layered layout that favours the links (below); returns overlaps, crossings, links over nodes, and with frames `frame_overlaps`, `nodes_in_other_frames` |
 | `focus(node, graph=None)` | shows a node to the person at the editor: selected and framed in the Graph view, its parameters in Properties, its output in the 2D View |
 | `undo()`, `redo()` | the editor's undo stack |
@@ -48,8 +51,11 @@ Ops worth knowing:
   kind, or a `float` input to a vector parameter the same way: every component (a `float4` keeps its alpha) or only
   `component` (0-3 or x/y/z/w, r/g/b/a), the others kept at their values; no `input` unlinks. `set_input(id, ...)`
   changes an input's
-  default, label, range (`range` or `min`/`max`), group, description, step, clamp, visible_if: what Properties edits.
-- `set_graph(id?, label?, description?)` renames the graph (its instances in the package follow) and sets its label.
+  default, label, range (`range` or `min`/`max`), group, description, step, clamp, visible_if: what Properties edits;
+  on a color, `swatches` names an image input of the graph (an ID map) whose colors the instances' Properties offer
+  to pick, read from its cooked values.
+- `set_graph(id?, label?, description?, parent_size?)` renames the graph (its instances in the package follow), sets its
+  label, and its Parent Size (`[width, height]` in pixels, powers of 2, as `get_graph` gives it).
 - `set_base(node?, name, {"mode": "relative_parent" | "relative_input" | "absolute", "value": ...})`: `node_info`
   lists the base parameters and their values. `output_size` values are **log2** (`[11, 11]` = 2048x2048, `[4, 4]` =
   16x16; relative modes add to the reference's): the reply says the size in pixels.

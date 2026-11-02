@@ -63,14 +63,15 @@ def dependencies(pkg: Package) -> list[Dependency]:
     return sorted(deps.values(), key=lambda d: (d.kind, d.name))
 
 
-def graph_warnings(pkg: Package, gid: str, _seen=None) -> list[GraphWarning]:
+def graph_warnings(pkg: Package, gid: str, _seen=None, previews: bool = True) -> list[GraphWarning]:
     """The warnings of one graph (content warnings plus our structural checks). Every instance of a graph that has
     warnings gets one (the graph is checked once; one being checked up the chain counts as without: a cycle). Slow
     (every node, the graphs it instances, a compile of its outputs): the editor checks a whole graph only when its
-    package opens, or after each edit with Tools > Live warnings (`Document.check`)."""
+    package opens, or after each edit with Tools > Live warnings (`Document.check`). `previews`: compiled with its
+    inputs' preview images (on its own); an instanced graph is checked without, as its instances compile it."""
     from trafilatura3d.visibility import check
-    seen = _seen if _seen is not None else {}  # (package, graph) -> has warnings (None while being checked)
-    seen[(id(pkg), gid)] = None
+    seen = _seen if _seen is not None else {}  # (package, graph, previews) -> has warnings (None while checked)
+    seen[(id(pkg), gid, previews)] = None
     g = pkg.graphs[gid]
     out = []
     if not g.output_nodes():
@@ -86,7 +87,7 @@ def graph_warnings(pkg: Package, gid: str, _seen=None) -> list[GraphWarning]:
         if msg:
             out.append(GraphWarning(f"{p.param.label or pid}: {msg}"))
     out += [GraphWarning(n.message, n.node if n.node in g.nodes else None) for n in pkg.notes if n.graph == gid]
-    out += output_size_warnings(pkg, gid)
+    out += output_size_warnings(pkg, gid, previews)
     return out
 
 
@@ -95,11 +96,12 @@ def node_warnings(pkg: Package, gid: str, node_ids) -> list[GraphWarning]:
     links, not the chain (an instanced graph's own warnings are its package's check)."""
     g = pkg.graphs[gid]
     out = []
+    memo: dict = {}  # the types resolved for one node serve the next ones (a selection of many shares its chain)
     for nid in node_ids:
         if nid not in g.nodes:
             continue
         try:
-            g._check_types([nid])
+            g._check_types([nid], memo)
         except (DocumentError, OSError, ValueError) as e:
             out.append(GraphWarning(str(e), nid))
         out += _node_checks(pkg, g, g.nodes[nid], None)
@@ -117,9 +119,9 @@ def _node_checks(pkg: Package, g, n, seen) -> list[GraphWarning]:
         except (DocumentError, OSError, ValueError) as e:
             return [GraphWarning("Reference resource not found", n.id, str(e))]
         if seen is not None:
-            key = (id(ref_pkg), ref_graph.id)
-            if key not in seen:
-                seen[key] = bool(graph_warnings(ref_pkg, ref_graph.id, seen))
+            key = (id(ref_pkg), ref_graph.id, False)
+            if key not in seen:  # as instanced: its preview images are not read (`compile_graph`)
+                seen[key] = bool(graph_warnings(ref_pkg, ref_graph.id, seen, previews=False))
             if seen[key]:
                 out.append(GraphWarning("The referenced data has some warnings", n.id, ref_graph.id))
     elif n.type in RESOURCE_NODES:
@@ -148,7 +150,7 @@ def _node_checks(pkg: Package, g, n, seen) -> list[GraphWarning]:
     return out
 
 
-def output_size_warnings(pkg: Package, gid: str) -> list[GraphWarning]:
+def output_size_warnings(pkg: Package, gid: str, previews: bool = True) -> list[GraphWarning]:
     """The Output nodes with a usage whose size is not the one most of them have (a material's maps are meant to
     match: a metallic at 16x16 because an absolute size upstream was taken for pixels, not log2)."""
     from trafilatura3d.compiler import compile_graph
@@ -157,7 +159,7 @@ def output_size_warnings(pkg: Package, gid: str) -> list[GraphWarning]:
     if len(outputs) < 2:
         return []
     try:
-        jobs = compile_graph(pkg, gid).jobs
+        jobs = compile_graph(pkg, gid, previews=previews).jobs
     except (DocumentError, KeyError, ValueError):
         return []
     sizes = {n.id: tuple(jobs[n.id].size) for n in outputs if n.id in jobs}

@@ -21,10 +21,10 @@ from trafilatura3d.editor import theme
 from trafilatura3d.editor.icons import icon
 from trafilatura3d.editor.params_ui import grouped, make_editor
 from trafilatura3d.editor.widgets import (HISTOGRAM_GRAY, HISTOGRAM_RGB, BoolToggle, ColorButton, CurveEditor, GradientBar,
-                                    LevelsEditor, NumberField, SliderField, VectorField)
+                                    LevelsEditor, NumberField, SliderField, SwatchPicker, VectorField)
 from trafilatura3d.nodes.atomic.levels import LEVELS_PARAMS
 from trafilatura3d.nodes.base import EDITORS, Param, ParamKind, PortType
-from trafilatura3d.package import INPUT_TYPES, INSTANCE, DocumentError
+from trafilatura3d.package import INPUT_TYPES, INSTANCE, RESOURCE_NODES, DocumentError
 
 ATTRIBUTES = ("identifier", "label", "description", "user_data", "group", "component", "usage", "color_space",
               "visible_if")
@@ -99,7 +99,7 @@ class PropertiesPanel(QScrollArea):
         self.doc = document
         self.setWidgetResizable(True)
         self.setFrameShape(QFrame.NoFrame)
-        self.package, self.graph_id, self.node_id = None, "", None
+        self.package, self.graph_id, self.node_id, self.item_id = None, "", None, None
         self._editing = False
         self._gesture = 0
         self._inner = None
@@ -116,8 +116,17 @@ class PropertiesPanel(QScrollArea):
         return self.package.graphs.get(self.graph_id) if self.package else None
 
     def show_target(self, package, graph_id: str, node_id):
+        if self._inner is None and (package, graph_id, node_id, None) == (
+                self.package, self.graph_id, self.node_id, self.item_id) and node_id is None:
+            return  # the graph's properties shown already (a selection of several nodes changing): nothing to redo
         self._inner = None  # not showing a node of a function or FX-Map graph
-        self.package, self.graph_id, self.node_id = package, graph_id, node_id
+        self.package, self.graph_id, self.node_id, self.item_id = package, graph_id, node_id, None
+        self.rebuild()
+
+    def show_item(self, package, graph_id: str, item_id: str):
+        """A graph item selected alone (a frame, a comment, a pin): its title, text and color."""
+        self._inner = None
+        self.package, self.graph_id, self.node_id, self.item_id = package, graph_id, None, item_id
         self.rebuild()
 
     def show_settings(self, title: str, rollouts, get, set_):
@@ -169,6 +178,8 @@ class PropertiesPanel(QScrollArea):
             return
         if self.node_id is not None and (self.graph is None or self.node_id not in self.graph.nodes):
             self.node_id = None
+        if self.item_id is not None and (self.graph is None or all(i["id"] != self.item_id for i in self.graph.items)):
+            self.item_id = None
         self.rebuild()
 
     def rebuild(self):
@@ -181,6 +192,8 @@ class PropertiesPanel(QScrollArea):
         if g is None:
             self.col.addWidget(QLabel("  Nothing selected"))
             self.title_changed.emit("Properties")
+        elif self.item_id is not None:
+            self._item_properties(g, g.item(self.item_id))
         elif self.node_id is None:
             self._graph_properties(g)
         else:
@@ -227,6 +240,32 @@ class PropertiesPanel(QScrollArea):
         if final:
             self._gesture += 1
 
+    # --- graph items ---------------------------------------------------------------------------
+
+    def _item_properties(self, g, item: dict):
+        """A frame: title, description and color; a comment: its text; a pin: its title."""
+        kind, iid = item["kind"], item["id"]
+        self.title_changed.emit(f"{kind.capitalize()} - Properties")
+        r = Rollout(kind.capitalize())
+
+        def set_(key, value, final=True):
+            self._edit(f"Edit {kind} {key}", lambda: g.item(iid).__setitem__(key, value), final, f"{iid}.{key}")
+        if kind in ("frame", "pin"):
+            title = QLineEdit(item.get("title", ""))
+            title.editingFinished.connect(lambda: set_("title", title.text()) if title.text() != g.item(iid).get(
+                "title") else None)
+            r.add("Title", title)
+        if kind in ("frame", "comment"):
+            text = QPlainTextEdit(item.get("text", ""))
+            text.setFixedHeight(120)
+            text.textChanged.connect(lambda: set_("text", text.toPlainText(), False))  # one undo step while typing
+            r.add("Description" if kind == "frame" else "Text", text)
+        if kind == "frame":
+            color = ColorButton(list(item.get("color", [0.25, 0.45, 0.25, 0.35])))
+            color.edited.connect(lambda v, final: set_("color", [float(x) for x in v], final))
+            r.add("Color", color)
+        self.col.addWidget(r)
+
     # --- node ---------------------------------------------------------------------------------
 
     def _node_properties(self, g, node):
@@ -270,8 +309,14 @@ class PropertiesPanel(QScrollArea):
                 hb.setLayout(line)
                 r.form.addWidget(hb)
             groups = {}
+            exposed_levels = self._exposed_levels(node, d) if node.type == INSTANCE else {}
             for path, (name, param) in grouped(specific, lambda it: it[1].group):
                 if node.type == INSTANCE and not self._param_visible(node, param, values):
+                    continue
+                if name in exposed_levels:
+                    names = exposed_levels[name]
+                    if name == names[0]:  # in place of the first of them
+                        self._exposed_levels_row(self._group(r, path, groups), g, node, names, param)
                     continue
                 if histogram and name in LEVELS_PARAMS:
                     if name == next(k for k in d.params if k in LEVELS_PARAMS):  # in place of the first of them
@@ -391,7 +436,8 @@ class PropertiesPanel(QScrollArea):
                     n += 1
                     pid = f"{base}{n}"
                 groups = "/".join(x for x in (group.text(), grp.text()) if x)
-                g.expose(pid, dataclasses.replace(param, default=values[name], label=param.label or name, group=groups))
+                g.expose(pid, dataclasses.replace(param, default=values[name], label=param.label or name, group=groups,
+                                                  swatches=""))  # a node's swatches name its own input
                 g.link(node.id, name, pid)
         self._edit("Batch expose", do, True, "expose")
 
@@ -447,9 +493,47 @@ class PropertiesPanel(QScrollArea):
             info.setObjectName("dim")
             rollout.add(param.label or name, info, [menu_btn], dim=True)
             return
-        editor = self._editor(param, value, lambda v, final: self._edit(
-            f"Edit {param.label or name}", lambda: g.set_param(node.id, name, v), final, f"{node.id}.{name}"))
-        rollout.add(param.label or name, editor, [menu_btn])
+        def on_edit(v, final):
+            self._edit(f"Edit {param.label or name}", lambda: g.set_param(node.id, name, v), final, f"{node.id}.{name}")
+        if param.swatches and param.components() >= 3:
+            editor = self._swatch_picker(node, name, param, value, on_edit)
+        else:
+            editor = self._editor(param, value, on_edit)
+        tools = [menu_btn]
+        if RESOURCE_NODES.get(node.type) == name:  # a file (an input's preview image too): browse for it
+            browse = tool_button("open", "Browse for the file")
+            browse.clicked.connect(lambda: self._browse_file(on_edit))
+            tools.insert(0, browse)
+        rollout.add(param.label or name, editor, tools)
+
+    def _browse_file(self, on_edit) -> None:
+        """A file named relative to the package's folder (saving then keeps it in its dependencies)."""
+        import os
+        home = str(self.package.path.parent) if self.package and self.package.path else ""
+        path, _ = QFileDialog.getOpenFileName(self, "Choose a file", home)
+        if path:
+            on_edit(os.path.relpath(path, home).replace(os.sep, "/") if home else path, True)
+
+    def _swatch_picker(self, node, name, param: Param, value, on_edit) -> QWidget:
+        """A color offered from the image the node's input `param.swatches` receives (an ID map's): a chip and the list
+        of that image's colors, read from its cooked values (`LiveCook.colors`, nothing waits for the GPU)."""
+        w = SwatchPicker(value, param.components())
+        w.setToolTip(f"A color of {param.swatches}")
+        w.edited.connect(on_edit)
+        source = self._input_source(node, param.swatches)
+        if source is None:
+            w.set_colors(None, f"Nothing connected to {param.swatches}")
+            return w
+
+        def fill(colors):
+            try:
+                w.set_colors(colors, "" if colors else f"No color covers enough of {param.swatches}")
+            except RuntimeError:  # the panel was rebuilt meanwhile
+                pass
+
+        job, out = source
+        self.doc.live.colors(f"swatches.{node.id}.{name}", job, out, fill)  # one per parameter: a key replaces its own
+        return w
 
     def _editor(self, param: Param, value, on_edit) -> QWidget:
         return make_editor(param, value, on_edit)
@@ -458,7 +542,10 @@ class PropertiesPanel(QScrollArea):
 
     def _levels_input(self, g, node, d):
         """(job, output) of what the node's first input receives, or None (not connected, not compiled)."""
-        port = next(iter(d.inputs), None)
+        return self._input_source(node, next(iter(d.inputs), None))
+
+    def _input_source(self, node, port):
+        """(job, output) of what the node's input `port` receives, or None (not connected, not compiled)."""
         src = node.inputs.get(port) if port else None
         compiled = self.doc.compiled(self.package, self.graph_id) if src else None
         return compiled.nodes.get(src[0], {}).get(src[1]) if compiled else None
@@ -470,6 +557,47 @@ class PropertiesPanel(QScrollArea):
         if source is not None:
             job, out = source
             self.doc.live.histogram("levels", job, out, lambda stats: then((*stats, job.depths[out])))
+
+    @staticmethod
+    def _exposed_levels(node, d) -> dict[str, list[str]]:
+        """A graph's Levels inputs (Editor Levels, a float), five in a group in the Levels node's order (In low, In
+        mid, In high, Out low, Out high): each name -> the five names. A group of another count, or one of them
+        linked or computed here, keeps its sliders."""
+        groups: dict[str, list[str]] = {}
+        for k, p in d.params.items():
+            if p.kind is ParamKind.FLOAT and p.editor_name() == "Levels":
+                groups.setdefault(p.group, []).append(k)
+        return {k: names for names in groups.values() if len(names) == 5
+                and not any(n in node.links or n in node.functions for n in names) for k in names}
+
+    def _exposed_levels_row(self, rollout, g, node, names, param) -> None:
+        """An instance's five Levels inputs in one levels editor, over the histogram of the image its input
+        `param.swatches` receives (what is connected to the instance there); a drag is one undo step."""
+        d = g.definition(node.id)
+        values = d.values(node)
+        editor = LevelsEditor([values[k] for k in names])
+        source = self._input_source(node, param.swatches) if param.swatches else None
+        if source is not None:
+            job, out = source
+
+            def histogram(stats):  # now, or once computed (the panel may have been rebuilt meanwhile)
+                if isValid(editor):
+                    counts, *_ = stats
+                    top = evaluator.DEPTHS[job.depths[out]][0]
+                    editor.set_histogram([(counts[:, 0], HISTOGRAM_GRAY)], ("0", f"{top:g}" if top else "1"))
+            self.doc.live.histogram(f"levels.{node.id}.{names[0]}", job, out, histogram)
+        else:
+            editor.setToolTip(f"Nothing connected to {param.swatches}" if param.swatches else
+                              "No image input chosen for its histogram (Edit exposed graph input > Histogram of)")
+
+        def edited(levels, final):
+            def do():
+                for k, v in zip(names, levels):
+                    if d.values(g.nodes[node.id])[k] != v:
+                        g.set_param(node.id, k, v)
+            self._edit(f"Edit {param.group or 'Levels'}", do, final, f"{node.id}.{names[0]}")
+        editor.edited.connect(edited)
+        rollout.add(param.group or "Levels", editor)
 
     def _levels_channels(self, g, node, d):
         return LEVELS_GRAY if g.output_type(node.id, next(iter(d.outputs))) is PortType.GRAY else LEVELS_COLOR
@@ -977,6 +1105,12 @@ class PropertiesPanel(QScrollArea):
             clamp = BoolToggle(p.clamp)
             clamp.edited.connect(lambda v, final: setp(clamp=v))
             row("Clamp", clamp)
+        if p.components() >= 3 or p.editor_name() == "Levels":  # a color's swatches, a Levels float's histogram
+            sw = QComboBox()
+            sw.addItems(["", *(g.identifier(n) for n in g.input_nodes() if n.type != "input_value")])
+            sw.setCurrentText(p.swatches)
+            sw.currentTextChanged.connect(lambda t: setp(swatches=t))
+            row("Swatches" if p.components() >= 3 else "Histogram of", sw)
         if p.kind is ParamKind.INT and p.editor_name() == "Drop down list":
             form.addWidget(self._dropdown_items(g, pid))
         if p.kind is ParamKind.ENUM:

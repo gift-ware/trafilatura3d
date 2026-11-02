@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (QFileDialog, QInputDialog, QMenu, QMessageBox, QT
 
 from trafilatura3d.editor import theme
 from trafilatura3d.editor.icons import icon
-from trafilatura3d.package import Graph, INSTANCE
+from trafilatura3d.package import Graph
 
 
 class _Tree(QTreeWidget):
@@ -214,24 +214,20 @@ class ExplorerPanel(QWidget):
         self.doc.edit(pkg, "Duplicate graph", do)
 
     def remove_graph(self, pkg, gid):
-        users = [g.id for g in pkg.graphs.values() for n in g.nodes.values() if n.type == INSTANCE and n.ref == gid]
+        users = pkg.graph_users(gid)
         if users:
-            QMessageBox.warning(self, "Remove graph", f"{gid} is used by: {', '.join(sorted(set(users)))}")
+            QMessageBox.warning(self, "Remove graph", f"{gid} is used by: {', '.join(users)}")
             return
         self.doc.edit(pkg, "Remove graph", lambda: pkg.remove_graph(gid))
 
     def remove_resource(self, pkg, rid):
         """A linked resource out of the package (one undo step); refused while nodes name its file. Its file stays on
         disk."""
-        users = sorted({f"{ref.user[0]}.{ref.user[1]}" for ref in pkg.file_references()
-                        if ref.user and ref.resource == rid})
+        users = pkg.resource_users(rid)
         if users:
             QMessageBox.warning(self, "Remove resource", f"{rid} is used by: {', '.join(users)}")
             return
-        view3d = self.window.view3d
-        if view3d.bake_resource == (pkg, rid):  # the scene on view: no longer a resource (its bakes, its settings)
-            view3d.bake_resource = view3d.baked_preview = None
-        self.doc.edit(pkg, "Remove resource", lambda: pkg.resources.pop(rid))
+        self.doc.edit(pkg, "Remove resource", lambda: pkg.remove_resource(rid))
 
     def link_bitmap(self, pkg):
         if pkg.path is None:

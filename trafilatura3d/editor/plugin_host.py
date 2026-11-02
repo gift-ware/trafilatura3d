@@ -12,8 +12,12 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (QDialog, QDockWidget, QFileDialog, QHBoxLayout, QLabel, QListWidget, QPushButton,
                                QTreeWidget, QTreeWidgetItem, QVBoxLayout)
 
+import trafilatura3d.export  # noqa: F401 - the module; `trafilatura3d.export` as an attribute is the package's function
 from trafilatura3d import plugins
+from trafilatura3d.editor import progress
 from trafilatura3d.editor.keys import variants
+
+exporting = sys.modules["trafilatura3d.export"]
 
 
 class EditorAccess(plugins.EditorAccess):
@@ -90,6 +94,15 @@ class EditorAccess(plugins.EditorAccess):
 
     def show_scene(self, package, resource_id):
         self.window.show_scene(package, resource_id)
+
+    def bake(self, package, resource_id, low_path, bakers, settings, out_dir, template):
+        return progress.bake_maps(self.window, self.window.doc, package, resource_id, low_path, bakers, settings,
+                                  out_dir, template)
+
+    def export(self, package, graph_id, out_dir, **options):
+        doc = self.window.doc
+        return progress.export_outputs(self.window, lambda step: exporting.export(
+            package, graph_id, out_dir, doc.ev, progress=step, **options))
 
     def remove_all(self):
         for menu, action in self.actions:

@@ -153,6 +153,33 @@ class LevelsHistogramTest(unittest.TestCase):
                                                    g.link(self.gray, LEVELS_PARAMS[0], "low")))
         self.assertIsNone(self.editor(self.gray))  # a linked value: the sliders interface
 
+    def test_an_instance_shows_its_levels_inputs_in_one_editor(self):
+        """A graph's five Levels inputs (Editor Levels, one group) are one levels editor on its instances, over the
+        histogram of what the instance receives at the image input they name; a drag edits the instance."""
+        sub = self.pkg.new_graph("curv", 7)
+        i = sub.add_node("input_grayscale")
+        sub.set_param(i, "identifier", "curvature")
+        lv, out = sub.add_node("levels"), sub.add_node("output")
+        sub.connect(i, "output", lv, "input")
+        sub.connect(lv, "output", out, "input")
+        for name, label in (("level_in_low", "In low"), ("level_in_mid", "In mid"), ("level_in_high", "In high"),
+                            ("level_out_low", "Out low"), ("level_out_high", "Out high")):
+            sub.expose_node_param(lv, name, f"curvature_{name}", label, "Curvature level", kind="float",
+                                  editor="Levels", swatches="curvature", min=0.0, max=1.0)
+        g = self.pkg.graphs[self.gid]
+        inst = g.add_node("graph_instance", ref="curv")
+        noise = next(n for n, v in g.nodes.items() if v.type == "gaussian_noise")
+        g.connect(noise, "output", inst, "curvature")
+        ed = self.editor(inst)
+        self.assertIsNotNone(ed)
+        self.assertEqual(ed.series[0][0].sum(), 128 * 128)  # the histogram of what reaches the instance's input
+        self.assertEqual(ed.values, [0.0, 0.5, 1.0, 0.0, 1.0])
+        steps = self.doc.undo.count()
+        drag(ed.input, 0.0, 0.3)
+        node = self.pkg.graphs[self.gid].nodes[inst]
+        self.assertAlmostEqual(node.params["curvature_level_in_low"], 0.3, delta=0.01)
+        self.assertEqual(self.doc.undo.count(), steps + 1)  # the drag is one step
+
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
 class CurveEditorTest(unittest.TestCase):

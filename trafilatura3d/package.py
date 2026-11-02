@@ -35,7 +35,8 @@ from trafilatura3d.nodes.base import EDITORS, Input, Node, Output, Param, ParamK
 FORMAT_VERSION = 2
 SUFFIX = ".trafilatura3d"  # a package file
 DEPENDENCIES = ".dependencies"  # next to a saved package, <its name>.dependencies: the files it uses from elsewhere
-RESOURCE_NODES = {"bitmap": "pkg_resource_path", "svg": "pkg_resource_path"}  # node type -> its file parameter
+RESOURCE_NODES = {"bitmap": "pkg_resource_path", "svg": "pkg_resource_path",  # node type -> its file parameter
+                  "input_color": "resource", "input_grayscale": "resource"}  # an input's preview image (`compiler`)
 FONT_SUFFIXES = (".ttf", ".otf", ".ttc")  # a Text node's font given as a file (else a system font's name)
 INSTANCE = "graph_instance"
 INPUT_TYPES = {"input_color": PortType.COLOR, "input_grayscale": PortType.GRAY, "input_value": PortType.VALUE}
@@ -100,7 +101,8 @@ class ExposedParam:
     id: str
     param: Param
 
-    FIELDS = ("label", "min", "max", "group", "description", "editor", "step", "clamp", "user_data", "visible_if")
+    FIELDS = ("label", "min", "max", "group", "description", "editor", "step", "clamp", "user_data", "visible_if",
+              "swatches")
 
     def to_dict(self) -> dict:
         p = self.param
@@ -415,6 +417,13 @@ class Graph:
             default = param.validate(param.default)
         except ValueError as e:
             raise DocumentError(f"{id}: {e}") from None
+        if param.swatches:  # offered from an image input of this graph (one renamed or removed later: none offered)
+            images = [self.identifier(n) for n in self.input_nodes() if n.type != "input_value"]
+            if param.components() < 3 and param.editor_name() != "Levels":
+                raise DocumentError(f"{id}: swatches on a {param.kind.value}, not a color or a Levels float")
+            if param.swatches not in images:
+                raise DocumentError(f"{id}: swatches {param.swatches!r} is not an image input of {self.id} "
+                                    f"(inputs: {', '.join(images) or 'none'})")
         self.parameters[id] = ExposedParam(id, dataclasses.replace(param, default=default, label=param.label or id))
 
     def expose_node_param(self, node_id: str, name: str, id: str, label: str = "", group: str = "",
@@ -430,8 +439,8 @@ class Graph:
             raise DocumentError(f"graph input {id!r} exists already: link the parameter to it, or choose another id")
         param, value = d.params[name], d.values(self.nodes[node_id])[name]
         if kind in (None, param.kind.value):
-            self.expose(id, self._with_fields(dataclasses.replace(
-                param, default=value, label=label or id, group=group), fields))
+            self.expose(id, self._with_fields(dataclasses.replace(  # a node's swatches name its own input
+                param, default=value, label=label or id, group=group, swatches=""), fields))
             self.link(node_id, name, id)
             return self.parameters[id].param
         vectors = (ParamKind.FLOAT2, ParamKind.FLOAT3, ParamKind.FLOAT4)
@@ -442,6 +451,31 @@ class Graph:
                                                 group=group), fields))
         self.link(node_id, name, id)
         return self.parameters[id].param
+
+    def set_preset(self, name: str, values: dict) -> None:
+        """An embedded preset (values of graph inputs, each checked as the input would): replaced when the name
+        exists, else added last."""
+        if not name:
+            raise DocumentError("a preset needs a name")
+        checked = {}
+        for pid, value in values.items():
+            if pid not in self.parameters:
+                raise DocumentError(f"preset {name!r}: no graph input {pid!r}")
+            try:
+                checked[pid] = self.parameters[pid].param.validate(value)
+            except ValueError as e:
+                raise DocumentError(f"preset {name!r}: {pid}: {e}") from None
+        preset = {"name": name, "values": checked}
+        i = next((i for i, p in enumerate(self.presets) if p["name"] == name), None)
+        if i is None:
+            self.presets.append(preset)
+        else:
+            self.presets[i] = preset
+
+    def remove_preset(self, name: str) -> None:
+        if all(p["name"] != name for p in self.presets):
+            raise DocumentError(f"no preset {name!r}")
+        self.presets = [p for p in self.presets if p["name"] != name]
 
     def edit_parameter(self, id: str, **fields) -> None:
         """Change properties of a graph input: default, label, min, max, group, description..."""
@@ -588,8 +622,10 @@ class Graph:
                 problems.append(f"{self.id}: two {kind} nodes with identifier {dup!r}")
         return problems
 
-    def _check_types(self, node_ids) -> None:
-        memo: dict = {}
+    def _check_types(self, node_ids, memo: dict | None = None) -> None:
+        """Raise on the first input of `node_ids` whose link is missing its output or gives a type it refuses; `memo`
+        the output types resolved so far (shared by several checks of the same graph state)."""
+        memo = {} if memo is None else memo
         for k in node_ids:
             n = self.nodes[k]
             try:
@@ -680,6 +716,10 @@ class FileReference:
 
 _RESOURCE_KINDS = {"bitmap": "Bitmap", "svg": "SVG", "font": "Font", "scene": "3D scene"}
 
+# The package the editor has open at a file, or None (set by the editor's Document): a reference to an open package
+# is that package, its edits seen at once, never a copy loaded from its file (`Package.resolve`).
+open_package: Callable[[Path], "Package | None"] | None = None
+
 
 class Package:
     def __init__(self, path: Path | None = None):
@@ -701,8 +741,33 @@ class Package:
         self.graphs[id] = g
         return g
 
+    def graph_users(self, id: str) -> list[str]:
+        """The graphs of the package holding an instance of graph `id`."""
+        return sorted({g.id for g in self.graphs.values() for n in g.nodes.values()
+                       if n.type == INSTANCE and n.ref == id})
+
     def remove_graph(self, id: str) -> None:
+        """Take a graph out of the package; refused while graphs of the package use it."""
+        if id not in self.graphs:
+            raise DocumentError(f"unknown graph {id!r}")
+        users = self.graph_users(id)
+        if users:
+            raise DocumentError(f"{id} is used by: {', '.join(users)}")
         del self.graphs[id]
+
+    def resource_users(self, rid: str) -> list[str]:
+        """The nodes ("graph.node") naming the file of resource `rid`."""
+        return sorted({f"{ref.user[0]}.{ref.user[1]}" for ref in self.file_references()
+                       if ref.user and ref.resource == rid})
+
+    def remove_resource(self, rid: str) -> None:
+        """Take a linked resource out of the package; refused while nodes name its file. Its file stays on disk."""
+        if rid not in self.resources:
+            raise DocumentError(f"unknown resource {rid!r}")
+        users = self.resource_users(rid)
+        if users:
+            raise DocumentError(f"{rid} is used by: {', '.join(users)}")
+        del self.resources[rid]
 
     def rename_graph(self, old: str, new: str) -> None:
         """Change a graph's identifier, in place in the package's order, following its instances in the package."""
@@ -744,14 +809,35 @@ class Package:
                 raise DocumentError(f"save the package before referencing {rel!r}")
             else:
                 path = (self.path.parent / rel).resolve()
-            if path not in self._external:
-                self._external[path] = Package.load(path)
-            pkg = self._external[path]
+            pkg = open_package(path) if open_package is not None else None
+            if pkg is None:
+                if path not in self._external:
+                    self._external[path] = Package.load(path)
+                pkg = self._external[path]
         else:
             pkg, gid = self, ref
         if gid not in pkg.graphs:
             raise DocumentError(f"unknown graph {ref!r}")
         return pkg, pkg.graphs[gid]
+
+    def referenced(self) -> dict[Path, Package]:
+        """The packages its graph instances refer to, theirs too (what its graphs read), by file."""
+        found: dict[Path, Package] = {}
+        todo = [self]
+        while todo:
+            pkg = todo.pop()
+            for g in pkg.graphs.values():
+                for n in g.nodes.values():
+                    if n.type != INSTANCE or "#" not in n.ref:
+                        continue
+                    try:
+                        other, _ = pkg.resolve(n.ref)
+                    except (DocumentError, OSError, ValueError):
+                        continue
+                    if other.path is not None and other.path not in found:
+                        found[other.path] = other
+                        todo.append(other)
+        return found
 
     # --- validation ---------------------------------------------------------------------------
 
@@ -781,8 +867,23 @@ class Package:
             pkg.graphs[gid] = g
         pkg.resources = {rid: Resource(r["kind"], r["path"], r.get("state"), r.get("baking"))
                          for rid, r in data.get("resources", {}).items()}
+        missing = pkg.undefined_aliases()
+        if missing:  # before the types: what it instances can't be read, nothing else would explain why
+            raise DocumentError(
+                f"This package belongs to a project: it uses {', '.join(f'{a}://' for a in missing)}, which no project "
+                f"in use defines. Open it with its project's configuration (Preferences > Projects, or the "
+                f"TRAFILATURA3D_CONFIG the project starts the editor with).")
         pkg.validate()
         return pkg
+
+    def undefined_aliases(self) -> list[str]:
+        """The aliases its graph instances and files name that the projects in use don't define."""
+        from trafilatura3d.project import alias_of, configuration
+        named = {n.ref.rpartition("#")[0] for g in self.graphs.values() for n in g.nodes.values() if n.type == INSTANCE}
+        named |= {ref.path for ref in self.file_references()}
+        defined = configuration().aliases()
+        return sorted({a for a in map(alias_of, named) if a and a != "sbs" and a not in defined})  # sbs://: an
+        # imported node with no counterpart (`resolve`), not an alias
 
     def restore(self, data: dict) -> None:
         """Replace the content with a snapshot from `to_dict()` (undo/redo), keeping this object."""
@@ -818,7 +919,7 @@ class Package:
                 if n.type in RESOURCE_NODES and n.params.get(RESOURCE_NODES[n.type]):
                     key = RESOURCE_NODES[n.type]
                     rid = next((k for k, r in self.resources.items() if r.path == n.params[key]), None)
-                    kind = "Bitmap" if n.type == "bitmap" else "SVG"
+                    kind = "SVG" if n.type == "svg" else "Bitmap"
                 elif n.type == "text" and str(n.params.get("font", "")).lower().endswith(FONT_SUFFIXES):
                     key, rid, kind = "font", None, "Font"
                 else:
@@ -826,6 +927,10 @@ class Package:
                 out.append(FileReference(kind, rid or n.id, n.params[key], (gid, n.id), rid,
                                          lambda p, params=n.params, k=key: params.__setitem__(k, p)))
         return out
+
+    def linked_files(self) -> set[Path]:
+        """The files its file references name (`file_references`, `resolved_file`), there or not."""
+        return {p for p in (resolved_file(ref.path, self) for ref in self.file_references()) if p is not None}
 
     def _gather_files(self, target: Path) -> None:
         """The files named by the package kept with it, saved at `target`: one outside its folder, or in another
@@ -864,17 +969,35 @@ class Package:
 
     def save(self, path: str | Path | None = None) -> None:
         """Write the package, creating the folders missing on the way; plugins hear before_save (and may refuse it
-        with Veto) and package_saved. The package takes the new path only once it is written."""
+        with Veto) and document_saved, as for a Paint project. The package takes the new path only once it is
+        written."""
         from trafilatura3d import plugins
         target = Path(path).resolve() if path is not None else self.path
-        plugins.emit("before_save", package=self, path=target)
+        plugins.emit("before_save", document=self, path=target)
         target.parent.mkdir(parents=True, exist_ok=True)
         self._gather_files(target)
         data = self.to_dict()
         _baking_files(data, lambda p: relative_file(p, target.parent))
         target.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         self.path = target
-        plugins.emit("package_saved", package=self, path=self.path)
+        plugins.emit("document_saved", document=self, path=self.path)
+
+
+def resolved_file(path: str, package: Package | None) -> Path | None:
+    """The file a package names (a resource's path, a node's file parameter): an alias expanded, a relative path from
+    the package's folder; None for none (empty, an alias no project in use defines)."""
+    if not path:
+        return None
+    from trafilatura3d.project import alias_of, expand
+    if alias_of(path):  # alias://path from the project configuration
+        try:
+            path = expand(path)
+        except KeyError:
+            return None
+    p = Path(path)
+    if not p.is_absolute() and package is not None and package.path is not None:
+        p = package.path.parent / p
+    return p.resolve()
 
 
 def dependency_folder(package_file: Path) -> Path:

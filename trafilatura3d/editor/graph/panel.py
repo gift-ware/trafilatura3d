@@ -17,7 +17,7 @@ from trafilatura3d import graphtools
 from trafilatura3d.editor import theme
 from trafilatura3d.editor.graph.function_panel import FunctionPanel, FxFunction, NodeFunction
 from trafilatura3d.editor.graph.fxmap_panel import FxMapPanel
-from trafilatura3d.editor.graph.items import NodeItem, title_color
+from trafilatura3d.editor.graph.items import GraphItem, NodeItem, title_color
 from trafilatura3d.editor.graph.nodemenu import NodeMenu, library_entries
 from trafilatura3d.editor.library import library_icon
 from trafilatura3d.editor.graph.scene import GraphScene
@@ -62,6 +62,7 @@ def tag_icon(text: str, color: QColor) -> QIcon:
 
 class GraphPanel(QWidget):
     selection_changed = Signal(object, str, object)  # package, graph id, node id or None
+    item_selected = Signal(object, str, str)  # package, graph id, the graph item (frame, comment, pin) selected alone
     view_2d = Signal(object, str, str)  # package, graph id, node id
     view_3d = Signal(object, str)  # package, graph id
     node_created = Signal(object, str, str)  # package, graph id, node id (Preferences: display it in 2D)
@@ -129,6 +130,11 @@ class GraphPanel(QWidget):
         self.view.on_drop = self._drop
         # a graph shown: its thumbnails as steps of the refresh (`LiveCook`), the interface answering meanwhile
         self.thumb_timer = QTimer(self, singleShot=True, interval=40, timeout=self._schedule_thumbnails)
+        # The warnings of the nodes a selection takes in, checked once it settles (a selection box changes it at
+        # every mouse move): (package, graph id, the nodes selected and checked), the nodes still to check
+        self._selection_checked: tuple = (None, "", frozenset())
+        self._to_check: set = set()
+        self.check_timer = QTimer(self, singleShot=True, interval=150, timeout=self._check_selection)
         self.scene.selectionChanged.connect(self._selection)
         self.doc.changed.connect(self._doc_changed)
         self.doc.layout_changed.connect(self._layout_changed)
@@ -644,13 +650,17 @@ class GraphPanel(QWidget):
         self.edit("Move links" if not keep else "Duplicate links", do)
         self.check_nodes(ends)
 
-    def move_nodes(self, positions: dict):
+    def move_nodes(self, positions: dict, items: dict | None = None):
+        """Nodes, and graph items (frames, comments, pins), where a drag left them: one step."""
         g = self.graph
 
         def do():
             for k, (x, y) in positions.items():
                 if k in g.nodes:
                     g.nodes[k].position = [x, y]
+            for i in g.items:
+                if i["id"] in (items or {}):
+                    i["position"] = list(items[i["id"]])
         self.edit("Move nodes", do, layout=True)
 
     def add_node(self, node_type, pos: QPointF, connect_from=None, ref: str = "", params: dict | None = None) -> str | None:
@@ -716,11 +726,7 @@ class GraphPanel(QWidget):
         ids = set(self.scene.selected_ids())
         if not ids:
             return
-        nodes = []
-        for k in ids:
-            d = g.nodes[k].to_dict()
-            d["inputs"] = {p: v for p, v in d.get("inputs", {}).items() if v[0] in ids}
-            nodes.append(d)
+        nodes = graphtools.portable_nodes(g, ids)  # pasted in any package
         self.clipboard = nodes
         QApplication.clipboard().setText(json.dumps({"trafilatura3d_nodes": nodes}))
 
@@ -729,6 +735,7 @@ class GraphPanel(QWidget):
         if not nodes or self.graph is None:
             return
         g = self.graph
+        nodes = graphtools.pasted_nodes(nodes, g.package)
         x0 = min(n["position"][0] for n in nodes)
         y0 = min(n["position"][1] for n in nodes)
 
@@ -742,7 +749,7 @@ class GraphPanel(QWidget):
                     if k != "identifier":
                         g.set_param(new, k, v)
                 g.nodes[new].base = dict(n.get("base", {}))
-            for n in nodes:
+            for n in graphtools.upstream_first(nodes):  # what a node receives typed before it is read
                 for port, (src, out) in n.get("inputs", {}).items():
                     g.connect(mapping[src], out, mapping[n["id"]], port)
             return list(mapping.values())
@@ -934,11 +941,25 @@ class GraphPanel(QWidget):
         if self.package is not None and self.graph is not None:
             self.doc.check_nodes(self.package, self.graph_id, node_ids)
 
+    def _check_selection(self):
+        ids, self._to_check = self._to_check, set()
+        if self.graph is not None:
+            self.check_nodes([k for k in ids if k in self.graph.nodes])
+
     def _selection(self):
         ids = self.scene.selected_ids()
-        if ids:
-            self.check_nodes(ids)
-        self.selection_changed.emit(self.package, self.graph_id, ids[0] if len(ids) == 1 else None)
+        if not self.scene._syncing:  # a sync rebuilds the graph items, then selects them again: no change to report
+            pkg, gid, checked = self._selection_checked
+            if (pkg, gid) != (self.package, self.graph_id):  # another graph shown: its selection is all new
+                checked, self._to_check = frozenset(), set()
+            self._to_check |= set(ids) - checked  # only the nodes it takes in; those checked before stay as found
+            self._selection_checked = (self.package, self.graph_id, frozenset(ids))
+            if self._to_check:
+                self.check_timer.start()
+            self.selection_changed.emit(self.package, self.graph_id, ids[0] if len(ids) == 1 else None)
+            items = [i.item_id for i in self.scene.selectedItems() if isinstance(i, GraphItem)]
+            if not ids and len(items) == 1:  # a frame, a comment or a pin alone: its properties
+                self.item_selected.emit(self.package, self.graph_id, items[0])
         self._apply_flow()
 
     def _info_changed(self):

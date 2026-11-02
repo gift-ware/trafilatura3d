@@ -268,6 +268,16 @@ class LiveCook(QObject):
         self.side(key, lambda: self.ev.histogram_steps(job, output),
                   lambda stats: None if stats is None else then(stats))
 
+    def colors(self, key: str, job: Job, output: str, then: Callable[[list], None]) -> None:
+        """`then(colors)` of a job output (`Evaluator.colors_steps`): now when they are known, else once cooked and
+        read as the side cook `key`; never if it fails."""
+        known = self.ev.colors_known(job, output)
+        if known is not None:
+            then(known)
+            return
+        self.side(key, lambda: self.ev.colors_steps(job, output),
+                  lambda colors: None if colors is None else then(colors))
+
     def _side_step(self):
         if not self._sides or self.busy:  # after the refresh (`_next` starts it again)
             return

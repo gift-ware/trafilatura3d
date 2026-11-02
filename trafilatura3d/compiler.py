@@ -132,22 +132,24 @@ class Compiled:
 
 
 def compile_graph(package: Package, graph_id: str, parent: Context | None = None, evaluator=None,
-                  values: dict | None = None, shift: int = 0) -> Compiled:
+                  values: dict | None = None, shift: int = 0, previews: bool = True) -> Compiled:
     """Compile a root graph; `parent` defaults to the application with the graph's Parent Size.
     With an `evaluator`, values reaching Input value nodes of instanced graphs are read back so their
     functions can Get them (without one, they read the Input value's default). `values` override the
     graph's input parameters (the Properties' Preview mode, a CLI render). `shift`: every texture computed that
-    many powers of 2 smaller (a dragged value's preview, `Context.shift`), in the evaluator's preview partition."""
+    many powers of 2 smaller (a dragged value's preview, `Context.shift`), in the evaluator's preview partition.
+    `previews`: its inputs read their preview images (the graph shown on its own); without, as in an instance."""
     graph = package.graphs[graph_id]
     parent = replace(parent or application_context(graph.parent_size), shift=shift)
     ctx = _resolve({**PARENT_DEFAULTS, **graph.base}, parent, None)
     jobs: dict[str, Job] = {}
-    nodes, outputs = _compile(package, graph, dict(values or {}), {}, ctx, "", jobs, top=True, ev=evaluator)
+    nodes, outputs = _compile(package, graph, dict(values or {}), {}, ctx, "", jobs, top=True, ev=evaluator,
+                              previews=previews)
     return Compiled(jobs, nodes, outputs, ctx)
 
 
 def _compile(package: Package, graph: Graph, values: dict, inputs: dict, ctx: Context, prefix: str,
-             jobs: dict, top: bool, ev=None):
+             jobs: dict, top: bool, ev=None, previews: bool = False):
     """Returns (node id -> output -> source, output identifier -> source). `values`: exposed
     parameter values set by the instance; `inputs`: input identifier -> source or None."""
     from trafilatura3d.functions import from_param, set_variables
@@ -194,6 +196,13 @@ def _compile(package: Package, graph: Graph, values: dict, inputs: dict, ctx: Co
             continue
 
         defaults = PARENT_DEFAULTS if node.type in INPUT_TYPES else NODE_DEFAULTS
+        if top and previews and node.type in ("input_color", "input_grayscale") and vals.get("resource"):
+            # The graph shown on its own: an input with a preview image reads it, as a Bitmap node (instanced, never)
+            from trafilatura3d.nodes import NODES
+            d = NODES["bitmap"]
+            vals = {**{k: p.default for k, p in d.params.items()}, "pkg_resource_path": vals["resource"],
+                    "color_mode": "Grayscale" if node.type == "input_grayscale" else "Color"}
+            defaults = NODE_DEFAULTS
         extra = d.extra(vals, package) if node.type != INSTANCE else {}
         base = {**defaults, **d.base_defaults_for(vals, extra), **node.base}
         main = srcs.get(d.primary_input()) if d.inputs else None

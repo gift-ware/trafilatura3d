@@ -23,7 +23,7 @@ recorder = Recorder()
 
 
 def initialize_plugin(host):
-    for event in ("package_opened", "package_saved", "outputs_exported", "bake_finished"):
+    for event in ("package_opened", "document_saved", "outputs_exported", "bake_finished"):
         host.events.subscribe(event, lambda event=event, **data: recorder.seen.append((event, sorted(data))))
     recorder.seen.append(("initialized", host.editor is not None))
     if host.editor is not None:
@@ -52,7 +52,7 @@ def initialize_plugin(host):
 planned = []  # the files before_export announced
 '''
 PAINT_VETOER = '''
-"""Refuses Paint exports into a folder called locked."""
+"""Refuses Paint exports into a folder called locked, and saves of a document called locked (both workspaces)."""
 from trafilatura3d.plugins import Veto
 
 seen = []
@@ -65,6 +65,12 @@ def initialize_plugin(host):
         seen.append(("before", list(paths)))
     host.events.subscribe("before_export_textures", check)
     host.events.subscribe("textures_exported", lambda session, paths: seen.append(("after", list(paths))))
+
+    def before_save(document, path):
+        if path.stem == "locked":
+            raise Veto("locked document")
+    host.events.subscribe("before_save", before_save)
+    host.events.subscribe("document_saved", lambda document, path: seen.append(("saved", path.name)))
 '''
 BROKEN = '''
 def initialize_plugin(host):
@@ -125,7 +131,7 @@ class PluginTest(unittest.TestCase):
         written = export(pkg, "ok", self.dir / "out")
         self.assertEqual(sys.modules["trafilatura3d_plugin_vetoer"].planned, written)  # announced before writing
         events = [e for e, _ in self.recorder().seen]
-        self.assertIn("package_saved", events)
+        self.assertIn("document_saved", events)
         self.assertIn("outputs_exported", events)
         with self.assertRaises(plugins.Veto) as refused:
             export(flat_package("blocked"), "blocked", self.dir / "out2")
@@ -146,6 +152,19 @@ class PluginTest(unittest.TestCase):
         with self.assertRaises(plugins.Veto):
             Exporter(s).run(PREDEFINED[0], ExportSettings(output_dir=str(self.dir / "locked")))
         self.assertFalse((self.dir / "locked").exists())
+        # A Paint project's save goes through the same events as a package's: refused before writing, heard after.
+        seen.clear()
+        s.save(self.dir / "ok.trafilatura3dpaint")
+        self.assertEqual(seen, [("saved", "ok.trafilatura3dpaint")])
+        with self.assertRaises(plugins.Veto):
+            s.save(self.dir / "locked.trafilatura3dpaint")
+        self.assertFalse((self.dir / "locked.trafilatura3dpaint").exists())
+        with self.assertRaises(plugins.Veto):
+            flat_package("x").save(self.dir / "locked.trafilatura3d")
+        (self.dir / "ok.trafilatura3dpaint").chmod(0o444)            # read-only: refused as a package's write is
+        with self.assertRaises(PermissionError):
+            s.save(self.dir / "ok.trafilatura3dpaint")
+        (self.dir / "ok.trafilatura3dpaint").chmod(0o644)
 
     def test_disable_reload_and_project_paths(self):
         self.m.load_all()
@@ -220,6 +239,21 @@ class PluginTest(unittest.TestCase):
             self.m.plugins["sample"].host.editor.save(pkg, self.dir / "moved.trafilatura3d")  # as Save As, no dialog
             self.assertEqual(pkg.path, (self.dir / "moved.trafilatura3d").resolve())
             self.assertTrue(pkg.path.exists())
+            # The editor's long steps in its progress window: an export, a bake (the map shown in the 3D View).
+            written = editor.export(pkg, "gui", self.dir / "exported", format="png")
+            self.assertTrue(written and all(p.exists() for p in written))
+            from tests.test_bake import bump, grid
+            from trafilatura3d import bake
+            grid(2, lambda x, z: 0 * x).export(self.dir / "low.obj")
+            grid(20, bump).export(self.dir / "high.obj")
+            shown = []
+            w.doc.bake_progress.connect(lambda _p, rid, what: shown.append((rid, what is not None)))
+            maps, canceled = editor.bake(pkg, "low", self.dir / "low.obj", {"normal_map_from_mesh": {}},
+                                         bake.Settings(size=(32, 32), high_meshes=[str(self.dir / "high.obj")],
+                                                       frontal=0.2, rear=0.2), self.dir / "maps", "$(bakername)")
+            self.assertEqual(([m.name for m in maps], canceled), (["normal_map_from_mesh.png"], False))
+            self.assertEqual(shown[0], ("low", True))
+            self.assertEqual(shown[-1], ("low", False))
             self.m.unload("sample")
             app.processEvents()
             self.assertNotIn("Studio", [a.text() for a in w.menuBar().actions()])  # removed with it

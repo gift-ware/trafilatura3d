@@ -1,6 +1,7 @@
 """Parameter widgets: a slider with its number on the right (the number accepts
 formulas like (4+2)*3), vector rows, color swatches, False/True toggles, gradient, levels and curve editors.
-Every widget emits `edited(value, final)`: `final` is False while a slider is being dragged."""
+Every widget emits `edited(value, final)`: `final` is False while a slider is being dragged. And `dependent`: the
+one way a non-modal window of the editor is made."""
 
 from __future__ import annotations
 
@@ -12,13 +13,21 @@ import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal
 from PySide6.QtGui import QBrush, QColor, QIcon, QLinearGradient, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (QColorDialog, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout,
-                               QHBoxLayout, QLabel, QLineEdit, QPushButton, QSlider, QVBoxLayout, QWidget)
+                               QHBoxLayout, QLabel, QLineEdit, QMenu, QPushButton, QSlider, QToolButton, QVBoxLayout,
+                               QWidget)
 
 from trafilatura3d.editor import theme
 from trafilatura3d.nodes.base import GRADIENT_INTERPOLATIONS
 
 _OPS = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul, ast.Div: operator.truediv,
         ast.Pow: operator.pow, ast.Mod: operator.mod, ast.USub: operator.neg, ast.UAdd: operator.pos}
+
+
+def dependent(widget: QWidget | None) -> tuple:
+    """(parent, flags) for a non-modal window that belongs to the editor (the Baking window...): a tool window of
+    `widget`'s main window, always above it and never behind it (a plain dialog parented to a panel can fall behind
+    the main window on macOS), closed with it. Modal dialogs (exec) stay above by themselves."""
+    return (widget.window() if widget is not None else None), Qt.Tool
 
 
 def evaluate_formula(text: str) -> float:
@@ -144,6 +153,51 @@ class VectorField(QWidget):
     def set_values(self, values):
         for f, v in zip(self.fields, values):
             f.set_value(v)
+
+
+class SwatchPicker(QToolButton):
+    """A color picked among the colors of an image (an ID map's), never typed: a small chip of the value and its hex,
+    a list of the colors offered with the share of the image each covers (`set_colors`)."""
+    edited = Signal(object, bool)
+
+    def __init__(self, value, components: int):
+        super().__init__()
+        self.components = components
+        self.setPopupMode(QToolButton.InstantPopup)
+        self.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.setMenu(QMenu(self))
+        self.set_value(value)
+        self.set_colors(None, "Reading…")
+
+    @staticmethod
+    def chip(rgb, size: int = 14) -> QIcon:
+        pix = QPixmap(size, size)
+        pix.fill(QColor("#111"))
+        p = QPainter(pix)
+        p.fillRect(1, 1, size - 2, size - 2, QColor.fromRgbF(*[min(max(x, 0.0), 1.0) for x in rgb[:3]]))
+        p.end()
+        return QIcon(pix)
+
+    def set_value(self, value):
+        self.rgb = list(value[:3])
+        self.setIcon(self.chip(self.rgb, 16))
+        self.setText(f"{QColor.fromRgbF(*[min(max(x, 0.0), 1.0) for x in self.rgb]).name()}  ▾")
+
+    def set_colors(self, colors, note: str = ""):
+        """The colors offered ([r, g, b], share), or none with a `note` (being read, nothing connected...)."""
+        menu = self.menu()
+        menu.clear()
+        if note:
+            menu.addAction(note).setEnabled(False)
+        for rgb, share in colors or []:
+            a = menu.addAction(self.chip(rgb), f"{QColor.fromRgbF(*rgb).name()}   {share:.1%}")
+            a.setCheckable(True)
+            a.setChecked(all(abs(x - y) < 0.5 / 255 for x, y in zip(rgb, self.rgb)))
+            a.triggered.connect(lambda _=False, rgb=rgb: self._pick(rgb))
+
+    def _pick(self, rgb):
+        self.set_value(rgb)
+        self.edited.emit(list(rgb) + [1.0] * (self.components - 3), True)
 
 
 class ColorButton(QPushButton):

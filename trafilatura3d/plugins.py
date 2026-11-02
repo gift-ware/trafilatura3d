@@ -26,8 +26,8 @@ from typing import Callable
 
 EVENTS = (
     "package_opened",     # package
-    "before_save",        # package, path: raise Veto to refuse
-    "package_saved",      # package, path
+    "before_save",        # document (a package or a Paint session), path: raise Veto to refuse
+    "document_saved",     # document (a package or a Paint session), path
     "before_export",      # package, graph_id, out_dir, paths (the files it will write): raise Veto to refuse
     "outputs_exported",   # package, graph_id, paths
     "before_export_textures",  # session, out_dir, paths (the files it will write): raise Veto to refuse
@@ -94,6 +94,17 @@ class EditorAccess(ABC):
     @abstractmethod
     def show_scene(self, package, resource_id: str) -> None:
         """Show a package's 3D scene resource in the 3D View, as a double click on it in the Explorer does."""
+
+    @abstractmethod
+    def bake(self, package, resource_id: str, low_path, bakers: dict, settings, out_dir,
+             template: str) -> tuple[list, bool]:
+        """`bake.Baker().bake` in the editor's progress window (the maps tile by tile, the one being baked shown in
+        the 3D View on the package's scene resource `resource_id`): (the maps written, whether it was canceled)."""
+
+    @abstractmethod
+    def export(self, package, graph_id: str, out_dir, **options) -> list | None:
+        """`export.export` (its keyword options) with the editor's evaluator in its progress window: the files
+        written, None when canceled."""
 
     @abstractmethod
     def remove_all(self) -> None:

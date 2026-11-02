@@ -154,8 +154,14 @@ BAKER_PARAMS["position_map_from_mesh"] = dict(BAKER_PARAMS["position"])  # same 
 
 
 def baker_defaults(baker: str) -> dict:
-    return {k: (list(p.default) if isinstance(p.default, list) else p.default)
-            for k, p in BAKER_PARAMS.get(baker, {}).items()}
+    """The baker's default parameters; a Normal Orientation follows the project's normal format."""
+    out = {k: (list(p.default) if isinstance(p.default, list) else p.default)
+           for k, p in BAKER_PARAMS.get(baker, {}).items()}
+    if "normal_orientation" in out:
+        from trafilatura3d.project import configuration
+        fmt = configuration().setting("general", "normal_format")
+        out["normal_orientation"] = fmt if fmt in ORIENTATION else out["normal_orientation"]
+    return out
 
 
 def resolved(baker: str, params: dict | None) -> dict:

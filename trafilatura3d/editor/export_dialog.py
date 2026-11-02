@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QFileDialog, QForm
 import sys
 
 import trafilatura3d.export  # noqa: F401 - the module; `trafilatura3d.export` as an attribute is the package's function
+from trafilatura3d.editor import progress
 from trafilatura3d.package import DocumentError
 
 exporting = sys.modules["trafilatura3d.export"]
@@ -42,12 +43,12 @@ def save_settings(package, graph_id, data: dict) -> None:
     settings().setValue(settings_key(package, graph_id), json.dumps(data))
 
 
-def run_export(document, package, graph_id, data: dict) -> list:
-    """Export with a dialog's settings (also what Automatic Export does)."""
+def run_export(document, package, graph_id, data: dict, progress=None) -> list:
+    """Export with a dialog's settings (also what Automatic Export does). `progress`: `export.export`'s."""
     outputs = {a["identifier"] for a in exporting.output_attributes(package, graph_id)} - set(data["disabled"])
     return exporting.export(package, graph_id, data["destination"], document.ev, format=data["format"],
                             pattern=data["pattern"], outputs=outputs,
-                            size=tuple(data["size"]) if data["batch"] else None)
+                            size=tuple(data["size"]) if data["batch"] else None, progress=progress)
 
 
 class ExportDialog(QDialog):
@@ -201,10 +202,12 @@ class ExportDialog(QDialog):
 
     def export(self) -> list:
         data = self._store()
-        try:
-            written = run_export(self.doc, self.pkg, self.gid, data)
+        try:  # modal: compiling, cooking node by node, writing file by file
+            written = progress.export_outputs(self, lambda step: run_export(self.doc, self.pkg, self.gid, data, step))
         except (DocumentError, OSError, ValueError) as e:
             QMessageBox.warning(self, "Export outputs", str(e))
+            return []
+        if written is None:  # canceled
             return []
         self.written = written
         QTimer.singleShot(0, self, self.accept)

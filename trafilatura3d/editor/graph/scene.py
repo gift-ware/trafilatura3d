@@ -262,8 +262,9 @@ class GraphScene(QGraphicsScene):
         if self._drag is None:
             super().mouseReleaseEvent(e)
             moved = {i.node_id: (i.pos().x(), i.pos().y()) for i in self.selectedItems() if isinstance(i, NodeItem)}
-            if moved and e.button() == Qt.LeftButton:
-                self.ctl.move_nodes(moved)
+            items = {i.item_id: (i.pos().x(), i.pos().y()) for i in self.selectedItems() if isinstance(i, GraphItem)}
+            if (moved or items) and e.button() == Qt.LeftButton:  # the frames, comments and pins dragged along too
+                self.ctl.move_nodes(moved, items) if items else self.ctl.move_nodes(moved)  # (items: graphs only)
             return
         port, line, mode, moved, start = self._drag
         self._drag = None

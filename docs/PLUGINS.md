@@ -44,8 +44,8 @@ Manager, then `plugins` in the user folder (`~/Library/Application Support/Trafi
 | Event | Arguments | |
 |---|---|---|
 | `package_opened` | package | |
-| `before_save` | package, path | raise `Veto` to refuse |
-| `package_saved` | package, path | |
+| `before_save` | document, path | a package or a Paint project (`Session`) about to be written to `path`; raise `Veto` to refuse |
+| `document_saved` | document, path | the same, once written |
 | `before_export` | package, graph_id, out_dir, paths | raise `Veto` to refuse; `paths`: the files it will write |
 | `outputs_exported` | package, graph_id, paths | |
 | `before_export_textures` | session, out_dir, paths | Paint export; raise `Veto` to refuse; `paths`: the files it will write |
@@ -70,6 +70,11 @@ error in a handler is reported and ignored: a plugin never stops Trafilatura 3D.
   raises `OSError` when it could not be saved. From the command line there is no editor: `package.save()`.
 - `show_scene(package, resource_id)`: a 3D scene resource of the package in the 3D View (as a double click on it in
   the Explorer).
+- `bake(package, resource_id, low_path, bakers, settings, out_dir, template)` → (maps, canceled): `bake.Baker().bake`
+  in the editor's modal progress window, the maps tile by tile, the one being baked shown in the 3D View on that
+  scene resource.
+- `export(package, graph_id, out_dir, **options)` → the files, None when canceled: `export.export` with the editor's
+  evaluator in the same window (compiling, cooking node by node, writing file by file).
 
 Everything added is removed when the plugin is unloaded (disabled or reloaded in the Plugin Manager).
 The command line loads plugins too (`--no-plugins` skips them, `trafilatura3d plugins` lists them).

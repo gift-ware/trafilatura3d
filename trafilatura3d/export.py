@@ -9,13 +9,14 @@ color outputs, raw data for grayscale ones, as the project settings say).
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
 import numpy as np
 
 from trafilatura3d import imageio
 from trafilatura3d.compiler import Context, application_context, compile_graph
-from trafilatura3d.evaluator import Evaluator
+from trafilatura3d.evaluator import Evaluator, Fence, Wait
 from trafilatura3d.package import Package
 from trafilatura3d.project import IMAGE_FORMATS as FORMATS
 PATTERN = "$(graph)_$(identifier)"  # ours: the page gives the variables, not the default
@@ -55,10 +56,14 @@ def file_name(pattern: str, graph_id: str, attributes: dict) -> str:
 
 def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Evaluator | None = None,
            parent: Context | None = None, values: dict | None = None, *, format: str | None = None,
-           pattern: str = PATTERN, outputs: set | None = None, size: tuple | None = None) -> list[Path]:
+           pattern: str = PATTERN, outputs: set | None = None, size: tuple | None = None,
+           progress=None) -> list[Path]:
     """Write the graph's outputs. `parent`: the application context (default: the graph's Parent Size), or
     `size` (log2 width, height): the Batch tab's Output size; `values` override the graph's inputs;
-    `outputs`: the identifiers to write (default all); `format` defaults to the project's."""
+    `outputs`: the identifiers to write (default all); `format` defaults to the project's.
+    `progress(text, done, total)` follows the steps (compiling, cooking node by node, writing file by file), called
+    often while the GPU works (the caller's event loop runs in it); returning False stops the export (what is
+    returned: the files written so far)."""
     from trafilatura3d import colormanagement as cm
     from trafilatura3d import plugins
     package.validate()
@@ -68,6 +73,8 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
     if size is not None:
         parent = application_context(tuple(size))
     ev = evaluator or Evaluator()
+    if progress is not None and progress("Compiling the graph", 0, 1) is False:
+        return []
     compiled = compile_graph(package, graph_id, parent, evaluator=ev, values=values)
     attributes = {a["identifier"]: a for a in output_attributes(package, graph_id)}
     chosen = {k: v for k, v in compiled.outputs.items() if outputs is None or k in outputs}
@@ -77,9 +84,15 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
     plugins.emit("before_export", package=package, graph_id=graph_id, out_dir=out_dir,
                  paths=list(paths.values()))  # Veto refuses
     out_dir.mkdir(parents=True, exist_ok=True)
-    ev.cook([job for job, _ in chosen.values()])
+    jobs = [job for job, _ in chosen.values()]
+    if progress is None:
+        ev.cook(jobs)
+    elif not _cook(ev, jobs, progress):
+        return []
     written = []
-    for identifier, (job, out) in chosen.items():
+    for k, (identifier, (job, out)) in enumerate(chosen.items()):
+        if progress is not None and progress(f"Writing {paths[identifier].name}", k, len(chosen)) is False:
+            return written
         pixels = ev.read(job, out)
         if not job.is_gray(out):
             opaque = pixels.shape[2] == 4 and np.all(pixels[:, :, 3] == pixels[:, :, 3].dtype.type(
@@ -100,8 +113,29 @@ def export(package: Package, graph_id: str, out_dir: str | Path, evaluator: Eval
         path = paths[identifier]
         imageio.write(path, convert(pixels, job.depths[out], ext))
         written.append(path)
+    if progress is not None:
+        progress("Done", len(chosen), len(chosen))
     plugins.emit("outputs_exported", package=package, graph_id=graph_id, paths=written)
     return written
+
+
+def _cook(ev: Evaluator, jobs: list, progress) -> bool:
+    """The jobs cooked in steps, `progress` called while each step's GPU work runs; False: stopped by it."""
+    total, done = max(1, ev.uncooked(jobs)), 0
+    steps = ev.cook_steps(jobs)
+    while True:
+        try:
+            step = next(steps)
+        except StopIteration:
+            return True
+        while True:  # at least once a step, then while the GPU works
+            if progress(f"Cooking the graph: node {min(done + 1, total)}/{total}", min(done, total), total) is False:
+                steps.close()  # what it cooked stays cached
+                return False
+            if not isinstance(step, Wait) or step.done():
+                break
+            time.sleep(0.005)
+        done += isinstance(step, Fence)
 
 
 def convert(pixels: np.ndarray, depth: str, ext: str) -> np.ndarray:

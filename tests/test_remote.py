@@ -49,6 +49,114 @@ class GraphToolsTest(unittest.TestCase):
                                   "id": "amount"}])
         self.assertIn("amount", graphtools.describe(g)["inputs"])
 
+    def test_upstream_first_lets_dots_carry_color(self):
+        """Pasted nodes connected downstream first: an unconnected Dot reads grayscale and a color input refuses it;
+        upstream first, each Dot already carries the color it receives."""
+        g = self.graph()
+        graphtools.apply_ops(g, [{"op": "add_node", "type": "uniform_color", "id": "c"},
+                                 {"op": "add_node", "type": "dot", "id": "d1"},
+                                 {"op": "add_node", "type": "dot", "id": "d2"},
+                                 {"op": "add_node", "type": "hsl", "id": "tint"},
+                                 {"op": "connect", "from": "c", "to": "d1"},
+                                 {"op": "connect", "from": "d1", "to": "d2"},
+                                 {"op": "connect", "from": "d2", "to": "tint"}])
+        nodes = [g.nodes[k].to_dict() for k in ("tint", "d2", "d1", "c")]  # downstream first, as a selection may be
+        self.assertEqual([n["id"] for n in graphtools.upstream_first(nodes)], ["c", "d1", "d2", "tint"])
+
+        def paste(order):
+            t = self.graph()
+            ids = {n["id"]: t.add_node(n["type"], n["position"]) for n in nodes}
+            for n in order:
+                for port, (src, out) in n.get("inputs", {}).items():
+                    t.connect(ids[src], out, ids[n["id"]], port)
+        with self.assertRaisesRegex(DocumentError, "expects color"):
+            paste(nodes)
+        paste(graphtools.upstream_first(nodes))
+
+    def test_nodes_copied_paste_in_another_package(self):
+        """A copy names the graphs and files of its package from anywhere and gives linked parameters their input's
+        value: pasted in another package it instances the same graph, pasted back home by its name again."""
+        from trafilatura3d.nodes.base import Param, ParamKind
+        tmp = Path(tempfile.mkdtemp())
+        lib = Package()
+        sub = lib.new_graph("sub", 8)
+        sub.add_node("uniform_color")
+        main = lib.new_graph("main", 8)
+        inst = main.add_node("graph_instance", ref="sub")
+        blur = main.add_node("blur")
+        bitmap = main.add_node("bitmap")
+        main.set_param(bitmap, "pkg_resource_path", "maps/id.png")
+        main.expose("amount", Param(ParamKind.FLOAT, 7.0, "Amount"))
+        main.link(blur, next(iter(main.definition(blur).params)), "amount")
+        lib.save(tmp / "lib" / "lib.trafilatura3d")
+        nodes = graphtools.portable_nodes(main, [inst, blur, bitmap])
+        by_type = {n["type"]: n for n in nodes}
+        self.assertEqual(by_type["graph_instance"]["ref"], f"{(tmp / 'lib' / 'lib.trafilatura3d').resolve()}#sub")
+        self.assertEqual(by_type["bitmap"]["params"]["pkg_resource_path"], str((tmp / "lib" / "maps" / "id.png").resolve()))
+        self.assertNotIn("links", by_type["blur"])
+        self.assertEqual(list(by_type["blur"]["params"].values()), [7.0])  # the input's value, not the node's own
+        other = Package()
+        other.new_graph("g", 8)
+        other.save(tmp / "trims" / "trim.trafilatura3d")
+        there = {n["type"]: n for n in graphtools.pasted_nodes(nodes, other)}
+        self.assertEqual(there["graph_instance"]["ref"], "../lib/lib.trafilatura3d#sub")
+        g = other.graphs["g"]
+        g.add_node("graph_instance", ref=there["graph_instance"]["ref"])  # resolves from the other package
+        home = {n["type"]: n for n in graphtools.pasted_nodes(nodes, lib)}
+        self.assertEqual(home["graph_instance"]["ref"], "sub")
+        from trafilatura3d import project  # under an alias: named by it, wherever the copy goes
+        self.addCleanup(project.set_configuration, project.configuration())
+        config = project.Configuration()
+        config.custom.append(project.Project(None, {"aliases": {"shared": str(tmp / "lib")}}, "Pipeline"))
+        project.set_configuration(config)
+        nodes = graphtools.portable_nodes(main, [inst])
+        self.assertEqual(nodes[0]["ref"], "shared://lib.trafilatura3d#sub")
+        self.assertEqual(graphtools.pasted_nodes(nodes, other)[0]["ref"], "shared://lib.trafilatura3d#sub")
+        self.assertEqual(graphtools.pasted_nodes(nodes, lib)[0]["ref"], "sub")
+
+    def test_presets_set_replaced_and_removed(self):
+        from trafilatura3d.nodes.base import Param, ParamKind
+        g = self.graph()
+        g.expose("tint", Param(ParamKind.COLOR, [1.0, 1.0, 1.0, 1.0], "Tint"))
+        res = graphtools.apply_ops(g, [
+            {"op": "set_preset", "name": "Yellow", "values": {"tint": [1, 0.8, 0, 1]}},
+            {"op": "set_preset", "name": "Blue", "values": {"tint": [0, 0, 1, 1]}},
+            {"op": "set_preset", "name": "Yellow", "values": {"tint": [1, 0.7, 0, 1]}},  # replaced in place
+            {"op": "set_preset", "name": "Bad", "values": {"nothing": 1}},
+            {"op": "set_preset", "name": "Bad", "values": {"tint": "red"}},
+            {"op": "remove_preset", "name": "Blue"},
+            {"op": "remove_preset", "name": "Blue"},
+        ])
+        self.assertEqual([("error" in r) for r in res], [False, False, False, True, True, False, True])
+        self.assertEqual(g.presets, [{"name": "Yellow", "values": {"tint": [1.0, 0.7, 0.0, 1.0]}}])
+
+    def test_set_function_drives_a_parameter(self):
+        from trafilatura3d.functions import FunctionGraph, evaluate
+        from trafilatura3d.nodes.base import Param, ParamKind
+        g = self.graph()
+        on = {"nodes": [{"id": "n", "type": "get_int", "params": {"variable": "count"}},
+                        {"id": "i", "type": "const_int", "params": {"value": 2}},
+                        {"id": "ge", "type": "greater_or_equal", "inputs": {"a": "n", "b": "i"}},
+                        {"id": "one", "type": "const_float", "params": {"value": 1.0}},
+                        {"id": "zero", "type": "const_float", "params": {"value": 0.0}},
+                        {"id": "out", "type": "if_else", "inputs": {"condition": "ge", "if_": "one", "else_": "zero"}}],
+              "output": "out"}
+        res = graphtools.apply_ops(g, [
+            {"op": "add_node", "type": "blend", "id": "slot"},
+            {"op": "set_function", "node": "slot", "param": "opacity", "function": on},  # no input "count" yet
+            {"op": "set_function", "node": "slot", "param": "opacity", "function": {"nodes": [], "output": "x"}},
+        ])
+        self.assertTrue(res[0]["ok"])
+        self.assertTrue(all("error" in r for r in res[1:]), res)
+        g.expose("count", Param(ParamKind.INT, 1, "Count"))
+        res = graphtools.apply_ops(g, [{"op": "set_function", "node": "slot", "param": "opacity", "function": on}])
+        self.assertEqual(res, [{"ok": True}])
+        self.assertEqual(graphtools.describe(g)["nodes"]["slot"]["functions"], ["opacity"])
+        fg = FunctionGraph(g.nodes["slot"].functions["opacity"], g.function_variables())
+        self.assertEqual([evaluate(fg, {"count": c}) for c in (1, 2, 3)], [0.0, 1.0, 1.0])
+        graphtools.apply_ops(g, [{"op": "set_function", "node": "slot", "param": "opacity"}])
+        self.assertEqual(g.nodes["slot"].functions, {})
+
     def test_layout_columns_from_the_outputs(self):
         g = self.graph()
         graphtools.apply_ops(g, [
@@ -266,6 +374,8 @@ class GraphToolsTest(unittest.TestCase):
             {"op": "set_base", "name": "label", "value": "x"},
             {"op": "set_base", "node": "lv", "name": "size", "value": {"mode": "absolute", "value": [8, 8]}},
             {"op": "set_graph", "id": "renamed", "label": "Renamed"},
+            {"op": "set_graph", "parent_size": [4096, 1024]},
+            {"op": "set_graph", "parent_size": [3000, 1024]},
         ])
         self.assertTrue(all(r.get("ok") for r in (res[0], res[1], res[4], res[8])), res)
         self.assertIn("exists already", res[2]["error"])
@@ -273,6 +383,9 @@ class GraphToolsTest(unittest.TestCase):
         self.assertIn("colour", res[5]["error"])
         self.assertIn("set_graph", res[6]["error"])
         self.assertIn("output_size", res[7]["error"])  # the base parameters are named
+        self.assertTrue(res[9].get("ok"), res)
+        self.assertEqual(g.parent_size, [12, 10])  # in pixels, kept as log2
+        self.assertIn("powers of 2", res[10]["error"])
         p = g.parameters["bright"].param
         self.assertEqual((p.default, p.label, p.min, p.max), (0.7, "Bright", 0.2, 0.9))
         self.assertEqual((g.id, g.label, list(pkg.graphs)), ("renamed", "Renamed", ["renamed", "user"]))
@@ -620,6 +733,20 @@ class RemoteEditorTest(unittest.TestCase):
         m = w.view3d.scene.materials[0]
         self.assertEqual((m.shader, m.value("blending")), ("Specular glossiness", shaders.ALPHA_TEST))
         call("new_package", template="Metallic roughness", name="back")
+        made = call("new_graph", name="extra", graph="back")  # in the package of "back", shown
+        self.assertEqual((made["graph"], w.graph.graph_id), ("extra", "extra"))
+        self.assertEqual(call("new_graph", name="extra")["graph"], "extra_2")  # taken: numbered
+        with self.assertRaises(channel.ChannelError):
+            call("new_graph", name="bad name")
+        call("remove_graph", graph="extra_2")
+        call("remove_graph", graph="extra")
+        with self.assertRaises(channel.ChannelError):
+            call("remove_graph", graph="nothing")
+        steps = w.doc.undo.count()
+        self.assertEqual(call("remove_graph", graph="back")["graphs"], [])
+        self.assertEqual(w.doc.undo.count(), steps + 1)
+        call("undo")
+        self.assertIn("back", call("status")["packages"][-1]["graphs"])
         w.open_graph(pkg, MATERIAL_GRAPH)
 
         try:

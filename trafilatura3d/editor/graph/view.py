@@ -1,11 +1,11 @@
 """Graph view navigation: wheel or Alt+right drag zooms, middle drag or Ctrl+right
 drag pans (two-finger swipe on a trackpad pans, pinch zooms), F frames the selection (or all),
-Z resets the zoom to 1:1, a drag on empty space (inside a frame too) draws a selection box, Shift adds to the
-selection. Dragging a link, nodes or a selection box near or past the view's border scrolls the view that way."""
+Z resets the zoom to 1:1, a drag on empty space (inside a frame too) draws a selection box (a frame only when it
+holds all of it), Shift adds to the selection. Dragging a link, nodes or a selection box near or past the view's border scrolls the view that way."""
 
 from __future__ import annotations
 
-from PySide6.QtCore import QEvent, QPointF, Qt, QTimer
+from PySide6.QtCore import QEvent, QPointF, QRectF, QSizeF, Qt, QTimer
 from PySide6.QtGui import QMouseEvent, QPainter
 from PySide6.QtWidgets import QApplication, QGraphicsView
 
@@ -32,6 +32,19 @@ class GraphView(QGraphicsView):
         self._edge_pos = None  # the mouse in the viewport during a left drag (`_edge_scroll`)
         self._shift_select = False  # a left press with Shift away from connectors: Shift taken as Control
         self._edge_timer = QTimer(self, interval=16, timeout=self._edge_scroll)
+        self._frames_before = set()  # the frames selected when a selection box starts (`_box_frames`)
+
+    def _box_frames(self) -> None:
+        """A selection box selects a frame only when it holds the whole frame (touching its border is not choosing
+        it: its nodes would stay behind when the selection moves); the frames selected before the box stay. Run
+        after Qt selects what the box touches (its rubberBandChanged comes before, then Qt selects again)."""
+        if self.rubberBandRect().isNull():
+            return
+        box = self.mapToScene(self.rubberBandRect()).boundingRect()
+        for gi in getattr(self.scene(), "graph_items", []):
+            if gi.kind == "frame" and gi.isSelected() and gi.item_id not in self._frames_before \
+                    and not box.contains(QRectF(gi.scenePos(), QSizeF(*gi.size()))):
+                gi.setSelected(False)
 
     def _left_drag(self) -> bool:
         """A left drag that follows the mouse across the scene: a link, nodes or frames moved, a selection box."""
@@ -115,6 +128,7 @@ class GraphView(QGraphicsView):
         # Shift on a connector moves its links (the scene's); elsewhere it adds to the selection
         self._shift_select = b == Qt.LeftButton and bool(m & Qt.ShiftModifier) and \
             self.scene()._port_at(self.mapToScene(e.position().toPoint())) is None
+        self._frames_before = {gi.item_id for gi in getattr(self.scene(), "graph_items", []) if gi.isSelected()}
         super().mousePressEvent(self._shift_as_control(e) if self._shift_select else e)
 
     def mouseMoveEvent(self, e):
@@ -137,6 +151,7 @@ class GraphView(QGraphicsView):
                 self._edge_timer.start()
         super().mouseMoveEvent(self._shift_as_control(e) if self._shift_select and e.modifiers() & Qt.ShiftModifier
                                else e)
+        self._box_frames()  # after Qt's own selection of what the box touches
 
     def mouseReleaseEvent(self, e):
         if self._pan is not None or self._zoom_drag is not None:

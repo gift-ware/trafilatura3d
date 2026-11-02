@@ -807,7 +807,7 @@ class PaintWorkspace(QMainWindow):
             path = Path(name)
         try:
             self.doc.save(path)
-        except OSError as e:
+        except (OSError, ValueError) as e:  # ValueError: a plugin's Veto (it refused the save)
             QMessageBox.critical(self.main, "Trafilatura 3D", str(e))
             return False
         self.main.remember(self.doc.session.path)
@@ -825,7 +825,7 @@ class PaintWorkspace(QMainWindow):
         keep = self.doc.session.path
         try:
             self.doc.session.save(name)
-        except OSError as e:
+        except (OSError, ValueError) as e:  # ValueError: a plugin's Veto
             QMessageBox.critical(self.main, "Trafilatura 3D", str(e))
         finally:
             self.doc.session.path = keep

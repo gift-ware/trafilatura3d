@@ -59,6 +59,27 @@ def save(path: str | None = None) -> str:
 
 
 @server.tool(structured_output=False)
+def new_graph(name: str, template: str = "Empty", graph: str | None = None) -> str:
+    """A new graph `name` (numbered when taken) in the package of `graph` (the one shown by default), made from a
+    template as `new_package` does, one undo step; it is shown in the editor."""
+    return _json(_call("new_graph", name=name, template=template, graph=graph))
+
+
+@server.tool(structured_output=False)
+def remove_graph(graph: str) -> str:
+    """Remove a graph from its package (one undo step); refused while graphs of the package use it. Returns the
+    package's graphs left."""
+    return _json(_call("remove_graph", graph=graph))
+
+
+@server.tool(structured_output=False)
+def remove_resource(resource: str, graph: str | None = None) -> str:
+    """Remove a linked resource from the package of `graph` (one undo step); refused while nodes name its file, which
+    stays on disk. Returns the package's resources left."""
+    return _json(_call("remove_resource", resource=resource, graph=graph))
+
+
+@server.tool(structured_output=False)
 def get_graph(graph: str | None = None) -> str:
     """The graph, compact: nodes {id: type, pos, params differing from the default, base, linked inputs},
     links "src.output -> dst.port", graph inputs, outputs with identifier and usage, warnings (if any)."""
@@ -93,7 +114,13 @@ def edit(ops: list[dict], graph: str | None = None) -> str:
     or "Position" (2), or kind "float": one number driving every component (a float4's fourth kept) |
     set_input(id, default?, label?, range?, group?, description?, ...) changes a graph input | unexpose(id) |
     link(node, param, input?; no input = unlink) | set_output(node, identifier?, usage?, label?) |
-    set_disabled(node, disabled) | set_graph(id?, label?, description?) renames the graph |
+    set_disabled(node, disabled) | set_function(node, param, function?; none removes it) drives a parameter by a
+    function graph {"nodes": [{"id", "type", "params"?, "inputs"? {port: node id}}], "output": id} (types:
+    const_float/const_int/const_bool..., get_float/get_int... {"variable": a graph input or built-in}, add, multiplication,
+    greater_or_equal, if_else {condition, if_, else_}, to_float...; as the editor's function graphs) |
+    set_graph(id?, label?, description?, parent_size? [w, h] px) renames the graph, its Parent Size |
+    set_preset(name, values {input id: value}) adds or replaces an embedded preset of the graph's inputs |
+    remove_preset(name) |
     insert_dot(to "node.port", position?) -> a Dot on that link |
     frame(nodes [ids], title?, color? [r, g, b, a], text?) -> a frame around those nodes, kept as its list (layout keeps
     them together and fits the frame again) | set_item(id, title?, color?, text?, nodes?, position?, size?) |

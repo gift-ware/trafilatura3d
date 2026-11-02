@@ -57,7 +57,9 @@ def storage_formats(features) -> dict[str, str]:
 
 HALO = 8  # texels computed around a region (recook_region): what the pointwise nodes read around a texel, and more
 POOL_MID_COOK = 512 << 20  # the free textures a cook keeps for its next jobs before giving them back
-HISTOGRAMS_KEPT = 16  # the histograms remembered (`histogram_steps`)
+HISTOGRAMS_KEPT = 16  # the histograms remembered (`histogram_steps`, `colors_steps`)
+COLORS_MAX = 32  # the distinct colors of an image offered at most (`distinct_colors`)
+COLORS_MIN_SHARE = 0.0005  # a color with fewer inner texels (`distinct_colors`) is no color of the map
 PREVIEW = "preview"
 PARTITION_SHARE = {"": 1.0, PREVIEW: 0.25}  # each partition's budget, of `Evaluator.budget`
 
@@ -671,6 +673,7 @@ class Evaluator:
         self._counted: set[str] = set()  # the owners whose held results count in the budget
         self._fence = None  # a texel read to wait for the GPU (`wait`)
         self._histograms: OrderedDict = OrderedDict()  # (job key, output) -> histogram (`histogram_steps`)
+        self._colors: OrderedDict = OrderedDict()  # (job key, output) -> distinct colors (`colors_steps`)
         self._inflight = None  # the cook `cook_steps` is running, between two of its steps
         # Per-node timings: with `timing` on, the time of each job cooked goes in `timings` (job key -> milliseconds,
         # its last cook). GPU timestamps around its work where they work (some devices report them and give zeros),
@@ -841,6 +844,22 @@ class Evaluator:
             if self._inflight is inner:
                 self._inflight = None
         return stats
+
+    def uncooked(self, targets: list[Job]) -> int:
+        """How many jobs a cook of the targets computes, the cached ones reused (each job of a fused chain counted:
+        an estimate of `cook_steps`'s fences, for a progress bar)."""
+        seen = set()
+
+        def visit(job):
+            if job.key in self.cache or job.key in seen:
+                return
+            seen.add(job.key)
+            for src in _sources(job):
+                visit(src)
+
+        for job in targets:
+            visit(job)
+        return len(seen)
 
     def _needs(self):
         """need(job): the memory its results take to compute, the cached ones free, its inputs computed the
@@ -1274,6 +1293,27 @@ class Evaluator:
             self._histograms.popitem(last=False)
         return stats
 
+    def colors_known(self, job: Job, output: str):
+        """The distinct colors of a job output found before (`colors_steps`), or None."""
+        colors = self._colors.get((job.key, output))
+        if colors is not None:
+            self._colors.move_to_end((job.key, output))
+        return colors
+
+    def colors_steps(self, job: Job, output: str):
+        """`distinct_colors` of a job output as a generator, a step per wait for the GPU (its cook's, then the read's):
+        nothing waits. The last HISTOGRAMS_KEPT are remembered."""
+        known = self.colors_known(job, output)
+        if known is not None:
+            return known
+        yield from self.cook_steps([job])
+        yield self.fence()  # read back once the GPU is done: reading earlier waits for it on this thread
+        colors = distinct_colors(self.read(job, output))
+        self._colors[job.key, output] = colors
+        while len(self._colors) > HISTOGRAMS_KEPT:
+            self._colors.popitem(last=False)
+        return colors
+
     # --- cache --------------------------------------------------------------------------------
 
     def _evict(self, key: str) -> None:
@@ -1345,6 +1385,27 @@ def _unpacked(a: np.ndarray, fmt: str) -> np.ndarray:
     if fmt in NORM16:
         a = a.astype(np.float32) / np.float32(65535)
     return np.concatenate([a[..., :1]] * 3 + [a[..., 1:2]], -1) if two_channels(fmt) else a
+
+
+def distinct_colors(pixels: np.ndarray) -> list[tuple[list[float], float]]:
+    """The colors of an image as `Evaluator.read` gives it, at 8 bits (an ID map's exactly): ([r, g, b] in 0-1, share
+    of the image), the most covering first, at most COLORS_MAX, none under COLORS_MIN_SHARE nor edge blends."""
+    rgb = pixels[..., :3] if pixels.shape[-1] >= 3 else np.repeat(pixels[..., :1], 3, -1)
+    q = rgb.astype(np.uint32) if rgb.dtype == np.uint8 else np.rint(np.clip(rgb, 0, 1) * 255).astype(np.uint32)
+    keys = (q[..., 0] << 16) | (q[..., 1] << 8) | q[..., 2]
+    counts = np.bincount(keys.ravel(), minlength=1 << 24)
+    # Texels equal to their four neighbours (tiled): a color's areas have them, the thin antialiased lines where two
+    # colors meet (edge blends) don't.
+    inner = np.ones(keys.shape, bool)
+    for axis in (0, 1):
+        for shift in (1, -1):
+            inner &= keys == np.roll(keys, shift, axis)
+    inside = np.bincount(keys[inner], minlength=1 << 24)
+    total = q.shape[0] * q.shape[1]
+    found = np.flatnonzero(inside >= max(1, COLORS_MIN_SHARE * total))
+    found = found[np.argsort(-counts[found], kind="stable")][:COLORS_MAX]
+    return [([(k >> 16 & 255) / 255, (k >> 8 & 255) / 255, (k & 255) / 255], float(counts[k] / total))
+            for k in found.tolist()]
 
 
 def _size(outs: dict) -> int:

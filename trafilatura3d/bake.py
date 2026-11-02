@@ -34,7 +34,7 @@ MATCH = ("Always", "By Mesh Name")
 FORMATS = ("png", "tga", "tif", "exr")
 SIZES = (32, 64, 128, 256, 512, 1024, 2048, 4096, 8192)  # Common parameters > Size (non-square allowed)
 NAME_TEMPLATE = "$(mesh)_$(bakername)"  # the default output name
-TILE = 2048  # supersampled pixels per tile side: 64 MB per rgba32float target
+TILE = 1024  # supersampled pixels per tile side: 16 MB per rgba32float target (measured as fast as 2048; 256 adds ~2 ms a tile)
 DENOISE_STEPS = (1, 2, 4, 8)  # the denoise's a-trous steps (after its step 0): it reaches 2 * 15 samples
 
 # Primary pass modes (bake_wgsl.PRIMARY) and the bakers that go on to the secondary pass.
@@ -283,11 +283,12 @@ class Baker:
     # --- bake --------------------------------------------------------------------------------------------------
 
     def bake(self, low_path: str, bakers: dict, settings: Settings, out_dir: str, template: str = NAME_TEMPLATE,
-             progress=None) -> list[Path]:
+             progress=None, each_tile=None) -> list[Path]:
         """Bake `bakers` ({baker id: parameters}) for the low poly mesh; returns the written files, named
         by `template` (see `output_path`), one per baker and UDIM tile the low mesh's UVs use.
         `progress(done, total, baker)` is called before each baker and once at the end; returning False
-        stops the bake. Plugins hear before_bake (and may refuse it with Veto) and bake_finished."""
+        stops the bake. `each_tile(baker, udim, done, total, image)` follows a map tile by tile (`_Job.map`);
+        returning False stops it too. Plugins hear before_bake (and may refuse it with Veto) and bake_finished."""
         from trafilatura3d import plugins
         out_dir = Path(out_dir)
         plugins.emit("before_bake", low_path=low_path, bakers=bakers, settings=settings, out_dir=out_dir)
@@ -311,7 +312,12 @@ class Baker:
                     _uv_svg(low, path, settings.size, params, tile)
                     written.append(path)
                     continue
-                img = self.finished(job, baker, params, tile)
+                each = None if each_tile is None else \
+                    lambda done, total, img, b=baker, t=tile: each_tile(b, t, done, total, img)
+                try:
+                    img = self.finished(job, baker, params, tile, each)
+                except Canceled:
+                    return written
                 _write(path, img, settings.format, baker)
                 written.append(path)
         if progress is not None:
@@ -333,10 +339,10 @@ class Baker:
             groups[i] = sets.setdefault(hit, len(sets))
         return _Job(self, settings, low, cage, highs, {g: s for s, g in sets.items()}, groups)
 
-    def finished(self, job: _Job, baker: str, params: dict, tile=(0, 0)) -> np.ndarray:
+    def finished(self, job: _Job, baker: str, params: dict, tile=(0, 0), each=None) -> np.ndarray:
         """A baker's map of a prepared bake for one UDIM tile, with Dilation and Apply Diffusion (RGBA float,
-        alpha = covered)."""
-        img = job.result(baker, resolved(baker, params), tile)
+        alpha = covered). `each`: see `_Job.map`."""
+        img = job.result(baker, resolved(baker, params), tile, each)
         img = self._dilate(img, job.settings.dilation)
         if job.settings.apply_diffusion:
             img = _diffuse(img)
@@ -367,6 +373,10 @@ class Baker:
         d.queue.submit([enc.finish()])
         data = d.queue.read_texture({"texture": tex[px % 2]}, {"bytes_per_row": w * 16}, (w, h, 1))
         return np.frombuffer(data, np.float32).reshape(h, w, 4).copy()
+
+
+class Canceled(Exception):
+    """A bake stopped by its tile callback (`_Job.map`)."""
 
 
 class _Job:
@@ -402,13 +412,14 @@ class _Job:
             self._bvh[key] = self.baker._high(objects, ids, self.settings, ebase, mbase)
         return self._bvh[key]
 
-    def result(self, baker: str, params: dict, tile) -> np.ndarray:
-        """A baker's map for one UDIM tile, finished (normalized as its parameters say)."""
+    def result(self, baker: str, params: dict, tile, each=None) -> np.ndarray:
+        """A baker's map for one UDIM tile, finished (normalized as its parameters say). `each`: see `map` (not
+        for Curvature, made of five quick maps)."""
         if baker == "curvature":
             maps = [self.map(m, {}, tile) for m in ("_low_normal", "_low_tangent", "_low_bitangent", "_low_position",
                                                      "_low_curvature")]
             return _curvature_low(*maps, self.diag, params)
-        img = self.map(baker, params, tile)
+        img = self.map(baker, params, tile, each)
         if baker == "height_map_from_mesh":
             return _height(img, params, self.settings, self.scale)
         if baker == "curvature_from_mesh":
@@ -495,9 +506,10 @@ class _Job:
                       radius=params.get("sampling_radius", 0.01) * rel, denoise=bool(params.get("denoise", False)))
         return values, ("group" if by_name else "all")
 
-    def map(self, baker: str, params: dict, udim=(0, 0)) -> np.ndarray:
+    def map(self, baker: str, params: dict, udim=(0, 0), each=None) -> np.ndarray:
         """(H, W, 4) float32 at the output size for one UDIM tile; alpha is the coverage (0 where nothing was
-        baked). Raw values for the bakers finished in `result`."""
+        baked). Raw values for the bakers finished in `result`. `each(done, total, image)` after each tile, with
+        the map so far (the caller's to read, not to keep); returning False raises Canceled."""
         s, d = self.settings, self.baker.device
         W, H = s.size
         ss = ANTIALIASING.get(s.antialiasing, 1)
@@ -528,6 +540,7 @@ class _Job:
             passes = [(g, 0, self.bvh(("group", g))) for g in self.group_sets]
             passes = [p for p in passes if p[2] is not None]
         udim_index = udim[0] + 10 * udim[1]
+        total, done = -(-H // step) * -(-W // step), 0
         for iy in range(0, H, step):
             for ix in range(0, W, step):
                 iw, ih = min(step, W - ix), min(step, H - iy)  # the tile
@@ -611,6 +624,9 @@ class _Job:
                 tile = np.frombuffer(d.queue.read_buffer(acc), np.float32).reshape(th * ss, tw * ss, 4)
                 tile = tile[(iy - y0) * ss:(iy - y0 + ih) * ss, (ix - x0) * ss:(ix - x0 + iw) * ss]
                 out[iy:iy + ih, ix:ix + iw] = _reduce(tile, ss)
+                done += 1
+                if each is not None and each(done, total, out) is False:
+                    raise Canceled
         return out
 
 # --- baking visualization (high poly, cage, high poly outside the cage) --------
@@ -947,10 +963,12 @@ def _texture(device, path):
     return t
 
 
+GRAY = ("ambient_occlusion", "ambient_occlusion_from_mesh", "thickness_map_from_mesh", "height_map_from_mesh",
+        "opacity_mask_from_mesh", "curvature", "curvature_from_mesh")  # written with one channel, the red one
+
+
 def _write(path: Path, img: np.ndarray, fmt: str, baker: str):
-    gray = baker in ("ambient_occlusion", "ambient_occlusion_from_mesh", "thickness_map_from_mesh", "height_map_from_mesh",
-                     "opacity_mask_from_mesh", "curvature", "curvature_from_mesh")
-    data = img[..., :1] if gray else img[..., :3]
+    data = img[..., :1] if baker in GRAY else img[..., :3]
     if fmt == "exr":
         imageio.write(path, data.astype(np.float32))
     elif fmt == "tga":

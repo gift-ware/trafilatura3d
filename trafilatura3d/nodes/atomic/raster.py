@@ -18,18 +18,10 @@ COLOR_MODES = ("Color", "Grayscale")
 
 
 def _resolve(path: str, package) -> dict:
-    if not path:
+    from trafilatura3d.package import resolved_file
+    p = resolved_file(path, package)
+    if p is None:
         return {"file": "", "mtime": 0.0}
-    from trafilatura3d.project import alias_of, expand
-    if alias_of(path):  # alias://path from the project configuration
-        try:
-            path = expand(path)
-        except KeyError:
-            return {"file": "", "mtime": 0.0}
-    p = Path(path)
-    if not p.is_absolute() and package is not None and package.path is not None:
-        p = package.path.parent / p
-    p = p.resolve()
     return {"file": str(p), "mtime": p.stat().st_mtime if p.exists() else 0.0}
 
 

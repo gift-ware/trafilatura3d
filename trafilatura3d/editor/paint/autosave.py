@@ -129,7 +129,7 @@ class Autosave(QWidget):
         keep = s.path
         try:
             s.save(path)
-        except OSError as e:
+        except (OSError, ValueError) as e:  # ValueError: a plugin's Veto
             self.ws.log(f"Autosave failed: {e}", error=True)
             return None
         finally:

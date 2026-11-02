@@ -99,7 +99,7 @@ GRADIENT_INTERPOLATIONS = ("linear", "flat", "smooth", "none")
 _VECTOR_LEN = {ParamKind.FLOAT2: 2, ParamKind.FLOAT3: 3, ParamKind.FLOAT4: 4, ParamKind.INT2: 2}
 # The editors (UI controls) a graph input of each kind can have; the first is the default.
 EDITORS = {
-    ParamKind.FLOAT: ("Slider", "Angle"),
+    ParamKind.FLOAT: ("Slider", "Angle", "Levels"),  # Levels: five of a group in one histogram editor (Properties)
     ParamKind.INT: ("Slider", "Drop down list", "Random seed", "Size pow 2"),
     ParamKind.BOOL: ("Togglebutton",),
     ParamKind.FLOAT2: ("Slider", "Position"),
@@ -147,6 +147,9 @@ class Param:
     user_data: str = ""
     visible_if: str = ""  # expression on the graph's inputs (trafilatura3d.visibility)
     items: tuple = ()  # Drop down list (INT): ((value, label), ...)
+    # The image input an editor reads: a color's, whose colors the Properties offer to pick (an ID map's); a Levels
+    # float's, whose histogram they show.
+    swatches: str = ""
 
     def editor_name(self) -> str:
         """The editor this parameter is shown with: its Editor if the kind has it, else the kind's default."""

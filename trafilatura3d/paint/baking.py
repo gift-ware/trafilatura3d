@@ -100,7 +100,7 @@ def bake_texture_set(session, ts, slots=None, progress=None, baker=None, tiles=N
     """Bake the checked mesh maps of a Texture Set (or `slots`) in its UDIM tiles (or `tiles`); returns {slot:
     {tile (str): resource name}} and assigns them to its mesh map slots. A tile's resource is named
     TextureSetName_slot, .<UDIM> after it with the UV Tile workflow. `progress(done, total, label)` returning False
-    stops."""
+    stops; `done` grows tile by tile within a map."""
     from trafilatura3d.paint.model import tile_uv
     cfg = config(ts)
     common = cfg["common"]
@@ -122,7 +122,8 @@ def bake_texture_set(session, ts, slots=None, progress=None, baker=None, tiles=N
     out = {}
     for i, (slot, udim) in enumerate(work):
         label = next(lbl for sl, lbl, *_ in BAKERS if sl == slot)
-        if progress is not None and progress(i, len(work), label if len(tiles) == 1 else f"{label} {udim}") is False:
+        label = label if len(tiles) == 1 else f"{label} {udim}"
+        if progress is not None and progress(i, len(work), label) is False:
             break
         params = {**cfg["bakers"][slot]["params"], **FIXED[slot]}
         if slot == "normal":
@@ -130,7 +131,12 @@ def bake_texture_set(session, ts, slots=None, progress=None, baker=None, tiles=N
         symmetric = slot == "curvature" and params.get("automatic_tonemapping", True)
         if symmetric:  # baked in a fixed wide range, then normalized around flat (below)
             params.update(automatic_tonemapping=False, tonemapping_min=-CURV_RANGE, tonemapping_max=CURV_RANGE)
-        img = baker.finished(job, BAKER_OF[slot], params, tile_uv(udim))
+        each = None if progress is None else lambda done, total, _img, i=i, label=label: progress(
+            i + done / total, len(work), f"{label}  tile {done}/{total}")
+        try:
+            img = baker.finished(job, BAKER_OF[slot], params, tile_uv(udim), each)
+        except bk.Canceled:
+            break
         if symmetric:
             img = _symmetric_curvature(np.asarray(img, np.float32))
         name = f"{ts.name}_{slot}" + (f".{udim}" if session.project.uv_tiles else "")

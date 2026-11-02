@@ -201,6 +201,17 @@ class Configuration:
             raise KeyError(m.group(1))
         return str(Path(aliases[m.group(1)]) / m.group(2))
 
+    def contract(self, path: str) -> str:
+        """A real path under an alias's folder as `alias://rest` (the deepest alias), other paths unchanged:
+        `expand`'s inverse."""
+        p = Path(path).resolve()
+        best = None
+        for name, folder in self.aliases().items():
+            f = Path(folder).resolve()
+            if p.is_relative_to(f) and (best is None or len(f.parts) > len(best[1].parts)):
+                best = (name, f)
+        return f"{best[0]}://{p.relative_to(best[1]).as_posix()}" if best else path
+
 
 _CURRENT: Configuration | None = None
 
@@ -220,6 +231,10 @@ def set_configuration(config: Configuration) -> None:
 
 def expand(path: str) -> str:
     return configuration().expand(path)
+
+
+def contract(path: str) -> str:
+    return configuration().contract(path)
 
 
 def alias_of(path: str) -> str | None:

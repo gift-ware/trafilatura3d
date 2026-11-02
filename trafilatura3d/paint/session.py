@@ -9,9 +9,11 @@ GPU keeps them: `paint.Pages.raw`) and resources/<name>.npz (packed as kept in m
 from __future__ import annotations
 
 import contextlib
+import errno
 import io
 import itertools
 import json
+import os
 import re
 import zipfile
 from pathlib import Path
@@ -378,9 +380,16 @@ class Session:
     # --- files ----------------------------------------------------------------------------------------
 
     def save(self, path=None) -> None:
+        """Write the project (through a temporary file); plugins hear before_save (and may refuse it with Veto) and
+        document_saved, as for a package. A read-only file is refused as a package's is: the rename over it
+        would not ask."""
+        from trafilatura3d import plugins
         path = Path(path or self.path)
         if path.suffix != PROJECT_SUFFIX:
             path = path.with_suffix(PROJECT_SUFFIX)
+        plugins.emit("before_save", document=self, path=path)
+        if path.exists() and not os.access(path, os.W_OK):
+            raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), str(path))
         uids = {u for ts in self.project.texture_sets for u in ts.all_uids()}
         tmp = path.with_suffix(path.suffix + ".tmp")
         with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
@@ -403,6 +412,7 @@ class Session:
                 z.writestr(f"resources/{name}.npz", b.getvalue(), compress_type=zipfile.ZIP_STORED)
         tmp.replace(path)
         self.path = path
+        plugins.emit("document_saved", document=self, path=path)
 
     @classmethod
     def open(cls, path, evaluator: Evaluator | None = None) -> Session:

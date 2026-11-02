@@ -157,6 +157,30 @@ class RemoteServer(QObject):
         pkg, gid = self.window.create_graph(name, (11, 11), None, template)
         return {"graphs": list(pkg.graphs), "graph": gid, "outputs": graphtools.describe(pkg.graphs[gid])["outputs"]}
 
+    def cmd_new_graph(self, name: str, template: str = "Empty", graph: str | None = None):
+        """As New graph on a package in the Explorer: a graph `name` (numbered when taken) made from a template, in the
+        package of `graph` (the one shown by default), one undo step; it is shown."""
+        if template not in TEMPLATES:
+            raise DocumentError(f"unknown template {template!r} (templates: {', '.join(TEMPLATES)})")
+        if not name or not name.replace("_", "").isalnum():
+            raise DocumentError(f"graph name {name!r}: letters, digits and _ only")
+        pkg, _ = self._target(graph)
+        pkg, gid = self.window.create_graph(name, (11, 11), pkg, template)
+        return {"graphs": list(pkg.graphs), "graph": gid, "outputs": graphtools.describe(pkg.graphs[gid])["outputs"]}
+
+    def cmd_remove_graph(self, graph: str):
+        """As Remove in the Explorer: one undo step, refused while graphs of its package use it."""
+        pkg, gid = self._target(graph)
+        self._edit(pkg, "Remove graph", lambda: pkg.remove_graph(gid) or True)  # None would read as refused
+        return {"graphs": list(pkg.graphs)}
+
+    def cmd_remove_resource(self, resource: str, graph: str | None = None):
+        """As Remove on a resource in the Explorer, in the package of `graph`: one undo step, refused while nodes name
+        its file (the file stays on disk)."""
+        pkg, _ = self._target(graph)
+        self._edit(pkg, "Remove resource", lambda: pkg.remove_resource(resource) or True)  # None would read as refused
+        return {"resources": list(pkg.resources)}
+
     def cmd_save(self, path: str | None = None, graph: str | None = None):
         pkg, _ = self._target(graph)
         if path is None and pkg.path is None:

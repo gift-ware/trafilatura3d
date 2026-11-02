@@ -10,7 +10,7 @@ import numpy as np
 
 from trafilatura3d import colormanagement as cm
 from trafilatura3d import project
-from trafilatura3d.package import Package
+from trafilatura3d.package import DocumentError, Package
 
 
 class ProjectStack(unittest.TestCase):
@@ -59,7 +59,6 @@ class ProjectStack(unittest.TestCase):
         self.assertEqual(Path(project.expand("lib://rock.png")), (self.dir / "assets" / "rock.png").resolve())
 
     def test_alias_in_package_references(self):
-        from trafilatura3d.diagnostics import package_warnings
         (self.dir / "shared").mkdir()
         lib = Package()
         lib.new_graph("soft", 6)
@@ -70,15 +69,13 @@ class ProjectStack(unittest.TestCase):
         g.add_node("graph_instance", ref="shared://lib.trafilatura3d#soft")
         self.assertEqual(pkg.resolve("shared://lib.trafilatura3d#soft")[1].id, "soft")
         bad = Package()
-        g2 = bad.new_graph("main", 6)
-        g2.nodes  # an unknown alias: the package still works and says what to define
+        bad.new_graph("main", 6)
         bad.path = self.dir / "bad.trafilatura3d"
         data = bad.to_dict()
         data["graphs"]["main"]["nodes"].append({"id": "graph_instance1", "type": "graph_instance",
                                                "ref": "nowhere://lib.trafilatura3d#soft", "position": [0, 0]})
-        bad = Package.from_dict(data, self.dir / "bad.trafilatura3d")
-        messages = [w.message for w in package_warnings(bad).get("", [])]
-        self.assertIn("Check the alias 'nowhere' is defined in your project", messages)
+        with self.assertRaisesRegex(DocumentError, "nowhere://.*project's configuration"):  # out of its project
+            Package.from_dict(data, self.dir / "bad.trafilatura3d")
 
     def test_ocio_variable_overrides_the_project(self):
         c = self.configure(self.write_project("p", {"color_management": {"mode": "OCIO", "ocio_config": "a.ocio"}}))

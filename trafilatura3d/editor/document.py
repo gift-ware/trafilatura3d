@@ -11,12 +11,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QFileSystemWatcher, QObject, QTimer, Signal
 from PySide6.QtGui import QUndoCommand, QUndoStack
 
 from trafilatura3d.compiler import Compiled, compile_graph
 from trafilatura3d.editor.live import PREVIEW_SIZE, LiveCook
 from trafilatura3d.evaluator import Evaluator
+from trafilatura3d import package as packages
 from trafilatura3d.package import DocumentError, Package
 
 
@@ -54,6 +55,9 @@ class Document(QObject):
     dirty_changed = Signal()  # an edit, undo or redo: the unsaved marks may change
     warnings_changed = Signal(object)  # a package whose warnings were checked again (`check`, `check_nodes`)
     error = Signal(str)
+    # A bake under way (package, scene resource id, (baker, UDIM tile, the map so far) or None once it ends): the
+    # 3D View shows the map as it is baked.
+    bake_progress = Signal(object, str, object)
 
     def __init__(self, evaluator: Evaluator | None = None):
         super().__init__()
@@ -72,6 +76,20 @@ class Document(QObject):
         self.warnings: dict[int, dict[str, list]] = {}
         self.live_warnings = False  # Tools > Live warnings: every edit checks its whole package again (slow)
         self.undo.indexChanged.connect(lambda _: self.dirty_changed.emit())
+        packages.open_package = self.package_at  # a reference to an open package is that package, not a copy
+        # The files the open packages link (bitmaps, SVGs, fonts, resources) watched: written from outside (a bake,
+        # an image editor, a copy), the packages recompile (their modification time is in the jobs' keys). Their
+        # folders too: a file replaced (written aside, renamed over) leaves the watch, a new one has none yet.
+        self._watcher = QFileSystemWatcher(self)
+        self._mtimes: dict[str, float] = {}  # watched file -> its modification time (0: missing)
+        self._files_timer = QTimer(self)  # a write comes as a burst of events: checked once it settles
+        self._files_timer.setSingleShot(True)
+        self._files_timer.setInterval(300)
+        self._files_timer.timeout.connect(self._check_files)
+        self._watcher.fileChanged.connect(lambda _p: self._files_timer.start())
+        self._watcher.directoryChanged.connect(lambda _p: self._files_timer.start())
+        self.packages_changed.connect(self._watch)
+        self.changed.connect(lambda _pkg: self._watch())
 
     # --- packages -----------------------------------------------------------------------------
 
@@ -114,12 +132,71 @@ class Document(QObject):
         self.dirty.discard(id(pkg))
         self.packages_changed.emit()
 
+    def package_at(self, path: Path) -> Package | None:
+        """The open package saved at `path`, or None."""
+        return next((p for p in self.packages if p.path is not None and p.path.resolve() == path), None)
+
     def close(self, pkg: Package) -> None:
         self.undo.clear()  # snapshots refer to the closed package (first: its signals reach views still showing it)
         self.packages.remove(pkg)
+        for other in self.packages:  # their references read its file again, not a copy loaded before it was open
+            other._external.pop(pkg.path, None)
         self.dirty.discard(id(pkg))
         self.warnings.pop(id(pkg), None)
         self.packages_changed.emit()
+
+    # --- linked files -------------------------------------------------------------------------
+
+    @staticmethod
+    def _mtime(path: str) -> float:
+        try:
+            return Path(path).stat().st_mtime
+        except OSError:
+            return 0.0
+
+    def _watched(self) -> tuple[set[str], set[str]]:
+        """(the files the open packages read: what they link, the packages they refer to that are not open and what
+        those link; the files of those packages)."""
+        files, referenced = set(), set()
+        for pkg in self.packages:
+            files |= {str(p) for p in pkg.linked_files()}
+            for path, other in pkg.referenced().items():
+                if self.package_at(path) is None:  # an open one is edited here, not read from its file
+                    referenced.add(str(path))
+                    files |= {str(p) for p in other.linked_files()}
+        return files | referenced, referenced
+
+    def _watch(self) -> None:
+        """Watch what the open packages read now (and the folders holding it)."""
+        files, _ = self._watched()
+        self._mtimes = {f: self._mtimes.get(f, self._mtime(f)) for f in files}
+        wanted = files | {str(Path(f).parent) for f in files}
+        watched = set(self._watcher.files()) | set(self._watcher.directories())
+        if watched - wanted:
+            self._watcher.removePaths(sorted(watched - wanted))
+        new = [p for p in sorted(wanted - watched) if Path(p).exists()]
+        if new:
+            self._watcher.addPaths(new)
+
+    def _check_files(self) -> None:
+        """A watched file or folder changed: the files written since, if any, recompile every package (a graph reads
+        other packages' files through its instances); a referenced package written (a sync, another editor) is read
+        again."""
+        written = [f for f, m in self._mtimes.items() if self._mtime(f) != m]
+        if not written:
+            return
+        if set(written) & self._watched()[1]:
+            for pkg in self.packages:  # copies of referenced packages (and of theirs): loaded again when next read
+                pkg._external.clear()
+        for f in written:
+            self._mtimes[f] = self._mtime(f)
+        self._watch()  # a replaced file watched again
+        missing = [f for f in self._mtimes if Path(f).exists() and f not in self._watcher.files()]
+        if missing:
+            self._watcher.addPaths(missing)
+        for pkg in list(self.packages):
+            self._revision[id(pkg)] = self._revision.get(id(pkg), 0) + 1  # not an edit: no undo step, not unsaved
+            self.changed.emit(pkg)
 
     def set_preview(self, pkg: Package, graph_id: str, values: dict | None) -> None:
         """Turn the Preview mode of a graph's inputs on (values) or off (None); views recook."""
@@ -221,6 +298,10 @@ class Document(QObject):
         if self.live_warnings and not self.dragging:  # at a dragged value's release, not at each step
             self.check(pkg)
         self.changed.emit(pkg)
+        if pkg.path is not None:  # the open packages whose graphs use its graphs: recompiled, not edited
+            for other in [p for p in self.packages if p is not pkg and pkg.path in p.referenced()]:
+                self._revision[id(other)] = self._revision.get(id(other), 0) + 1
+                self.changed.emit(other)
 
     # --- compilation --------------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ class ColorToMask(BasicNode):
     outputs = {"output": Output(PortType.GRAY)}
     params = {
         "use_color_input": Param(ParamKind.BOOL, False, "Use color input"),
-        "color": Param(ParamKind.FLOAT3, [0.5, 0.5, 0.5], "Color", 0.0, 1.0),
+        "color": Param(ParamKind.FLOAT3, [0.5, 0.5, 0.5], "Color", 0.0, 1.0, swatches="input"),
         "threshold": Param(ParamKind.FLOAT, 0.01, "Threshold", 0.001, 1.0),
         "selection_fade": Param(ParamKind.FLOAT, 0.0, "Selection fade", 0.0, 1.0),
         "distance_color_space": Param(ParamKind.ENUM, "RGB (Data)", "Distance color space", choices=SPACES),

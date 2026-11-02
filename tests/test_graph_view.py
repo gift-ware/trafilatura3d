@@ -155,6 +155,119 @@ class BaseModeTest(unittest.TestCase):
 
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
+class ItemPropertiesTest(unittest.TestCase):
+    def test_a_frame_selected_shows_its_title_description_and_color(self):
+        """A frame selected alone: Properties edits its title, description and color (each an undo step); a comment
+        shows its text, a pin its title."""
+        from PySide6.QtCore import QCoreApplication, QEvent, QPointF
+        from PySide6.QtWidgets import QApplication, QLineEdit, QPlainTextEdit
+        import rendercanvas.qt as rq
+        from trafilatura3d.editor.widgets import ColorButton
+        QCoreApplication.setOrganizationName("Trafilatura3DTest")
+        QCoreApplication.setApplicationName("Trafilatura3DTest")
+        app = QApplication.instance() or QApplication([])
+        init = rq.QRenderWidget.__init__
+        rq.QRenderWidget.__init__ = lambda self, *a, **k: init(self, *a, **{**k, "present_method": "bitmap"})
+        self.addCleanup(setattr, rq.QRenderWidget, "__init__", init)
+        from trafilatura3d.editor.mainwindow import MainWindow
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        w = MainWindow([str(material_package(Path(tmp.name) / "scene.trafilatura3d"))])
+
+        def close():
+            w.doc.undo.indexChanged.disconnect()
+            w.graph.scene.selectionChanged.disconnect()
+            w.deleteLater()
+            QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+        self.addCleanup(close)
+        panel, g = w.graph, w.graph.graph
+        for kind in ("frame", "comment", "pin"):
+            panel.add_item(kind, QPointF(0, 0))
+        app.processEvents()
+
+        def select(kind):
+            panel.scene.clearSelection()
+            item = next(i for i in panel.scene.items() if getattr(i, "item_id", "").startswith(kind))
+            item.setSelected(True)
+            app.processEvents()
+            return item.item_id
+        frame = select("frame")
+        self.assertEqual(w.properties.item_id, frame)
+        title = w.properties.findChildren(QLineEdit)[0]
+        title.setText("Dirt")
+        title.editingFinished.emit()
+        w.properties.findChildren(QPlainTextEdit)[0].setPlainText("Spots where the paint is gone")
+        steps = w.doc.undo.count()
+        w.properties.findChildren(ColorButton)[0].edited.emit([0.5, 0.1, 0.1, 0.4], True)
+        self.assertEqual(w.doc.undo.count(), steps + 1)
+        self.assertEqual({k: g.item(frame)[k] for k in ("title", "text", "color")},
+                         {"title": "Dirt", "text": "Spots where the paint is gone", "color": [0.5, 0.1, 0.1, 0.4]})
+        comment = select("comment")
+        self.assertEqual((len(w.properties.findChildren(QPlainTextEdit)), len(w.properties.findChildren(ColorButton))),
+                         (1, 0))
+        w.properties.findChildren(QPlainTextEdit)[0].setPlainText("Note")
+        self.assertEqual(g.item(comment)["text"], "Note")
+        pin = select("pin")
+        pin_title = w.properties.findChildren(QLineEdit)[0]
+        pin_title.setText("Shadows")
+        pin_title.editingFinished.emit()
+        self.assertEqual(g.item(pin)["title"], "Shadows")
+        panel.scene.clearSelection()
+        app.processEvents()
+        self.assertIsNone(w.properties.item_id)  # nothing selected: the graph's properties
+
+        # A selection of a frame and a node dragged together: both kept where they were left, also after the next edit
+        from PySide6.QtCore import Qt
+        from PySide6.QtWidgets import QGraphicsSceneMouseEvent
+        frame_item = next(i for i in panel.scene.graph_items if i.item_id == frame)
+        node_id = next(iter(g.nodes))
+        node_item = panel.scene.nodes[node_id]
+        frame_item.setSelected(True)
+        node_item.setSelected(True)
+        frame_item.setPos(frame_item.pos() + QPointF(320, 160))
+        node_item.setPos(node_item.pos() + QPointF(320, 160))
+        release = QGraphicsSceneMouseEvent(QEvent.GraphicsSceneMouseRelease)
+        release.setButton(Qt.LeftButton)
+        panel.scene.mouseReleaseEvent(release)
+        where = (list(g.item(frame)["position"]), list(g.nodes[node_id].position))
+        self.assertEqual(where, ([frame_item.pos().x(), frame_item.pos().y()], [node_item.pos().x(), node_item.pos().y()]))
+        panel.scene.clearSelection()
+        panel.scene.nodes[node_id].setSelected(True)
+        panel.duplicate()  # the next edit: the scene made again from the document
+        app.processEvents()
+        frame_item = next(i for i in panel.scene.graph_items if i.item_id == frame)
+        self.assertEqual([frame_item.pos().x(), frame_item.pos().y()], where[0])
+
+        # A selection box dragged with the mouse selects a frame only when it holds all of it
+        from PySide6.QtGui import QMouseEvent
+        from PySide6.QtWidgets import QApplication
+        w.resize(1200, 800)
+        w.show()
+        panel.edit("Place", lambda: g.item(frame).update(position=[90000.0, 90000.0], size=[400.0, 260.0]))
+        app.processEvents()
+        view, vp = panel.view, panel.view.viewport()
+        view.resetTransform()
+        view.centerOn(QPointF(90200, 90130))
+        app.processEvents()
+
+        def box_drag(a, b):  # scene points: press at a, move to b in steps, release
+            panel.scene.clearSelection()
+            pa, pb = QPointF(view.mapFromScene(a)), QPointF(view.mapFromScene(b))
+
+            def send(kind, p, buttons):
+                QApplication.sendEvent(vp, QMouseEvent(kind, p, vp.mapToGlobal(p), Qt.LeftButton, buttons,
+                                                       Qt.NoModifier))
+            send(QEvent.MouseButtonPress, pa, Qt.LeftButton)
+            for i in range(1, 6):
+                send(QEvent.MouseMove, pa + (pb - pa) * i / 5, Qt.LeftButton)
+            send(QEvent.MouseButtonRelease, pb, Qt.NoButton)
+            app.processEvents()
+            return next(i for i in panel.scene.graph_items if i.item_id == frame).isSelected()
+        self.assertFalse(box_drag(QPointF(89900, 89900), QPointF(90200, 90100)))  # a part of it: not chosen
+        self.assertTrue(box_drag(QPointF(89900, 89900), QPointF(90500, 90360)))  # all of it
+
+
+@unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
 class WarningsTest(unittest.TestCase):
     def test_warnings_close_until_they_change(self):
         """The ✕ closes a graph's warnings; the same ones stay closed, others show again."""
@@ -235,8 +348,19 @@ class WarningsTest(unittest.TestCase):
         panel.connect(noise, "output", blur, "input")
         self.assertEqual([x.node for x in w.doc.graph_warnings(pkg, "G") if x.node], [])
         w.doc.warnings[id(pkg)]["G"].append(GraphWarning("stale", blur))
-        panel.scene.nodes[blur].setSelected(True)  # selected: its own warnings checked again
+        with mock.patch("trafilatura3d.diagnostics.node_warnings", wraps=__import__(
+                "trafilatura3d.diagnostics", fromlist=["x"]).node_warnings) as checked:
+            panel.scene.nodes[blur].setSelected(True)  # selected: its own warnings checked again, once it settles
+            panel.scene.nodes[noise].setSelected(True)
+            checked.assert_not_called()  # not at every change (a selection box changes it at every mouse move)
+            self.assertTrue(panel.check_timer.isActive())
+            panel.check_timer.timeout.emit()
+            panel.check_timer.stop()
+            self.assertEqual(checked.call_count, 1)  # the nodes it took in, together
+            self.assertEqual(set(checked.call_args.args[2]), {blur, noise})
         self.assertNotIn("stale", messages())
+        panel.scene.nodes[noise].setSelected(False)  # leaving the selection checks nothing
+        self.assertFalse(panel.check_timer.isActive())
 
 
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")

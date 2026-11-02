@@ -9,6 +9,34 @@ from pathlib import Path
 from tests.scenes import material_package
 
 
+class ExportProgressTest(unittest.TestCase):
+    def test_steps_and_cancel(self):
+        """The export reports compiling, cooking node by node and writing file by file; stopped while cooking it
+        writes nothing."""
+        import sys
+        import trafilatura3d.export  # noqa: F401 - the module (the package's `export` is the function)
+        from trafilatura3d.evaluator import Evaluator
+        from trafilatura3d.package import Package
+        export = sys.modules["trafilatura3d.export"]
+        with tempfile.TemporaryDirectory() as tmp:
+            pkg = Package.load(material_package(Path(tmp) / "scene.trafilatura3d"))
+            gid = next(iter(pkg.graphs))
+            steps = []
+            written = export.export(pkg, gid, Path(tmp) / "out", Evaluator(), format="png",
+                                    progress=lambda text, done, total: steps.append((text, done, total)))
+            texts = [t for t, *_ in steps]
+            self.assertEqual(texts[0], "Compiling the graph")
+            cooking = [s for s in steps if s[0].startswith("Cooking the graph: node ")]
+            self.assertGreater(len(cooking), 1)
+            self.assertTrue(all(0 <= done <= total for _, done, total in cooking))
+            self.assertEqual([t for t in texts if t.startswith("Writing ")], [f"Writing {p.name}" for p in written])
+            self.assertEqual(texts[-1], "Done")
+            stopped = export.export(pkg, gid, Path(tmp) / "stopped", Evaluator(), format="png",
+                                    progress=lambda text, done, total: not text.startswith("Cooking"))
+            self.assertEqual(stopped, [])
+            self.assertEqual(list((Path(tmp) / "stopped").iterdir()), [])
+
+
 @unittest.skipUnless(os.environ.get("QT_QPA_PLATFORM") == "offscreen", "GUI test: run with QT_QPA_PLATFORM=offscreen")
 class ExportDialogTest(unittest.TestCase):
     def test_dialog(self):

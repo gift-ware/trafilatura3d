@@ -8,11 +8,14 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import time
+from pathlib import Path
 from typing import Any
 
 from trafilatura3d.nodes.base import Node, Param, ParamKind
-from trafilatura3d.package import DocumentError, Graph
+from trafilatura3d.package import INSTANCE, RESOURCE_NODES, DocumentError, Graph
+from trafilatura3d.project import alias_of, contract, expand
 
 # Node geometry in scene units (the Graph view's items): the title over a square thumbnail, connectors
 # on the sides one PORT_STEP apart.
@@ -378,7 +381,8 @@ def _apply(graph: Graph, op: dict) -> Any:
             graph.set_param(node, name, value)
     elif kind == "set_base":
         if not op.get("node") and op.get("name") in ("id", "identifier", "label", "description"):
-            raise DocumentError(f"{op['name']!r} is not a base parameter: set_graph(id?, label?, description?)")
+            raise DocumentError(f"{op['name']!r} is not a base parameter: set_graph(id?, label?, description?, "
+                                f"parent_size?)")
         node = _node(graph, op) if op.get("node") else None
         graph.set_base(node, op["name"], op["value"])
         if op["name"] == "output_size":  # log2 values: say what they mean
@@ -390,6 +394,12 @@ def _apply(graph: Graph, op: dict) -> Any:
         for key in ("label", "description"):
             if key in op:
                 setattr(graph, key, str(op[key]))
+        if "parent_size" in op:  # in pixels, as get_graph gives it
+            size = [int(v) for v in op["parent_size"]]
+            if len(size) != 2 or any(v < 16 or v & (v - 1) or v > 1 << 13 for v in size):  # the Graph view's sizes
+                raise DocumentError(f"parent_size {op['parent_size']!r}: [width, height] in pixels, powers of 2 from "
+                                    f"16 to {1 << 13}")
+            graph.parent_size = [v.bit_length() - 1 for v in size]
         if op.get("id"):
             graph.package.rename_graph(graph.id, op["id"])
     elif kind == "set_input":
@@ -423,6 +433,12 @@ def _apply(graph: Graph, op: dict) -> Any:
                 graph.set_param(node, key, op[key])
     elif kind == "set_disabled":
         graph.set_disabled([_node(graph, op)], bool(op.get("disabled", True)))
+    elif kind == "set_function":
+        graph.set_function(_node(graph, op), op["param"], op.get("function"))
+    elif kind == "set_preset":
+        graph.set_preset(op["name"], op.get("values", {}))
+    elif kind == "remove_preset":
+        graph.remove_preset(op["name"])
     elif kind == "frame":
         fid = graph.add_item("frame", [0.0, 0.0], **{k: op[k] for k in ("title", "color", "text") if k in op})
         _set_frame_contents(graph, graph.item(fid), op.get("nodes", []), op.get("frames", []))
@@ -492,7 +508,8 @@ def _input_fields(op: dict, taken: tuple) -> dict:
 
 
 OPS = ("add_node", "remove_node", "connect", "disconnect", "set_param", "set_base", "move", "expose", "unexpose",
-       "link", "set_output", "set_disabled", "set_graph", "set_input", "insert_dot", "frame", "set_item", "remove_item")
+       "link", "set_output", "set_disabled", "set_function", "set_graph", "set_input", "set_preset", "remove_preset",
+       "insert_dot", "frame", "set_item", "remove_item")
 
 
 def apply_ops(graph: Graph, ops: list[dict]) -> list[dict]:
@@ -824,6 +841,68 @@ def layout(graph: Graph, dots: bool = False) -> dict[str, list[float]]:
                 pos[to] = list(graph.nodes[to].position)
     fit_frames(graph, parent, members)  # each frame around its nodes and frames again
     return pos
+
+
+def portable_nodes(graph: Graph, ids) -> list[dict]:
+    """Nodes copied (as `NodeInstance.to_dict`) to be pasted in any package: their links among them only, the graphs
+    they instance and the files they read named from anywhere (an alias, `project.contract`, else an absolute path:
+    a name or a relative path only means something in their own package), a parameter linked to a graph input given
+    that input's value (the input stays behind)."""
+    home = graph.package.path.parent if graph.package.path else None
+    ids = set(ids)
+    out = []
+    for k in ids:
+        d = json.loads(json.dumps(graph.nodes[k].to_dict()))
+        d["inputs"] = {p: v for p, v in d.get("inputs", {}).items() if v[0] in ids}
+        for name, pid in d.pop("links", {}).items():
+            if pid in graph.parameters:
+                d.setdefault("params", {})[name] = graph.parameters[pid].param.default
+        if home is not None and d["type"] == INSTANCE and d.get("ref") and not alias_of(d["ref"]):
+            rel, _, gid = d["ref"].rpartition("#")
+            if not rel.startswith("sbs://") and not rel.endswith((".sbs", ".sbsar")):
+                d["ref"] = contract(str((home / rel).resolve() if rel else graph.package.path)) + "#" + gid
+        key = RESOURCE_NODES.get(d["type"])
+        path = d.get("params", {}).get(key) if key else None
+        if home is not None and path and not alias_of(path) and not Path(path).is_absolute():
+            d["params"][key] = contract(str((home / path).resolve()))
+        out.append(d)
+    return out
+
+
+def pasted_nodes(nodes: list[dict], package) -> list[dict]:
+    """`portable_nodes` made the package's own: a graph of the package instanced by its name, another package's
+    relative to this one when it is saved (an alias stays)."""
+    out = []
+    for n in nodes:
+        n = dict(n)
+        rel, sep, gid = n.get("ref", "").rpartition("#")
+        if sep and package.path is not None and (alias_of(rel) or Path(rel).is_absolute()):
+            if Path(expand(rel)).resolve() == package.path.resolve():
+                n["ref"] = gid
+            elif not alias_of(rel):
+                n["ref"] = os.path.relpath(rel, package.path.parent).replace(os.sep, "/") + "#" + gid
+        out.append(n)
+    return out
+
+
+def upstream_first(nodes: list[dict]) -> list[dict]:
+    """Nodes (as `NodeInstance.to_dict`) ordered so that each comes after the ones its inputs read among them:
+    connected in this order, a polymorphic node (a Dot, a Blend) already has the type of what it receives when
+    something downstream is connected to it (connected first it would be grayscale, and a color input refuses it)."""
+    by_id = {n["id"]: n for n in nodes}
+    out, done = [], set()
+
+    def visit(n, path=()):
+        if n["id"] in done or n["id"] in path:
+            return
+        for src, _ in n.get("inputs", {}).values():
+            if src in by_id:
+                visit(by_id[src], (*path, n["id"]))
+        done.add(n["id"])
+        out.append(n)
+    for n in nodes:
+        visit(n)
+    return out
 
 
 def insert_dot(graph: Graph, dst: str, port: str, position=None) -> str:
