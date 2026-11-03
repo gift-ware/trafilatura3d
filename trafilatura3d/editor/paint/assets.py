@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (QComboBox, QFrame, QHBoxLayout, QLabel, QLineEdit
                                QSizePolicy, QToolButton, QVBoxLayout, QWidget)
 
 from trafilatura3d.editor import theme
+from trafilatura3d.editor.widgets import IconGrid
 from trafilatura3d.editor.library import SIZES as LIBRARY_SIZES
 from trafilatura3d.editor.paint.icons import picon
 from trafilatura3d.editor.paint.properties import alpha_icon
@@ -88,7 +89,7 @@ def source_asset(src) -> dict | None:
     return {"kind": "texture", "name": src.image} if src.image else None
 
 
-class AssetGrid(QListWidget):
+class AssetGrid(IconGrid):
     """The grid: items drag their asset reference (MIME)."""
 
     def startDrag(self, actions):
@@ -244,7 +245,10 @@ class AssetsPanel(QWidget):
         types, doc, out = types or (self.kind,), self.ws.doc, []
         want = lambda k: "All" in types or k in types
         if want("Alphas"):
+            from trafilatura3d.paint import alpha_library
             out += [(n, {"kind": "alpha", "name": n}, "Alpha") for n in ALPHAS]
+            out += [(label, {"kind": "alpha", "name": ref}, f"Alpha ({category})")
+                    for ref, label, category in alpha_library.listing()]
         if doc is not None and want("Textures"):  # an image sequence once
             out += [(n, {"kind": "texture", "name": n}, "Texture" if n == i else "Image sequence")
                     for n, i in doc.session.resources.listing()]

@@ -17,6 +17,7 @@ from trafilatura3d.editor import theme
 from trafilatura3d.editor.graph.items import title_color
 from trafilatura3d.editor.graph.nodemenu import graph_nodes, fuzzy_score
 from trafilatura3d.editor.icons import icon
+from trafilatura3d.editor.widgets import IconGrid
 from trafilatura3d.nodes import NODES
 from trafilatura3d.package import SUFFIX
 from trafilatura3d.sample import sample_job
@@ -84,7 +85,7 @@ PROJECT = "Project"  # graphs of the packages in the project's watched folders
 SIZES = {"Small Icons": 48, "Medium Icons": 72, "Large Icons": 104}
 
 
-class LibraryList(QListWidget):
+class LibraryList(IconGrid):
     def startDrag(self, actions):
         types = [i.data(Qt.UserRole) for i in self.selectedItems()]
         if not types:

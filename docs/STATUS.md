@@ -10,7 +10,8 @@ still change between versions: there is no backward compatibility yet.
 rebuilds it as a Paint project: mesh, Texture Sets and UV tiles, layers and folders, fill layers, masks, effects
 (fill, levels, filters and generators matched by name), embedded images, and the brush strokes, which are replayed
 with our own brush (paint, eraser, projection, polygon fill, symmetry, pen pressure). What could not be converted is
-listed in the import report (the Log panel). Known gaps:
+listed in the import report (the Log panel). Both document versions are read: version 0 and the version 1 of
+newer releases (their saves and autosaves), whose 16-bit textures are lossless JPEG 2000 tiles. Known gaps:
 
 - **Brush alphas.** Procedural brush alphas stored in compiled form cannot be read. A few common ones are rebuilt
   with our own generators (dirt, cracks, ink and dot alphas), shaped by their hardness, shape and invert parameters;
@@ -35,6 +36,17 @@ listed in the import report (the Log panel). Known gaps:
   height made by it carries more of the broad forms, and Relief Balance at its ends keeps less of the other band.
 - Resources embedded in a `.sbs` (SVGs) are extracted to a temporary folder, and copied into the package's
   dependency folder when it is saved.
+
+## Brush alphas
+
+The library alphas (Assets > Alphas, the Alpha section of the Properties) are graphs of our nodes,
+`trafilatura3d/paint/alpha_graphs/<category>.trafilatura3d`, one per alpha of the reference index
+(`reference/paint/alphas.json`) except the Dynamic ones (brush makers, path alphas: our brush has no dynamic
+strokes). They respond to Hardness, Shape and Invert as the originals do; their other parameters (variants,
+widths, counts, flips) are not exposed yet. Noise alphas are close to the originals; drawn ones (stains, brush
+dabs, hand and finger prints, safety-sign pictograms) are simplified silhouettes. A `.spp` import replays its strokes
+with the library alpha of each alpha it names (`spp/alphas.json`), with the project's values and seed; alphas of
+older libraries keep their recipes (`spp/alphas.py`) or a generic alpha, named in the report.
 
 ## Graph workspace
 

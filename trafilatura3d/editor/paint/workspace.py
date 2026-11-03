@@ -1116,11 +1116,11 @@ class PaintWorkspace(QMainWindow):
         if kind == "procedural":
             return asset["id"]
         if kind == "alpha":
-            from trafilatura3d.paint.alphas import ALPHAS
+            from trafilatura3d.paint import alpha_library
             name = f"alpha {asset['name']}"
             res = self.doc.session.resources
             if name not in res.images:
-                res.add(name, np.asarray(ALPHAS[asset["name"]](1024), np.float32))
+                res.add(name, alpha_library.image(asset["name"], 1024))
             return name
         return asset["name"]
 

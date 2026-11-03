@@ -158,6 +158,13 @@ class Replayer:
             if graph == "shape_inky":
                 self.note(where, "brush alpha shape_inky: one shape for every stamp (the original varies it)")
             return key
+        ref = spp_alphas.library_ref(graph, tweaks)
+        if ref is not None:  # our library's alpha for it, with the project's values
+            if ref not in self._alpha_cache:
+                from trafilatura3d.paint import alpha_library
+                self.engine.alpha(ref, alpha_library.image(ref, 256))
+                self._alpha_cache[ref] = ref
+            return ref
         for si in proc.get("sourcesInputs", []):  # an alpha made from an image (brush presets): that image
             src = si.get("source") or {}
             if src.get(CLASS) == "DataSourceBitmap":

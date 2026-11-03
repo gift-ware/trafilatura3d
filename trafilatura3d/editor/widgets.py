@@ -12,7 +12,7 @@ import numpy as np
 
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal
 from PySide6.QtGui import QBrush, QColor, QIcon, QLinearGradient, QPainter, QPainterPath, QPen, QPixmap
-from PySide6.QtWidgets import (QColorDialog, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout,
+from PySide6.QtWidgets import (QColorDialog, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout, QListWidget,
                                QHBoxLayout, QLabel, QLineEdit, QMenu, QPushButton, QSlider, QToolButton, QVBoxLayout,
                                QWidget)
 
@@ -46,6 +46,23 @@ def evaluate_formula(text: str) -> float:
         return float(ev(ast.parse(text.strip(), mode="eval")))
     except (SyntaxError, ZeroDivisionError, TypeError) as e:
         raise ValueError(text) from e
+
+
+class IconGrid(QListWidget):
+    """A list of items shown as a grid of icons or as a list (the Library, the Assets): the wheel scrolls by rows,
+    one row of the grid a step as the list scrolls one line, whatever the number of items on a row (per item, the
+    Qt default, a step moves a single icon)."""
+
+    def updateGeometries(self):
+        super().updateGeometries()
+        if self.viewMode() == QListWidget.IconMode:
+            if self.verticalScrollMode() != QListWidget.ScrollPerPixel:
+                self.setVerticalScrollMode(QListWidget.ScrollPerPixel)
+            row = self.gridSize().height() or self.sizeHintForRow(0)
+            if row > 0:
+                self.verticalScrollBar().setSingleStep(row)
+        elif self.verticalScrollMode() != QListWidget.ScrollPerItem:
+            self.setVerticalScrollMode(QListWidget.ScrollPerItem)
 
 
 class NumberField(QLineEdit):

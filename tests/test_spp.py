@@ -89,6 +89,68 @@ def doc_bytes(root) -> bytes:
     return bytes(d.b)
 
 
+class DocV1:
+    """The version 1 layout: classes declared once, values without tags. An object is (class, {field: (type,
+    value)}); type 0x13 takes a list of objects, 0x11 a list of objects of one class."""
+
+    def __init__(self):
+        self.b = bytearray(struct.pack("<III", 0x1B7C2FDD, 1, 0))
+        self.classes: list[str] = []
+
+    def string(self, s: str) -> None:
+        raw = s.encode("utf-8")
+        self.b += struct.pack("<I", len(raw)) + raw
+
+    def klass(self, name: str, fields: dict) -> None:
+        if name in self.classes:
+            self.b += struct.pack("<i", self.classes.index(name))
+            return
+        self.classes.append(name)
+        self.b += struct.pack("<i", -1)
+        self.string(name)
+        self.b += struct.pack("<I", len(fields))
+        for k, (t, _v) in fields.items():
+            self.string(k)
+            self.b += struct.pack("<I", t)
+
+    def values(self, fields: dict) -> None:
+        for t, v in fields.values():
+            self.typed(t, v)
+
+    def typed(self, t: int, v) -> None:
+        b = self.b
+        if t == 0x12:
+            if v is None:
+                b += b"\0\0\0\0"
+                return
+            at = len(b)
+            b += b"\0\0\0\0"
+            self.klass(*v)
+            self.values(v[1])
+            b[at:at + 4] = struct.pack("<I", len(b))
+        elif t == 0x13:
+            b += struct.pack("<I", len(v))
+            for o in v:
+                self.typed(0x12, o)
+        elif t == 0x11:
+            b += struct.pack("<I", len(v))
+            if v:
+                self.klass(*v[0])
+                for o in v:
+                    self.values(o[1])
+        elif t == 0x10:
+            self.string(v)
+        elif t == 0x0A:
+            b.append(0xFF if v else 0)
+        else:
+            b += struct.pack({0x01: "<f", 0x09: "<i", 0x0c: "<Q", 0x16: "<2Q"}[t], *(v if isinstance(v, list) else [v]))
+
+    def root(self, obj) -> bytes:
+        self.b += struct.pack("<II", 0x12, 0)
+        self.typed(0x12, obj)
+        return bytes(self.b)
+
+
 def qt_image(pixels: np.ndarray, fmt: str = "LUM8") -> bytes:
     """An image record: the header map, then the LZ4 block."""
     import lz4.block
@@ -106,6 +168,33 @@ def qt_image(pixels: np.ndarray, fmt: str = "LUM8") -> bytes:
         out += key(k) + struct.pack(">IB", t, 0)
         out += struct.pack(">I", v) if t == 3 else key(v)
     return out + block
+
+
+def jp2_image(pixels: np.ndarray, fmt: str, tile: int, drop_alpha=()) -> bytes:
+    """A JPEG 2000 image record (newer projects): the header map, then per tile its rectangle, size and a zero, and
+    a lossless JP2 file padded to 8 bytes; the tiles listed in `drop_alpha` are written without their alpha."""
+    import imagecodecs
+    h, w, _ = pixels.shape
+
+    def key(k):
+        e = k.encode("utf-16-be")
+        return struct.pack(">I", len(e)) + e
+    rects = [(x, y) for y in range(0, h, tile) for x in range(0, w, tile)]
+    entries = [("width", 3, w), ("height", 3, h), ("format", 10, fmt), ("compression", 10, "jp2"),
+               ("tilesCount", 3, len(rects))]
+    out = struct.pack(">I", len(entries))
+    for k, t, v in entries:
+        out += key(k) + struct.pack(">IB", t, 0)
+        out += struct.pack(">I", v) if t == 3 else key(v)
+    for i, (x, y) in enumerate(reversed(rects)):  # in any order: each tile says where it goes
+        part = pixels[y:y + tile, x:x + tile]
+        if i in drop_alpha:
+            part = part[..., :3]
+        blob = imagecodecs.jpeg2k_encode(np.ascontiguousarray(part.squeeze(-1) if part.shape[2] == 1 else part),
+                                         level=0, codecformat="JP2")
+        out += struct.pack("<6I", x, y, x + part.shape[1], y + part.shape[0], len(blob), 0)
+        out += blob + b"\0" * (-len(blob) % 8)
+    return out
 
 
 def scene_bytes(pos, nrm, uv, tri, uid: int, center=(0.0, 0.0, 0.0), radius=1.0) -> bytes:
@@ -220,6 +309,38 @@ class TestFormats(unittest.TestCase):
         with self.assertRaises(document.DocumentError):
             document.parse(bytes(data))
 
+    def test_document_version_1(self):
+        src = ("DataSourceUniform", {"opacity": (0x01, 0.5)})
+        items = [("Item", {"x": (0x09, 2), "on": (0x0A, True)}), ("Item", {"x": (0x09, 3), "on": (0x0A, False)})]
+        root = ("Root", {"label": (0x10, "text"), "none": (0x12, None), "uid": (0x0c, 7),
+                         "channelTypes": (0x16, [1 << 27, 5]), "items": (0x11, items),
+                         "actions": (0x13, [("Action", {"sourceTransparent": (0x12, src), "x": (0x09, 4)})]),
+                         "again": (0x13, [("Item", {"x": (0x09, 9), "on": (0x0A, True)})])})
+        got = document.parse(DocV1().root(root))
+        self.assertEqual((got["@"], got["label"], got["none"], got["uid"]), ("Root", "text", None, 7))
+        self.assertEqual(got["channelTypes"], 1 << 27)  # version 0's 64 bits
+        self.assertEqual([(i["x"], i["on"]) for i in got["items"]], [(2, True), (3, False)])
+        self.assertEqual(got["again"][0]["x"], 9)  # a class declared before, by its index
+        action = got["actions"][0]
+        self.assertEqual(action["sourceTransparent"][0]["opacity"], 0.5)  # a list, as in version 0
+
+    def test_document_version_1_channel_bits(self):
+        channels = [("DataChannel", {"type": (0x09, 13)}), ("DataChannel", {"type": (0x09, 0)})]
+        inputs = [("DataProceduralInput", {"channelType": (0x09, -1)}), ("DataProceduralInput", {"channelType": (0x09, 24)})]
+        got = document.parse(DocV1().root(("Root", {"channels": (0x11, channels), "inputs": (0x11, inputs)})))
+        self.assertEqual([c["type"] for c in got["channels"]], [1 << 13, 1])  # version 0's bits
+        self.assertEqual([i["channelType"] for i in got["inputs"]], [0, 1 << 24])  # -1: none
+
+    def test_document_version_1_checks_its_end_offsets(self):
+        data = bytearray(DocV1().root(("Root", {"x": (0x09, 1)})))
+        data[document.HEADER + 8] += 1  # the root's end offset
+        with self.assertRaises(document.DocumentError):
+            document.parse(bytes(data))
+
+    def test_document_unknown_version(self):
+        with self.assertRaisesRegex(document.DocumentError, "version 7"):
+            document.parse(struct.pack("<III", 0x1B7C2FDD, 7, 0) + b"\0" * 8)
+
     def test_image_record(self):
         px = (np.arange(16 * 8, dtype=np.uint8).reshape(8, 16, 1) * 2)
         a, head = decode_image(qt_image(px))
@@ -229,6 +350,17 @@ class TestFormats(unittest.TestCase):
         bgra[..., 0], bgra[..., 2], bgra[..., 3] = 10, 200, 255  # blue, red
         a, _ = decode_image(qt_image(bgra, "BGRA8"))
         np.testing.assert_allclose(a[0, 0], [200 / 255, 0, 10 / 255, 1.0])
+
+    def test_jp2_image_record(self):
+        rng = np.random.default_rng(3)
+        gray = rng.integers(0, 65535, (16, 24, 1), dtype=np.uint16)
+        a, _ = decode_image(jp2_image(gray, "LUM16", 8))
+        np.testing.assert_array_equal(np.round(a * 65535).astype(np.uint16), gray)  # lossless, 16 bits
+        rgba = rng.integers(0, 65535, (16, 16, 4), dtype=np.uint16)
+        a, _ = decode_image(jp2_image(rgba, "RGBA16", 8, drop_alpha=(0,)))
+        want = rgba.astype(np.float32) / 65535
+        want[8:, 8:, 3] = 1.0  # the first tile written (the last one) came without alpha: opaque
+        np.testing.assert_allclose(a, want, atol=1e-6)
 
     def test_tile_list(self):
         names = {1001: "a" * 40 + ".image", 1012: "b" * 40 + ".image"}

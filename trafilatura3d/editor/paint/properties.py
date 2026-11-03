@@ -26,7 +26,7 @@ from shiboken6 import isValid
 from trafilatura3d.editor import theme
 from trafilatura3d.editor.paint.widgets import ChannelButtons, PressureButton, PSlider, Swatch, header
 from trafilatura3d.editor.widgets import HISTOGRAM_GRAY, HISTOGRAM_RGB, LevelsEditor
-from trafilatura3d.paint.brush import (ALIGNMENTS, ALPHAS, DEFAULT_ALPHA, PROJECTION_MODES, SIZE_SPACES, TILING_MODES,
+from trafilatura3d.paint.brush import (ALIGNMENTS, DEFAULT_ALPHA, PROJECTION_MODES, SIZE_SPACES, TILING_MODES,
                                    BrushSettings, ProjectionSettings)
 from trafilatura3d.paint.channels import CHANNELS, FORMATS, is_gray
 from trafilatura3d.nodes.base import Param, ParamKind, PortType
@@ -134,7 +134,8 @@ def _color_field(title: str):
 
 
 def alpha_icon(name: str, size: int = 48) -> QIcon:
-    a = np.clip(ALPHAS[name](size), 0, 1)
+    from trafilatura3d.paint import alpha_library
+    a = alpha_library.image(name, size)
     g = np.ascontiguousarray((a * 255).astype(np.uint8))
     img = QImage(g.data, size, size, size, QImage.Format_Grayscale8).copy()
     return QIcon(QPixmap.fromImage(img))
@@ -476,16 +477,40 @@ class PropertiesPanel(QScrollArea):
 
     def alpha_picker(self, current: str, pick):
         """The Alpha section: the current alpha's slot, the alphas and the project's textures (their luminance)
-        from its picker or dragged from the Assets; `pick(name)`."""
+        from its picker or dragged from the Assets; `pick(name)`. A library alpha shows its graph's parameters
+        (Hardness, Shape, Invert...), their values kept in its reference."""
         from trafilatura3d.editor.paint.assets import ResourceSlot
+        from trafilatura3d.paint import alpha_library as lib
         self.lay.addWidget(header("Alpha"))
         if current.startswith(TEXTURE_ALPHA):
             asset = {"kind": "texture", "name": current[len(TEXTURE_ALPHA):]}
         else:
-            asset = {"kind": "alpha", "name": current if current in ALPHAS else DEFAULT_ALPHA}
+            asset = {"kind": "alpha", "name": current if lib.exists(current) else DEFAULT_ALPHA}
         self.lay.addWidget(ResourceSlot(
             self.ws.assets, ("alpha", "texture"),
             lambda a: pick(a["name"] if a["kind"] == "alpha" else TEXTURE_ALPHA + a["name"]), asset, asset["name"]))
+        ref = asset["name"]
+        if asset["kind"] != "alpha" or not ref.startswith(lib.LIBRARY):
+            return
+        category, graph, values = lib.split(ref)
+
+        def edit(pid, v, final):
+            values[pid] = v
+            if final:  # after the event: picking rebuilds the panel, the slider or box sending it included
+                QTimer.singleShot(0, lambda ref=lib.join(category, graph, values): pick(ref))
+        for p in lib.parameters(ref):
+            value = values.get(p.id, p.param.default)
+            if p.param.kind is ParamKind.BOOL:
+                box = QCheckBox(p.param.label)
+                box.setChecked(bool(value))
+                box.toggled.connect(lambda on, pid=p.id: edit(pid, 1.0 if on else 0.0, True))
+                self.lay.addWidget(box)
+            elif p.param.kind is ParamKind.FLOAT:
+                lo = p.param.min if p.param.min is not None else 0.0
+                hi = p.param.max if p.param.max is not None else 1.0
+                sl = PSlider(p.param.label, float(value), lo, hi)
+                sl.edited.connect(lambda v, final, pid=p.id: edit(pid, v, final))
+                self.lay.addWidget(sl)
 
     def _stencil(self, st):
         """Stencil (Paint page): a grayscale resource masking the stroke from the viewport, its Tiling Mode; S + left

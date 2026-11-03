@@ -83,9 +83,29 @@ def image_header(data: bytes) -> dict:
     return _qmap(data)[0]
 
 
+def _jp2_tiles(data: bytes, o: int, count: int, h: int, w: int, comps: int, dtype) -> np.ndarray:
+    """The pixels of a JPEG 2000 record (newer projects, lossless): after the header, per tile its rectangle (4 x
+    uint32: x0, y0, x1, y1), its size and a zero (uint32), then a JP2 file padded to 8 bytes. A tile with one
+    component less than the image has no alpha: opaque."""
+    import imagecodecs
+    a = np.zeros((h, w, comps), dtype)
+    if comps == 4:
+        a[..., 3] = np.iinfo(dtype).max if np.dtype(dtype).kind == "u" else 1
+    for _ in range(count):
+        x0, y0, x1, y1, n, _zero = struct.unpack_from("<6I", data, o)
+        o += 24
+        tile = imagecodecs.jpeg2k_decode(data[o:o + n])
+        o += (n + 7) // 8 * 8
+        tile = tile.reshape(tile.shape[0], tile.shape[1], -1)
+        if (tile.shape[0], tile.shape[1]) != (y1 - y0, x1 - x0) or tile.shape[2] > comps:
+            raise ContainerError(f"JPEG 2000 tile {x0},{y0}: {tile.shape}, its rectangle says {x1 - x0}x{y1 - y0}")
+        a[y0:y1, x0:x1, :tile.shape[2]] = tile
+    return a
+
+
 def decode_image(data: bytes) -> tuple[np.ndarray, dict]:
-    """(pixels (H, W, C), rows from the top, RGBA order; the header) of an image record. 8 and 16-bit integers become
-    float32 0-1, half floats stay half."""
+    """(pixels (H, W, C), rows from the top, RGBA order; the header) of an image record: raw, lz4 or JPEG 2000
+    tiles (`_jp2_tiles`). 8 and 16-bit integers become float32 0-1, half floats stay half."""
     import lz4.block
     head, o = _qmap(data)
     w, h = int(head["width"]), int(head["height"])
@@ -107,17 +127,20 @@ def decode_image(data: bytes) -> tuple[np.ndarray, dict]:
     row = w * comps * np.dtype(dtype).itemsize
     pitch = int(head.get("pitch") or row)
     size = int(head.get("bufferSize") or head.get("dataSizeRaw") or h * pitch)
-    if head.get("compression") == "lz4":
-        if "dataSizeLZ4" in head:  # the block follows the header
-            n = int(head["dataSizeLZ4"])
-        else:  # the block's size first
-            n, = struct.unpack_from(">I", data, o)
-            o += 4
-        raw = lz4.block.decompress(data[o:o + n], uncompressed_size=size)
+    if head.get("compression") == "jp2":
+        a = _jp2_tiles(data, o, int(head["tilesCount"]), h, w, comps, dtype)
     else:
-        raw = data[o:o + size]
-    rows = np.frombuffer(raw, np.uint8, h * pitch).reshape(h, pitch)[:, :row]
-    a = np.ascontiguousarray(rows).view(dtype).reshape(h, w, comps)
+        if head.get("compression") == "lz4":
+            if "dataSizeLZ4" in head:  # the block follows the header
+                n = int(head["dataSizeLZ4"])
+            else:  # the block's size first
+                n, = struct.unpack_from(">I", data, o)
+                o += 4
+            raw = lz4.block.decompress(data[o:o + n], uncompressed_size=size)
+        else:
+            raw = data[o:o + size]
+        rows = np.frombuffer(raw, np.uint8, h * pitch).reshape(h, pitch)[:, :row]
+        a = np.ascontiguousarray(rows).view(dtype).reshape(h, w, comps)
     if bgr:
         a = a[..., [2, 1, 0, 3]]
     if dtype == np.uint8:

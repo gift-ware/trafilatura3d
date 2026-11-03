@@ -38,6 +38,13 @@ file does not store parameters left at their default). It contains identifiers a
 descriptions or other content of Adobe, and exists so that imported files open and look the same without Designer
 installed.
 
+The brush alphas of `trafilatura3d/paint/alpha_graphs/` are graphs of our own nodes, named by us. They were drawn by
+comparing their visible output with the alphas a `.spp` project can name (rendered from the user's installation),
+never by reading, tracing or copying those files. `reference/paint/alphas.json` lists those alphas by identifier and
+category, from the file listing of the Painter alpha library (no content); `trafilatura3d/spp/alphas.json` is the
+importer's correspondence table from each identifier to our graph, so that a project's strokes are replayed with
+our alpha and the project's parameter values. Both contain identifiers only.
+
 A few functions of the function library (`trafilatura3d/functions.py`) must give exactly the results that imported
 graphs expect, because those graphs call them by name and read what they compute: the non-square output size
 functions (both versions) and the tile count function, which set the variables a noise reads (scale per axis, size

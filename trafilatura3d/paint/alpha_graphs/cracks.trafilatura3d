@@ -1,0 +1,587 @@
+{
+  "trafilatura3d": 2,
+  "graphs": {
+    "crack_shards": {
+      "label": "Crack shards",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.004
+              ],
+              [
+                0.0883,
+                0.4
+              ],
+              [
+                0.3291,
+                0.5
+              ],
+              [
+                0.4265,
+                0.72
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "base",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            0.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            0.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "id": "base",
+          "type": "crystal_facets_legacy",
+          "position": [
+            -576.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    "crack_hide": {
+      "label": "Crack hide",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "cells",
+          "type": "voronoi",
+          "params": {
+            "scale": 20.0,
+            "style": "F2-F1"
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "grain",
+          "type": "bnw_noise_rough",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.45
+          },
+          "inputs": {
+            "foreground": [
+              "grain",
+              "output"
+            ],
+            "background": [
+              "cells",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.5824,
+                0.0
+              ],
+              [
+                0.5827,
+                0.004
+              ],
+              [
+                0.6189,
+                0.1
+              ],
+              [
+                0.6519,
+                0.5
+              ],
+              [
+                0.7074,
+                0.72
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "crack_web_core": {
+      "label": "Crack web core",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gen1",
+          "type": "voronoi",
+          "params": {
+            "scale": 9.0,
+            "style": "F2-F1"
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            0.0
+          ]
+        },
+        {
+          "id": "curve2",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.97,
+                0.0
+              ],
+              [
+                0.985,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen1",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "holes3",
+          "type": "tile_sampler",
+          "params": {
+            "x_amount": 12,
+            "y_amount": 12,
+            "pattern": "Disc",
+            "scale": 0.8,
+            "scale_random": 0.3,
+            "position_random": 1.0,
+            "mask_random": 0.35
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            160.0
+          ]
+        },
+        {
+          "id": "curve4",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.15
+              ],
+              [
+                1.0,
+                0.0
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "holes3",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix5",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Max",
+            "opacity": 1.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "curve2",
+              "output"
+            ],
+            "background": [
+              "curve4",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values6",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                1.0
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix5",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape7",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values6",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape7",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    }
+  }
+}

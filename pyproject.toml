@@ -21,6 +21,7 @@ dependencies = [
     "usd-core==26.8",  # USD meshes and scenes (Pixar)
     "h5py==3.16.0",  # .spp project containers (HDF5)
     "lz4==4.4.5",  # the images inside .spp projects
+    "imagecodecs==2026.10.10",  # the JPEG 2000 images of newer .spp projects (16 bits a component)
 ]
 
 [project.optional-dependencies]
@@ -49,6 +50,6 @@ version = {attr = "trafilatura3d.__version__"}
 include = ["trafilatura3d*"]
 
 [tool.setuptools.package-data]
-"*" = ["*.wgsl", "*.png", "*.json"]  # json: the importer's tables, the nodes' depths
+"*" = ["*.wgsl", "*.png", "*.json", "*.trafilatura3d"]  # json: the importer's tables, the nodes' depths; packages: the brush alphas
 "trafilatura3d.native" = ["*.c", "*/*.dylib", "*/*.so", "*/*.dll", "*/*.txt"]  # ufbx (tools/build_ufbx.py)
 "trafilatura3d.editor" = ["fonts/*.ttf", "fonts/*.txt"]  # the UI font (Inter)

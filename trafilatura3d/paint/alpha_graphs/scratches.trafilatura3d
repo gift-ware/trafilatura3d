@@ -1,0 +1,1544 @@
+{
+  "trafilatura3d": 2,
+  "graphs": {
+    "scuff_grain_vertical": {
+      "label": "Scuff grain vertical",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gen1",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            0.0
+          ]
+        },
+        {
+          "id": "stretch2",
+          "type": "transformation_2d",
+          "params": {
+            "transformation_matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.04167
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen1",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "gen3",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                -1,
+                -1
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            160.0
+          ]
+        },
+        {
+          "id": "stretch4",
+          "type": "transformation_2d",
+          "params": {
+            "transformation_matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.03125
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen3",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix5",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Copy",
+            "opacity": 0.5
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "stretch2",
+              "output"
+            ],
+            "background": [
+              "stretch4",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values6",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.3115,
+                0.3137
+              ],
+              [
+                0.3882,
+                0.4384
+              ],
+              [
+                0.4451,
+                0.5196
+              ],
+              [
+                0.4958,
+                0.5978
+              ],
+              [
+                0.5488,
+                0.6769
+              ],
+              [
+                0.6055,
+                0.7631
+              ],
+              [
+                0.6782,
+                0.874
+              ],
+              [
+                1.0,
+                1.0
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix5",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape7",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Levels, then falloff",
+            "threshold": false
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values6",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape7",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "scuff_tufts": {
+      "label": "Scuff tufts",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base0",
+          "type": "fur_straight_legacy",
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "base1",
+          "type": "wood_fibers_light_legacy",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.5
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "base1",
+              "output"
+            ],
+            "background": [
+              "base0",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.223,
+                0.0
+              ],
+              [
+                0.225,
+                0.004
+              ],
+              [
+                0.3809,
+                0.1
+              ],
+              [
+                0.521,
+                0.5
+              ],
+              [
+                0.5974,
+                0.72
+              ],
+              [
+                0.9319,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "scuff_blades": {
+      "label": "Scuff blades",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gen1",
+          "type": "scratches_generator",
+          "params": {
+            "spline_number": 8,
+            "max_segments_per_spline": 8,
+            "spline_rotation": 0.27,
+            "spline_rotation_random": 0.3,
+            "spline_scale": 0.75,
+            "spline_scale_random": 0.25,
+            "spline_distortion": 0.03,
+            "spline_width": 40.0,
+            "spline_width_random": 0.4,
+            "luminance_random": 0.0,
+            "fade_mode": "Start + End",
+            "fade_length": 0.45,
+            "normal_format": "DirectX"
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mask2",
+          "type": "shape",
+          "params": {
+            "pattern": "Paraboloid",
+            "scale": 1.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            0.0
+          ]
+        },
+        {
+          "id": "curve3",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.045000000000000005,
+                0.0
+              ],
+              [
+                0.055,
+                1.0
+              ],
+              [
+                1.0,
+                1.0
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mask2",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "mix4",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Multiply",
+            "opacity": 1.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "curve3",
+              "output"
+            ],
+            "background": [
+              "gen1",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values5",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.0001,
+                0.0
+              ],
+              [
+                0.0002,
+                0.004
+              ],
+              [
+                0.0003,
+                0.1
+              ],
+              [
+                0.3213,
+                0.5
+              ],
+              [
+                0.6035,
+                0.72
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix4",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape6",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true,
+            "shape": 0.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values5",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape6",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "scuff_patchy": {
+      "label": "Scuff patchy",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base0",
+          "type": "wood_fibers_light_legacy",
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "base1",
+          "type": "fractal_sum_base",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.5
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "base1",
+              "output"
+            ],
+            "background": [
+              "base0",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.5424,
+                0.0
+              ],
+              [
+                0.5425,
+                0.004
+              ],
+              [
+                0.5627,
+                0.1
+              ],
+              [
+                0.5858,
+                0.5
+              ],
+              [
+                0.6069,
+                0.72
+              ],
+              [
+                0.7388,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "scuff_hairlines": {
+      "label": "Scuff hairlines",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gen1",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                -1,
+                -1
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            0.0
+          ]
+        },
+        {
+          "id": "stretch2",
+          "type": "transformation_2d",
+          "params": {
+            "transformation_matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.02083
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen1",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "gen3",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            160.0
+          ]
+        },
+        {
+          "id": "stretch4",
+          "type": "transformation_2d",
+          "params": {
+            "transformation_matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.01562
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen3",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix5",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Copy",
+            "opacity": 0.5
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "stretch2",
+              "output"
+            ],
+            "background": [
+              "stretch4",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values6",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.647,
+                0.0
+              ],
+              [
+                0.6471,
+                0.004
+              ],
+              [
+                0.6685,
+                0.1
+              ],
+              [
+                0.6938,
+                0.5
+              ],
+              [
+                0.7446,
+                0.72
+              ],
+              [
+                0.9585,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix5",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape7",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values6",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape7",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "bars_worn_oval": {
+      "label": "Bars worn oval",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gen1",
+          "type": "stripes",
+          "params": {
+            "stripes": 8,
+            "width": 0.55,
+            "softness": 0.4,
+            "shift": 0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -1152.0,
+            176.0
+          ]
+        },
+        {
+          "id": "gen2",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                -1,
+                -1
+              ]
+            }
+          },
+          "position": [
+            -1152.0,
+            336.0
+          ]
+        },
+        {
+          "id": "warp3",
+          "type": "directional_warp",
+          "params": {
+            "intensity": 6.0,
+            "warp_angle": 0.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "gen1",
+              "output"
+            ],
+            "intensity_input": [
+              "gen2",
+              "output"
+            ]
+          },
+          "position": [
+            -960.0,
+            240.0
+          ]
+        },
+        {
+          "id": "gen4",
+          "type": "white_noise",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -960.0,
+            80.0
+          ]
+        },
+        {
+          "id": "mask5",
+          "type": "shape",
+          "params": {
+            "pattern": "Paraboloid",
+            "scale": 1.05,
+            "size": [
+              0.8,
+              1.0
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "mix6",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Copy",
+            "opacity": 0.2
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "gen4",
+              "output"
+            ],
+            "background": [
+              "warp3",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix7",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Multiply",
+            "opacity": 1.0
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "foreground": [
+              "mask5",
+              "output"
+            ],
+            "background": [
+              "mix6",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values8",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.1451,
+                0.0
+              ],
+              [
+                0.146,
+                0.004
+              ],
+              [
+                0.1611,
+                0.48
+              ],
+              [
+                0.1783,
+                0.5
+              ],
+              [
+                0.4531,
+                0.72
+              ],
+              [
+                0.9829,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "mix7",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            64.0
+          ]
+        },
+        {
+          "id": "shape9",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values8",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "invert": "invert",
+            "shape": "shape"
+          },
+          "position": [
+            -192.0,
+            64.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape9",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            64.0
+          ]
+        }
+      ]
+    }
+  }
+}

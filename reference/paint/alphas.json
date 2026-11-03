@@ -1,0 +1,2573 @@
+{
+ "source": "identifiers and categories of the brush alphas a .spp project can name (see PROVENANCE.md)",
+ "items": [
+  {
+   "id": "painter.alpha.shape_bell",
+   "name": "shape_bell",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_bell_half",
+   "name": "shape_bell_half",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_bell_ridged",
+   "name": "shape_bell_ridged",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_border_circle",
+   "name": "shape_border_circle",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_border_cross",
+   "name": "shape_border_cross",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_border_square",
+   "name": "shape_border_square",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_border_triangle",
+   "name": "shape_border_triangle",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_brick",
+   "name": "shape_brick",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_capsule",
+   "name": "shape_capsule",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_circle_squeeze",
+   "name": "shape_circle_squeeze",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_cone",
+   "name": "shape_cone",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_crescent",
+   "name": "shape_crescent",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_dots",
+   "name": "shape_dots",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_gradient",
+   "name": "shape_gradient",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_lines_bending",
+   "name": "shape_lines_bending",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_paraboloid",
+   "name": "shape_paraboloid",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_pyramid",
+   "name": "shape_pyramid",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_sharp_line",
+   "name": "shape_sharp_line",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_square_squeeze",
+   "name": "shape_square_squeeze",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_star",
+   "name": "shape_star",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_thorn",
+   "name": "shape_thorn",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_v2",
+   "name": "shape_v2",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_wave",
+   "name": "shape_wave",
+   "category": "basic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_circular_partial",
+   "name": "brush_circular_partial",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_circular_partial_large",
+   "name": "brush_circular_partial_large",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_corner",
+   "name": "brush_corner",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_corner_large",
+   "name": "brush_corner_large",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_dirty_vertical",
+   "name": "brush_dirty_vertical",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_gouache",
+   "name": "brush_gouache",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_long_stroke",
+   "name": "brush_long_stroke",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_maker",
+   "name": "brush_maker",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_circular",
+   "name": "brush_paint_circular",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_circular_drop",
+   "name": "brush_paint_circular_drop",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_circular_irregular",
+   "name": "brush_paint_circular_irregular",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_diagonal",
+   "name": "brush_paint_diagonal",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_diagonal_grungy",
+   "name": "brush_paint_diagonal_grungy",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_diagonal_long",
+   "name": "brush_paint_diagonal_long",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_fluid",
+   "name": "brush_paint_fluid",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_grungy",
+   "name": "brush_paint_grungy",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_grungy_line",
+   "name": "brush_paint_grungy_line",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_irregular",
+   "name": "brush_paint_irregular",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_line_cloudy",
+   "name": "brush_paint_line_cloudy",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_line_drop",
+   "name": "brush_paint_line_drop",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_line_erased",
+   "name": "brush_paint_line_erased",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_partial",
+   "name": "brush_paint_partial",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_rotated",
+   "name": "brush_paint_rotated",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_small",
+   "name": "brush_paint_small",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_thin",
+   "name": "brush_paint_thin",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paint_vertical",
+   "name": "brush_paint_vertical",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_dirty",
+   "name": "brush_paper_dirty",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_dirty_cloud",
+   "name": "brush_paper_dirty_cloud",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_dirty_drop",
+   "name": "brush_paper_dirty_drop",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_dirty_small",
+   "name": "brush_paper_dirty_small",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_grainy",
+   "name": "brush_paper_grainy",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_heavy",
+   "name": "brush_paper_heavy",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_paper_smooth",
+   "name": "brush_paper_smooth",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_pastel",
+   "name": "brush_pastel",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_pastel_spread",
+   "name": "brush_pastel_spread",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_smudge",
+   "name": "brush_smudge",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_sponge_arc",
+   "name": "brush_sponge_arc",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_sponge_dense",
+   "name": "brush_sponge_dense",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_sponge_erased",
+   "name": "brush_sponge_erased",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_sponge_hollow",
+   "name": "brush_sponge_hollow",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_sponge_warped_border",
+   "name": "brush_sponge_warped_border",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_wave",
+   "name": "brush_wave",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_wood_stroke",
+   "name": "brush_wood_stroke",
+   "category": "brush",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_branch",
+   "name": "celtic_branch",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_circle_crossed_corners",
+   "name": "celtic_circle_crossed_corners",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_cross",
+   "name": "celtic_cross",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_cross_butterfly",
+   "name": "celtic_cross_butterfly",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_cross_circle",
+   "name": "celtic_cross_circle",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_cross_round",
+   "name": "celtic_cross_round",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_cross_split",
+   "name": "celtic_cross_split",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_round_square",
+   "name": "celtic_round_square",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_square_crossed_corners",
+   "name": "celtic_square_crossed_corners",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.celtic_wave",
+   "name": "celtic_wave",
+   "category": "celtic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fibers_square",
+   "name": "fibers_square",
+   "category": "clothing",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fold",
+   "name": "fold",
+   "category": "clothing",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stitch_generator",
+   "name": "stitch_generator",
+   "category": "clothing",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.zipper",
+   "name": "zipper",
+   "category": "clothing",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cracks_cells",
+   "name": "cracks_cells",
+   "category": "cracks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cracks_crystal",
+   "name": "cracks_crystal",
+   "category": "cracks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cracks_leather",
+   "name": "cracks_leather",
+   "category": "cracks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_blurry_dense",
+   "name": "dirt_blurry_dense",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_brushed",
+   "name": "dirt_brushed",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_cloudy",
+   "name": "dirt_cloudy",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_smudge",
+   "name": "dirt_smudge",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_spots",
+   "name": "dirt_spots",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_spots_dense_small",
+   "name": "dirt_spots_dense_small",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_spots_hollow",
+   "name": "dirt_spots_hollow",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dirt_stain_large",
+   "name": "dirt_stain_large",
+   "category": "dirt",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_maker_dynamic",
+   "name": "brush_maker_dynamic",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_maker_paint_roller",
+   "name": "brush_maker_paint_roller",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.brush_maker_photoshop",
+   "name": "brush_maker_photoshop",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cracks_directional",
+   "name": "cracks_directional",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cracks_stamp",
+   "name": "cracks_stamp",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.custom_ribbon_grayscale",
+   "name": "custom_ribbon_grayscale",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.ornament_leaf",
+   "name": "ornament_leaf",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.pen_marker",
+   "name": "pen_marker",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_inky",
+   "name": "shape_inky",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_offset",
+   "name": "shape_offset",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shut_line_shape_alpha",
+   "name": "shut_line_shape_alpha",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stitches_roller",
+   "name": "stitches_roller",
+   "category": "dynamic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_hand_bloody",
+   "name": "fingerprint_hand_bloody",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_hand_dirty",
+   "name": "fingerprint_hand_dirty",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_hand_drop",
+   "name": "fingerprint_hand_drop",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_hand_flowing",
+   "name": "fingerprint_hand_flowing",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_hand_top",
+   "name": "fingerprint_hand_top",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_index",
+   "name": "fingerprint_index",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_index_flowing",
+   "name": "fingerprint_index_flowing",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_little",
+   "name": "fingerprint_little",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_middle",
+   "name": "fingerprint_middle",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_multiple",
+   "name": "fingerprint_multiple",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_ring",
+   "name": "fingerprint_ring",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_thumb",
+   "name": "fingerprint_thumb",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_thumb_flowing",
+   "name": "fingerprint_thumb_flowing",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint_thumb_partial",
+   "name": "fingerprint_thumb_partial",
+   "category": "fingerprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.footprint_erased",
+   "name": "footprint_erased",
+   "category": "footprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.footprint_paint",
+   "name": "footprint_paint",
+   "category": "footprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.footprint_partial",
+   "name": "footprint_partial",
+   "category": "footprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.footprint_soaked",
+   "name": "footprint_soaked",
+   "category": "footprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_band",
+   "name": "arrow_band",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_bend_split",
+   "name": "arrow_bend_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_bent",
+   "name": "arrow_bent",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_border_cut",
+   "name": "arrow_border_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_circle",
+   "name": "arrow_circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_double",
+   "name": "arrow_double",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_fire",
+   "name": "arrow_fire",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_flat",
+   "name": "arrow_flat",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_head_cut",
+   "name": "arrow_head_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_head_smooth",
+   "name": "arrow_head_smooth",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_inset_border",
+   "name": "arrow_inset_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_long",
+   "name": "arrow_long",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_loop",
+   "name": "arrow_loop",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_negative",
+   "name": "arrow_negative",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_rotation",
+   "name": "arrow_rotation",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_rounded",
+   "name": "arrow_rounded",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_simple",
+   "name": "arrow_simple",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_simple_multiple",
+   "name": "arrow_simple_multiple",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_simple_opposed",
+   "name": "arrow_simple_opposed",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_simple_split",
+   "name": "arrow_simple_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_simple_stripes",
+   "name": "arrow_simple_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.arrow_target",
+   "name": "arrow_target",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.bracket",
+   "name": "bracket",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.bracket_bent",
+   "name": "bracket_bent",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.checker_circle",
+   "name": "checker_circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle",
+   "name": "circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_branch",
+   "name": "circle_branch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_cog",
+   "name": "circle_cog",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_crosshair",
+   "name": "circle_crosshair",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_dots",
+   "name": "circle_dots",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_dots_lines",
+   "name": "circle_dots_lines",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_double",
+   "name": "circle_double",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_empty_square",
+   "name": "circle_empty_square",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_gear",
+   "name": "circle_gear",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_graduation",
+   "name": "circle_graduation",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_inverted_gradient",
+   "name": "circle_inverted_gradient",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_overlap",
+   "name": "circle_overlap",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_partial",
+   "name": "circle_partial",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_plus",
+   "name": "circle_plus",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_slit",
+   "name": "circle_slit",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_split",
+   "name": "circle_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_split_rounded",
+   "name": "circle_split_rounded",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_square_border",
+   "name": "circle_square_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circle_square_plain",
+   "name": "circle_square_plain",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_spiral",
+   "name": "circular_spiral",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_spiral_dense",
+   "name": "circular_spiral_dense",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_spiral_double",
+   "name": "circular_spiral_double",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_spiral_fade",
+   "name": "circular_spiral_fade",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_spiral_fermat",
+   "name": "circular_spiral_fermat",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_stick",
+   "name": "circular_stick",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.circular_triangle",
+   "name": "circular_triangle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_blocky",
+   "name": "cross_blocky",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_corner",
+   "name": "cross_corner",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_forbidden_full",
+   "name": "cross_forbidden_full",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_half",
+   "name": "cross_half",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_rectangle",
+   "name": "cross_rectangle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_rounded",
+   "name": "cross_rounded",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_split",
+   "name": "cross_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_thin",
+   "name": "cross_thin",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.dots_circular",
+   "name": "dots_circular",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower_stylized",
+   "name": "flower_stylized",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_border",
+   "name": "hexagon_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_border_corner",
+   "name": "hexagon_border_corner",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_border_double",
+   "name": "hexagon_border_double",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_branch",
+   "name": "hexagon_branch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_crosshair",
+   "name": "hexagon_crosshair",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_dots_corner",
+   "name": "hexagon_dots_corner",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_half_arrow",
+   "name": "hexagon_half_arrow",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_pyramid_split",
+   "name": "hexagon_pyramid_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_round_cut",
+   "name": "hexagon_round_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_split",
+   "name": "hexagon_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_star",
+   "name": "hexagon_star",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_stretch",
+   "name": "hexagon_stretch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_stripes",
+   "name": "hexagon_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_tri_branch",
+   "name": "hexagon_tri_branch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.hexagon_triple",
+   "name": "hexagon_triple",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.iris",
+   "name": "iris",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lightning",
+   "name": "lightning",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_dashed",
+   "name": "line_dashed",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_dashed_diagonal",
+   "name": "line_dashed_diagonal",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_double_angle",
+   "name": "line_double_angle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_notch",
+   "name": "line_notch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_oblong",
+   "name": "line_oblong",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_stripes",
+   "name": "line_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_stripes_mirror",
+   "name": "line_stripes_mirror",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_wave",
+   "name": "line_wave",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.line_zigzag",
+   "name": "line_zigzag",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lines_wave",
+   "name": "lines_wave",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.pyramid_double_block",
+   "name": "pyramid_double_block",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.pyramid_stripes",
+   "name": "pyramid_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.rectangle_band_stripes",
+   "name": "rectangle_band_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.rectangle_dots",
+   "name": "rectangle_dots",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.rectangle_half_rounded",
+   "name": "rectangle_half_rounded",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.round_checker",
+   "name": "round_checker",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.ruler_circle",
+   "name": "ruler_circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.shape_t_line",
+   "name": "shape_t_line",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_band",
+   "name": "square_band",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_border_corner_cut",
+   "name": "square_border_corner_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_border_split",
+   "name": "square_border_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_dashed",
+   "name": "square_dashed",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_dots",
+   "name": "square_dots",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_line_overlap",
+   "name": "square_line_overlap",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_rectangle",
+   "name": "square_rectangle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_round_border",
+   "name": "square_round_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_round_empty_line",
+   "name": "square_round_empty_line",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_rounded_split",
+   "name": "square_rounded_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_stripes",
+   "name": "square_stripes",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_to_circle",
+   "name": "square_to_circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_triangle",
+   "name": "square_triangle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.square_vent",
+   "name": "square_vent",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_border",
+   "name": "star_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_broken_ring",
+   "name": "star_broken_ring",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_chevron",
+   "name": "star_chevron",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_five_branch",
+   "name": "star_five_branch",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_square_overlap",
+   "name": "star_square_overlap",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_sun",
+   "name": "star_sun",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.star_within_star",
+   "name": "star_within_star",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle",
+   "name": "triangle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_border_band",
+   "name": "triangle_border_band",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_border_cut",
+   "name": "triangle_border_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_border_dot",
+   "name": "triangle_border_dot",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_circular",
+   "name": "triangle_circular",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_crossed",
+   "name": "triangle_crossed",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_cut",
+   "name": "triangle_cut",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_cut_border",
+   "name": "triangle_cut_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_double_overlap",
+   "name": "triangle_double_overlap",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_double_overlap_small",
+   "name": "triangle_double_overlap_small",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_infinite",
+   "name": "triangle_infinite",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_linear_gradient",
+   "name": "triangle_linear_gradient",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_pyramid",
+   "name": "triangle_pyramid",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_rounded",
+   "name": "triangle_rounded",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_rounded_circle",
+   "name": "triangle_rounded_circle",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_row",
+   "name": "triangle_row",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_slide",
+   "name": "triangle_slide",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_split",
+   "name": "triangle_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_split_border",
+   "name": "triangle_split_border",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_split_horizontal",
+   "name": "triangle_split_horizontal",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_split_vertical",
+   "name": "triangle_split_vertical",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_square",
+   "name": "triangle_square",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_three_split",
+   "name": "triangle_three_split",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_three_split_offset",
+   "name": "triangle_three_split_offset",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_triforce",
+   "name": "triangle_triforce",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.triangle_v",
+   "name": "triangle_v",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.wiggly_dots",
+   "name": "wiggly_dots",
+   "category": "geometric",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_details",
+   "name": "handprint_details",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_heavy_leak",
+   "name": "handprint_heavy_leak",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_leak",
+   "name": "handprint_leak",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_paint",
+   "name": "handprint_paint",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_paint_erased",
+   "name": "handprint_paint_erased",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_paint_palm",
+   "name": "handprint_paint_palm",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_paint_partial",
+   "name": "handprint_paint_partial",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_paper",
+   "name": "handprint_paper",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_partial",
+   "name": "handprint_partial",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_partial_flowing",
+   "name": "handprint_partial_flowing",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_smear",
+   "name": "handprint_smear",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_smear_dry",
+   "name": "handprint_smear_dry",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_smear_flowing",
+   "name": "handprint_smear_flowing",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_smear_paint",
+   "name": "handprint_smear_paint",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_soaked",
+   "name": "handprint_soaked",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.handprint_splat",
+   "name": "handprint_splat",
+   "category": "handprint",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.diagonal_drips",
+   "name": "diagonal_drips",
+   "category": "leaks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drips_big",
+   "name": "drips_big",
+   "category": "leaks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drips_high",
+   "name": "drips_high",
+   "category": "leaks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drips_top",
+   "name": "drips_top",
+   "category": "leaks",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.bones_crossed",
+   "name": "bones_crossed",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.bones_crossed_dots",
+   "name": "bones_crossed_dots",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_medieval",
+   "name": "cross_medieval",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_medieval_curved",
+   "name": "cross_medieval_curved",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.cross_medieval_round",
+   "name": "cross_medieval_round",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fleur_de_lis",
+   "name": "fleur_de_lis",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_cross_heart",
+   "name": "medieval_cross_heart",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_flower_bell",
+   "name": "medieval_flower_bell",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_flower_simple",
+   "name": "medieval_flower_simple",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_rosace",
+   "name": "medieval_rosace",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_spiral",
+   "name": "medieval_spiral",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.medieval_swirl",
+   "name": "medieval_swirl",
+   "category": "medieval",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.charcoal",
+   "name": "charcoal",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.claws_erased",
+   "name": "claws_erased",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.claws_spots",
+   "name": "claws_spots",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.fingerprint",
+   "name": "fingerprint",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower_sakura_grains",
+   "name": "flower_sakura_grains",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower_sakura_light",
+   "name": "flower_sakura_light",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower_sakura_petal",
+   "name": "flower_sakura_petal",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower_sakura_simple",
+   "name": "flower_sakura_simple",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.frost",
+   "name": "frost",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.moisture",
+   "name": "moisture",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.mold",
+   "name": "mold",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.skin_frog_alveoli",
+   "name": "skin_frog_alveoli",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.skin_frog_cracked",
+   "name": "skin_frog_cracked",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.skin_frog_dense",
+   "name": "skin_frog_dense",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stone_noisy",
+   "name": "stone_noisy",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.vein_long_narrow",
+   "name": "vein_long_narrow",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.veins",
+   "name": "veins",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.veins_straight",
+   "name": "veins_straight",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.veiny",
+   "name": "veiny",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.wood_knot",
+   "name": "wood_knot",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.wrinkles",
+   "name": "wrinkles",
+   "category": "organic",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sandpaper_vertical",
+   "name": "sandpaper_vertical",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.scratches_dense",
+   "name": "scratches_dense",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.scratches_hard",
+   "name": "scratches_hard",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.scratches_partial",
+   "name": "scratches_partial",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.scratches_scatter",
+   "name": "scratches_scatter",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stripes_damaged",
+   "name": "stripes_damaged",
+   "category": "scratches",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.splash_spots",
+   "name": "splash_spots",
+   "category": "splats",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.spray",
+   "name": "spray",
+   "category": "splats",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.coffee_circle",
+   "name": "coffee_circle",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.coffee_circle_half",
+   "name": "coffee_circle_half",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.coffee_cup",
+   "name": "coffee_cup",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.coffee_projection",
+   "name": "coffee_projection",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.coffee_smear",
+   "name": "coffee_smear",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_long",
+   "name": "drop_long",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_medium",
+   "name": "drop_medium",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_small",
+   "name": "drop_small",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_splatter",
+   "name": "drop_splatter",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_spread",
+   "name": "drop_spread",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_spread_small",
+   "name": "drop_spread_small",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_spread_wide",
+   "name": "drop_spread_wide",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.drop_thick",
+   "name": "drop_thick",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.leak_one_drop",
+   "name": "leak_one_drop",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.leak_one_drop_small",
+   "name": "leak_one_drop_small",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.leak_spread",
+   "name": "leak_spread",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.leak_spread_small",
+   "name": "leak_spread_small",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lips_erased",
+   "name": "lips_erased",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lips_partial",
+   "name": "lips_partial",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lips_partial_round",
+   "name": "lips_partial_round",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.lips_plain",
+   "name": "lips_plain",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_cloud",
+   "name": "smudge_cloud",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_paper",
+   "name": "smudge_paper",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_radial",
+   "name": "smudge_radial",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_small",
+   "name": "smudge_small",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_star",
+   "name": "smudge_star",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.smudge_stretch",
+   "name": "smudge_stretch",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_brushed",
+   "name": "stain_brushed",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_circles",
+   "name": "stain_circles",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_fiber_large",
+   "name": "stain_fiber_large",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_fibers",
+   "name": "stain_fibers",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_marks",
+   "name": "stain_marks",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_mop_hairy",
+   "name": "stain_mop_hairy",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_mossy",
+   "name": "stain_mossy",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_napkin",
+   "name": "stain_napkin",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_napkin_diagonal",
+   "name": "stain_napkin_diagonal",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_napkin_island",
+   "name": "stain_napkin_island",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_nugget",
+   "name": "stain_nugget",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_skull",
+   "name": "stain_skull",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_splat",
+   "name": "stain_splat",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_splat_paper",
+   "name": "stain_splat_paper",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.stain_spread",
+   "name": "stain_spread",
+   "category": "stains",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.atom",
+   "name": "atom",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.atom_simple",
+   "name": "atom_simple",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.band_half_rounded",
+   "name": "band_half_rounded",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.barcode",
+   "name": "barcode",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.bell",
+   "name": "bell",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.card_clubs",
+   "name": "card_clubs",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.card_diamonds",
+   "name": "card_diamonds",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.card_heart",
+   "name": "card_heart",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.card_spades",
+   "name": "card_spades",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.flower",
+   "name": "flower",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.moon",
+   "name": "moon",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_recycle_symbol_taiwan",
+   "name": "Sign Recycle Symbol Taiwan",
+   "category": "symbol",
+   "kind": "bitmap"
+  },
+  {
+   "id": "painter.alpha.sign_recycle_symbol",
+   "name": "Sign Recycle Symbol",
+   "category": "symbol",
+   "kind": "bitmap"
+  },
+  {
+   "id": "painter.alpha.sign_arrow_diagonal",
+   "name": "sign_arrow_diagonal",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_arrow_sideway",
+   "name": "sign_arrow_sideway",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_biohazard",
+   "name": "sign_biohazard",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_caution",
+   "name": "sign_caution",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_caution_vertical",
+   "name": "sign_caution_vertical",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_circle_info",
+   "name": "sign_circle_info",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_circle_number",
+   "name": "sign_circle_number",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_cold",
+   "name": "sign_cold",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_corrosive",
+   "name": "sign_corrosive",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_cut_hazard",
+   "name": "sign_cut_hazard",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_diamond_border",
+   "name": "sign_diamond_border",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_divide",
+   "name": "sign_divide",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_dog",
+   "name": "sign_dog",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_electrical",
+   "name": "sign_electrical",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_electromagnetic",
+   "name": "sign_electromagnetic",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_entanglement_hazard",
+   "name": "sign_entanglement_hazard",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_environment_pollution",
+   "name": "sign_environment_pollution",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_explosive",
+   "name": "sign_explosive",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_eye",
+   "name": "sign_eye",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_flammable",
+   "name": "sign_flammable",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_forbidden",
+   "name": "sign_forbidden",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_forbidden_band",
+   "name": "sign_forbidden_band",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_general_danger",
+   "name": "sign_general_danger",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_harmful",
+   "name": "sign_harmful",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_harmful_square",
+   "name": "sign_harmful_square",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_heat",
+   "name": "sign_heat",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_laser",
+   "name": "sign_laser",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_magnetic_field",
+   "name": "sign_magnetic_field",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_minus",
+   "name": "sign_minus",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_multiply",
+   "name": "sign_multiply",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_optical_radiation",
+   "name": "sign_optical_radiation",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_oxidizer",
+   "name": "sign_oxidizer",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_person",
+   "name": "sign_person",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_plus",
+   "name": "sign_plus",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_power",
+   "name": "sign_power",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_protection_ear",
+   "name": "sign_protection_ear",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_protection_eye",
+   "name": "sign_protection_eye",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_protection_respirator",
+   "name": "sign_protection_respirator",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_radiation",
+   "name": "sign_radiation",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_radiation_round",
+   "name": "sign_radiation_round",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_toxic",
+   "name": "sign_toxic",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_vent",
+   "name": "sign_vent",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.sign_warning_hatched",
+   "name": "sign_warning_hatched",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.water_drop",
+   "name": "water_drop",
+   "category": "symbol",
+   "kind": "procedural"
+  },
+  {
+   "id": "painter.alpha.text_caution",
+   "name": "Text Caution",
+   "category": "text",
+   "kind": "bitmap"
+  },
+  {
+   "id": "painter.alpha.text_stop",
+   "name": "Text Stop",
+   "category": "text",
+   "kind": "bitmap"
+  },
+  {
+   "id": "painter.alpha.text_warning",
+   "name": "Text Warning",
+   "category": "text",
+   "kind": "bitmap"
+  }
+ ]
+}

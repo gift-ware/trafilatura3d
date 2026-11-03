@@ -1675,6 +1675,38 @@ class PaintWorkspaceTest(unittest.TestCase):
         ws.path_tool.set_attr("alpha", "Round hard")
         self.assertEqual(doc.ts.find(uid).paths[0].alpha, "Round hard")
 
+    def test_library_alpha_from_assets_with_its_hardness(self):
+        """A library alpha clicked in the Assets (searched by name) becomes the Paint tool's; its Hardness slider in
+        the Alpha section, clicked near its right end, keeps the value in the alpha's reference; a stroke with it
+        paints."""
+        from PySide6.QtCore import QPoint
+        from PySide6.QtTest import QTest
+        from trafilatura3d.editor.paint.widgets import PSlider
+        ws, doc = self.ws, self.ws.doc
+        w, h = self.paint_layer_under(0.5, 0.5)
+        ws.set_tool("paint")
+        ws.assets.set_kind("Alphas")
+        ws.assets.search.setText("Grime rings")
+        self.app.processEvents()
+        grid = ws.assets.grid
+        item = next(grid.item(i) for i in range(grid.count())
+                    if grid.item(i).data(Qt.UserRole)["name"] == "library:dirt/grime_rings")
+        QTest.mouseClick(grid.viewport(), Qt.LeftButton, pos=grid.visualItemRect(item).center())
+        self.app.processEvents()
+        self.assertEqual(ws.tools.alphas["paint"], "library:dirt/grime_rings")
+        hardness = next(s for s in ws.properties.findChildren(PSlider) if s.label.text() == "Hardness")
+        r = hardness.slider.rect()
+        QTest.mouseClick(hardness.slider, Qt.LeftButton, pos=QPoint(int(r.width() * 0.9), r.center().y()))
+        self.app.processEvents()
+        ref = ws.tools.alphas["paint"]
+        self.assertTrue(ref.startswith("library:dirt/grime_rings?hardness="), ref)
+        self.assertGreater(float(ref.split("hardness=")[1]), 0.7)
+        ws.tools.brushes["paint"].size = 40.0
+        self.assertTrue(ws.stroke_begin(w * 0.5, h * 0.5, 1.0))
+        ws.stroke_end()
+        cov = read(doc.session.compiler(1001), doc.session.compiler(1001).channel(doc.ts, "basecolor"))[..., 3]
+        self.assertGreater((cov > 0.5).sum(), 20)
+
     def test_paths_on_masks_and_paint_effects(self):
         """A path on a layer's mask paints the mask (any layer kind); a path on a paint effect paints the effect;
         a fill layer's content (no painting) takes none."""

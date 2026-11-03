@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.6.0 — 3 November 2026
+
+### Brush alphas
+
+- **A library of 416 brush alphas**, each a graph of our own nodes, under our own names
+  (`trafilatura3d/paint/alpha_graphs/`, one package per category: basic, brush, celtic, clothing, cracks, dirt,
+  fingerprint, footprint, geometric, handprint, leaks, medieval, organic, scratches, splats, stains, symbol, text).
+  They sit in Assets > Alphas next to the generated ones; picked for a tool, the Alpha section of the Properties
+  shows their parameters, and the values travel with the alpha (tools, paths): `library:<category>/<graph>?hardness=…`.
+- **Alpha Shape** node (Paint/Alphas): the Hardness, Shape and Invert every library alpha ends with, plus Order and
+  Threshold.
+- **Imported `.spp` projects use them**: an alpha a project names is replayed with its library graph and the
+  project's values and random seed (`trafilatura3d/spp/alphas.json`, the correspondence table). The alphas respond
+  to Hardness, Shape and Invert as the alphas of imported projects do; noise alphas are close, drawn ones (stains,
+  brush dabs, hand and finger prints, sign pictograms) are simpler silhouettes. Their other parameters are not
+  exposed yet; alphas of older libraries keep their recipes or a generic alpha, named in the import report.
+
+### `.spp` projects of newer versions
+
+- **Document version 1** is read (saves and autosaves of newer releases): classes declared once, values without tags,
+  128-bit channel masks; it gives the same tree as version 0, which reads as before.
+- **JPEG 2000 textures**: the 16-bit textures of those projects are lossless JPEG 2000 tiles, decoded exactly (new
+  dependency `imagecodecs`).
+
+### Fixed
+
+- **Mouse wheel in icon mode** (the Library, the Assets): a step scrolls rows of the grid, as the list mode scrolls
+  lines; it moved a single icon, a fraction of a row.
+- **Properties**: changing a library alpha's parameter no longer crashes (the panel was rebuilt inside the slider's
+  own event).
+
+### Dependencies
+
+- `imagecodecs==2026.10.10`.
+
 ## 0.5.0 — 2 November 2026
 
 ### Long steps you can follow

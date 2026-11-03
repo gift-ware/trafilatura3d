@@ -1,0 +1,1286 @@
+{
+  "trafilatura3d": 2,
+  "graphs": {
+    "grime_lumpy_disc": {
+      "label": "Grime lumpy disc",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "disc",
+          "type": "shape",
+          "params": {
+            "pattern": "Paraboloid"
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.35
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "background": [
+              "disc",
+              "output"
+            ],
+            "foreground": [
+              "lumps",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.2598,
+                0.0
+              ],
+              [
+                0.3017,
+                1.0
+              ],
+              [
+                1.0,
+                1.0
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "shape": 0.0
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        },
+        {
+          "id": "lumps",
+          "type": "bnw_noise_soft_legacy",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                -1,
+                -1
+              ]
+            }
+          },
+          "position": [
+            -768.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    "grime_streaks": {
+      "label": "Grime streaks",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "leaks",
+          "type": "grunge_leaky_paint",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "fibers",
+          "type": "grunge_fibrous",
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.5
+          },
+          "inputs": {
+            "foreground": [
+              "leaks",
+              "output"
+            ],
+            "background": [
+              "fibers",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0196
+              ],
+              [
+                0.2421,
+                0.5137
+              ],
+              [
+                0.3171,
+                0.5922
+              ],
+              [
+                0.3844,
+                0.651
+              ],
+              [
+                0.4447,
+                0.702
+              ],
+              [
+                0.505,
+                0.749
+              ],
+              [
+                0.5695,
+                0.8039
+              ],
+              [
+                0.6343,
+                0.8706
+              ],
+              [
+                0.8416,
+                0.9765
+              ],
+              [
+                1.0,
+                0.9765
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels"
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "grime_cloud_hard": {
+      "label": "Grime cloud hard",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base",
+          "type": "clouds_soft",
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                -3,
+                -3
+              ]
+            }
+          },
+          "position": [
+            -576.0,
+            0.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.5856,
+                0.0
+              ],
+              [
+                0.5871,
+                0.004
+              ],
+              [
+                0.7264,
+                0.25
+              ],
+              [
+                0.7884,
+                0.5
+              ],
+              [
+                0.837,
+                0.72
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "base",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            0.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "base": {
+            "output_size": {
+              "mode": "relative_parent",
+              "value": [
+                0,
+                0
+              ]
+            }
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            0.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    "grime_smear": {
+      "label": "Grime smear",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "noise",
+          "type": "bnw_noise_soft_legacy",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "clouds",
+          "type": "clouds_soft",
+          "position": [
+            -768.0,
+            160.0
+          ]
+        },
+        {
+          "id": "mix",
+          "type": "blend",
+          "params": {
+            "opacity": 0.5
+          },
+          "inputs": {
+            "foreground": [
+              "noise",
+              "output"
+            ],
+            "background": [
+              "clouds",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0118
+              ],
+              [
+                0.3504,
+                0.0118
+              ],
+              [
+                0.5247,
+                0.4549
+              ],
+              [
+                0.5607,
+                0.5529
+              ],
+              [
+                0.5875,
+                0.6118
+              ],
+              [
+                0.6116,
+                0.6588
+              ],
+              [
+                0.6353,
+                0.698
+              ],
+              [
+                0.6619,
+                0.7373
+              ],
+              [
+                0.6982,
+                0.7843
+              ],
+              [
+                0.947,
+                0.9961
+              ],
+              [
+                1.0,
+                0.9961
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "mix",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            48.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels"
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            48.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            48.0
+          ]
+        }
+      ]
+    },
+    "grime_blobs": {
+      "label": "Grime blobs",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base",
+          "type": "grunge_blobs",
+          "position": [
+            -384.0,
+            0.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels"
+          },
+          "inputs": {
+            "input": [
+              "base",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            0.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    "grime_specks_dense": {
+      "label": "Grime specks dense",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base",
+          "type": "gaussian_spots_small_legacy",
+          "position": [
+            -576.0,
+            0.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.0005,
+                0.004
+              ],
+              [
+                0.0396,
+                0.4
+              ],
+              [
+                0.2473,
+                0.5
+              ],
+              [
+                0.3076,
+                0.72
+              ],
+              [
+                0.9795,
+                0.95
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "base",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            0.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            0.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    "grime_rings": {
+      "label": "Grime rings",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "spots",
+          "type": "grunge_blobs",
+          "position": [
+            -1344.0,
+            144.0
+          ]
+        },
+        {
+          "id": "rings",
+          "type": "edge_detect",
+          "params": {
+            "edge_width": 3.0,
+            "edge_roundness": 0.0,
+            "invert": true
+          },
+          "inputs": {
+            "input": [
+              "solid",
+              "output"
+            ]
+          },
+          "position": [
+            -960.0,
+            144.0
+          ]
+        },
+        {
+          "id": "solid",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.3,
+                0.0
+              ],
+              [
+                0.31,
+                1.0
+              ],
+              [
+                1.0,
+                1.0
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "spots",
+              "output"
+            ]
+          },
+          "position": [
+            -1152.0,
+            144.0
+          ]
+        },
+        {
+          "id": "breaks",
+          "type": "bnw_noise_rough",
+          "position": [
+            -768.0,
+            0.0
+          ]
+        },
+        {
+          "id": "broken",
+          "type": "blend",
+          "params": {
+            "blending_mode": "Multiply",
+            "opacity": 0.6
+          },
+          "inputs": {
+            "foreground": [
+              "breaks",
+              "output"
+            ],
+            "background": [
+              "profile",
+              "output"
+            ]
+          },
+          "position": [
+            -576.0,
+            64.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.0
+              ],
+              [
+                0.5744,
+                0.0
+              ],
+              [
+                0.5755,
+                0.004
+              ],
+              [
+                0.5817,
+                0.48
+              ],
+              [
+                0.5877,
+                0.5
+              ],
+              [
+                0.6517,
+                0.72
+              ],
+              [
+                1.0,
+                0.95
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "broken",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            64.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            64.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            64.0
+          ]
+        },
+        {
+          "id": "profile",
+          "type": "blur_hq",
+          "params": {
+            "intensity": 1.5
+          },
+          "inputs": {
+            "input": [
+              "rings",
+              "output"
+            ]
+          },
+          "position": [
+            -768.0,
+            160.0
+          ]
+        }
+      ]
+    },
+    "grime_patch_broken": {
+      "label": "Grime patch broken",
+      "parent_size": [
+        11,
+        11
+      ],
+      "base": {
+        "output_size": {
+          "mode": "absolute",
+          "value": [
+            9,
+            9
+          ]
+        }
+      },
+      "parameters": [
+        {
+          "id": "hardness",
+          "kind": "float",
+          "default": 0.5,
+          "label": "Hardness",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "shape",
+          "kind": "float",
+          "default": 0.75,
+          "label": "Shape",
+          "min": 0.0,
+          "max": 1.0
+        },
+        {
+          "id": "invert",
+          "kind": "bool",
+          "default": false,
+          "label": "Invert"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "base",
+          "type": "bnw_noise_even_legacy",
+          "position": [
+            -576.0,
+            0.0
+          ]
+        },
+        {
+          "id": "values",
+          "type": "curve",
+          "params": {
+            "curve": [
+              [
+                0.0,
+                0.95
+              ],
+              [
+                0.2144,
+                0.72
+              ],
+              [
+                0.2605,
+                0.5
+              ],
+              [
+                0.4329,
+                0.1
+              ],
+              [
+                0.5879,
+                0.004
+              ],
+              [
+                0.5885,
+                0.0
+              ],
+              [
+                1.0,
+                0.0
+              ]
+            ]
+          },
+          "inputs": {
+            "input": [
+              "base",
+              "output"
+            ]
+          },
+          "position": [
+            -384.0,
+            0.0
+          ]
+        },
+        {
+          "id": "shape",
+          "type": "paint_alpha_shape",
+          "params": {
+            "order": "Falloff, then levels",
+            "threshold": true
+          },
+          "inputs": {
+            "input": [
+              "values",
+              "output"
+            ]
+          },
+          "links": {
+            "hardness": "hardness",
+            "shape": "shape",
+            "invert": "invert"
+          },
+          "position": [
+            -192.0,
+            0.0
+          ]
+        },
+        {
+          "id": "output",
+          "type": "output",
+          "params": {
+            "identifier": "output",
+            "label": "Alpha"
+          },
+          "inputs": {
+            "input": [
+              "shape",
+              "output"
+            ]
+          },
+          "position": [
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    }
+  }
+}

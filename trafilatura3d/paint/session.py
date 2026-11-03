@@ -240,9 +240,16 @@ class Session:
         return cached[1][channel], cached[2]
 
     def alpha_name(self, name: str) -> str:
-        """A brush alpha ready in the brush engine: a built-in one as is, a project texture ("texture:<name>") by its
-        luminance under a key that changes with the image; an unknown texture falls back to Round soft."""
+        """A brush alpha ready in the brush engine: a built-in one as is, a library one (paint/alpha_library) cooked
+        with its values under its reference, a project texture ("texture:<name>") by its luminance under a key that
+        changes with the image; an unknown texture or library alpha falls back to Round soft."""
+        from trafilatura3d.paint import alpha_library
         from trafilatura3d.paint.brush import TEXTURE_ALPHA
+        if name.startswith(alpha_library.LIBRARY):
+            if not alpha_library.exists(name):
+                return "Round soft"
+            self.brush_engine().alpha(name, alpha_library.image(name, 512))
+            return name
         if not name.startswith(TEXTURE_ALPHA):
             return name
         tex = name[len(TEXTURE_ALPHA):]

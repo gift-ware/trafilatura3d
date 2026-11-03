@@ -16,7 +16,10 @@ centered on it) and a scatter of dots (diameter 0.3 x size of the frame, uniform
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
 
 import numpy as np
 
@@ -65,8 +68,10 @@ def _smoothstep(t):
 
 def levels(base: np.ndarray, hardness: float) -> np.ndarray:
     h = float(np.clip(hardness, 0.0, 1.0))
+    if h <= 0.0:
+        return (base >= 1.0).astype(np.float64)  # no ramp left: a step, the input white included
     if h <= 0.5:
-        return np.clip((base - (1 - 2 * h)) / max(2 * h, 1e-6), 0.0, 1.0)
+        return np.clip((base - (1 - 2 * h)) / (2 * h), 0.0, 1.0)
     return np.clip(base / max(2 * (1 - h), 1e-6), 0.0, 1.0)
 
 
@@ -154,6 +159,31 @@ def dots(tweaks: dict, seed: int = 0, n: int = 1 << SIZE_LOG2) -> np.ndarray:
 
 
 NAMES = frozenset(BASES) | {"shape_inky", "dots_02"}
+LIBRARY_TABLE = Path(__file__).with_name("alphas.json")  # graph name in a project -> our library alpha
+
+
+@lru_cache(maxsize=1)
+def _table() -> dict:
+    return {k.lower(): v for k, v in json.loads(LIBRARY_TABLE.read_text(encoding="utf-8"))["alphas"].items()}
+
+
+def library_ref(graph: str, tweaks: dict) -> str | None:
+    """The library alpha (paint/alpha_library reference) standing for a project's alpha graph, with the project's
+    values of the parameters the library graph has and its random seed; None when the table has no counterpart."""
+    from trafilatura3d.paint import alpha_library as lib
+    target = _table().get(graph.lower())
+    if target is None:
+        return None
+    category, name = target.split("/")
+    ref = lib.join(category, name, {})
+    if not lib.exists(ref):
+        return None
+    known = {p.id for p in lib.parameters(ref)}
+    values = {k: float(v) for k, v in tweaks.items() if k in known and isinstance(v, (int, float))}
+    seed = int(tweaks.get("$randomseed", 0))
+    if seed:
+        values["seed"] = seed
+    return lib.join(category, name, values)
 
 
 def alpha(ev, name: str, tweaks: dict, seed: int = 0) -> np.ndarray:
